@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="silver">#bcbcbc</color>
+    <color name="gainsBoro">#D9D9D9</color>
+    <color name="white_Smoke">#EEEEEE</color>
+    <color name="floral_White">#FFFAF4</color>
+    <color name="merino">#E2DDD1</color>
+    <color name="shark">#35363A</color>
+    <color name="nero_7">#2a2a2a</color>
+    <color name="nero_3">#2c2c2c</color>
+    <color name="nero_6">#232323</color>
+    <color name="nero">#272727</color>
+    <color name="black_Russian">#202124</color>
+    <color name="nero_2">#202020</color>
+    <color name="nero_4">#171717</color>
+    <color name="nero_5">#1C1C1C</color>
+    <color name="radicalRed">#FC1967</color>
+    <color name="torchRed">#fc1934</color>
+
+</resources>

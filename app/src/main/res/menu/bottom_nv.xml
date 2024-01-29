@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/artists"
+        android:icon="@drawable/karaoke"
+        android:title="@string/artists" />
+    <item
+        android:id="@+id/playlists"
+        android:icon="@drawable/playlist"
+        android:title="@string/playlists" />
+    <item
+        android:id="@+id/home"
+        android:icon="@drawable/home"
+        android:title="@string/home" />
+    <item
+        android:id="@+id/albums"
+        android:icon="@drawable/album"
+        android:title="@string/albums" />
+    <item
+        android:id="@+id/genres"
+        android:icon="@drawable/list"
+        android:title="@string/genres" />
+
+</menu>
