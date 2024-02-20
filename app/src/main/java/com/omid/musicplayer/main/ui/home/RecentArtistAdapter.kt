@@ -34,14 +34,25 @@ class RecentArtistAdapter(private val recentArtist : List<RecentArtistListMp3>):
             Glide.with(AppConfiguration.getContext()).load(recentArtistInfo.artistImageThumb)
                 .error(R.drawable.error)
                 .listener(object : RequestListener<Drawable>{
-                    override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+                    override fun onLoadFailed(
+                        e: GlideException?,
+                        model: Any?,
+                        target: Target<Drawable>,
+                        isFirstResource: Boolean
+                    ): Boolean {
                         artistNameRecent.visibility = View.GONE
                         val padding = AppConfiguration.getContext().resources.getDimensionPixelSize(R.dimen._12dp)
                         ivRecentArtist.setPadding(padding)
                         return false
                     }
 
-                    override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+                    override fun onResourceReady(
+                        resource: Drawable,
+                        model: Any,
+                        target: Target<Drawable>?,
+                        dataSource: DataSource,
+                        isFirstResource: Boolean
+                    ): Boolean {
                         return false
                     }
 

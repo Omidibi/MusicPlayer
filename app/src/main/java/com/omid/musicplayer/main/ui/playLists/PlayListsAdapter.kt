@@ -34,15 +34,26 @@ class PlayListsAdapter(private val plyLists : List<PlayListsMp3>): RecyclerView.
         Glide.with(AppConfiguration.getContext()).load(playListsInfo.playlistImageThumb)
             .error(R.drawable.error)
             .listener(object : RequestListener<Drawable>{
-                override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+                override fun onLoadFailed(
+                    e: GlideException?,
+                    model: Any?,
+                    target: Target<Drawable>,
+                    isFirstResource: Boolean
+                ): Boolean {
                     holder.tvNamePlaylists.visibility = View.GONE
                     val padding = AppConfiguration.getContext().resources.getDimensionPixelSize(R.dimen._12dp)
                     holder.ivPlaylists.setPadding(padding)
                     return false
                 }
 
-                override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
-                    return false
+                override fun onResourceReady(
+                    resource: Drawable,
+                    model: Any,
+                    target: Target<Drawable>?,
+                    dataSource: DataSource,
+                    isFirstResource: Boolean
+                ): Boolean {
+                   return false
                 }
 
             })

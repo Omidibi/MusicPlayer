@@ -45,7 +45,7 @@ class LatestSongsAdapter() : RecyclerView.Adapter<LatestSongsVH>() {
             Glide.with(AppConfiguration.getContext()).load(latestSongInfo.mp3ThumbnailB)
                 .error(R.drawable.error)
                 .listener(object : RequestListener<Drawable> {
-                    override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+                    override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>, isFirstResource: Boolean): Boolean {
                         artistName.visibility = View.GONE
                         musicName.visibility = View.GONE
                         val padding = activity.resources.getDimensionPixelSize(R.dimen._12dp)
@@ -53,7 +53,13 @@ class LatestSongsAdapter() : RecyclerView.Adapter<LatestSongsVH>() {
                         return false
                     }
 
-                    override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+                    override fun onResourceReady(
+                        resource: Drawable,
+                        model: Any,
+                        target: Target<Drawable>?,
+                        dataSource: DataSource,
+                        isFirstResource: Boolean
+                    ): Boolean {
                         return false
                     }
 

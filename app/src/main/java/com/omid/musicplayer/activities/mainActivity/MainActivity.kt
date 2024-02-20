@@ -5,6 +5,7 @@ import android.content.pm.ActivityInfo
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.widget.SeekBar
@@ -38,7 +39,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var allFragmentList: MutableList<Fragment>
     private lateinit var player: ExoPlayer
     private lateinit var runnable: Runnable
-    private var handler = Handler()
+    private var handler = Handler(Looper.getMainLooper())
     private var currentVolume = 1f
     private lateinit var latestMp3: LatestMp3
     private lateinit var mainLatestList: List<LatestMp3>
