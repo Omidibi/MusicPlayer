@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/mainFragment">
+
+    <fragment
+        android:id="@+id/playListsFragment"
+        android:name="com.omid.musicplayer.main.ui.playLists.PlayListsFragment"
+        android:label="fragment_playlists"
+        tools:layout="@layout/fragment_playlists" >
+        <action
+            android:id="@+id/action_playListsFragment_to_playlistByIdListFragment"
+            app:destination="@id/playlistByIdListFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/albumsFragment"
+        android:name="com.omid.musicplayer.main.ui.albums.AlbumsFragment"
+        android:label="fragment_albums"
+        tools:layout="@layout/fragment_albums" >
+        <action
+            android:id="@+id/action_albumsFragment_to_albumsByIdListFragment"
+            app:destination="@id/albumsByIdListFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/artistsFragment"
+        android:name="com.omid.musicplayer.main.ui.artists.ArtistsFragment"
+        android:label="fragment_artists"
+        tools:layout="@layout/fragment_artists" />
+
+    <fragment
+        android:id="@+id/genresFragment"
+        android:name="com.omid.musicplayer.main.ui.genres.GenresFragment"
+        android:label="fragment_genres"
+        tools:layout="@layout/fragment_genres" >
+        <action
+            android:id="@+id/action_genresFragment_to_songsListByCatIdFragment"
+            app:destination="@id/songsListByCatIdFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.omid.musicplayer.fragments.searchFragment.SearchFragment"
+        android:label="fragment_search"
+        tools:layout="@layout/fragment_search" />
+
+    <fragment
+        android:id="@+id/menuFragment"
+        android:name="com.omid.musicplayer.fragments.menuFragment.MenuFragment"
+        android:label="fragment_menu"
+        tools:layout="@layout/fragment_menu" />
+
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.omid.musicplayer.main.ui.mainFragment.MainFragment"
+        android:label="fragment_main"
+        tools:layout="@layout/fragment_main" />
+    <fragment
+        android:id="@+id/albumsByIdListFragment"
+        android:name="com.omid.musicplayer.fragments.albumsByIdListFragment.AlbumsByIdListFragment"
+        android:label="fragment_albums_by_id_list"
+        tools:layout="@layout/fragment_albums_by_id_list" />
+    <fragment
+        android:id="@+id/songsListByCatIdFragment"
+        android:name="com.omid.musicplayer.fragments.songsListByCatIdFragment.SongsListByCatIdFragment"
+        android:label="fragment_songs_list_by_cat_id"
+        tools:layout="@layout/fragment_songs_list_by_cat_id" />
+    <fragment
+        android:id="@+id/playlistByIdListFragment"
+        android:name="com.omid.musicplayer.fragments.playlistByIdListFragment.PlaylistByIdListFragment"
+        android:label="fragment_playlist_by_id_list"
+        tools:layout="@layout/fragment_playlist_by_id_list" />
+
+</navigation>

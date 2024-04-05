@@ -5,26 +5,36 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
+import com.omid.musicplayer.MainWidgets
 import com.omid.musicplayer.R
 import com.omid.musicplayer.api.WebServiceCaller
 import com.omid.musicplayer.databinding.FragmentGenresBinding
 import com.omid.musicplayer.model.listener.IListener
 import com.omid.musicplayer.model.models.CategoriesList
+import com.sothree.slidinguppanel.SlidingUpPanelLayout
 import retrofit2.Call
 
 class GenresFragment : Fragment() {
+
     private lateinit var binding: FragmentGenresBinding
     private val webServiceCaller = WebServiceCaller()
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         setupBinding()
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         aboutProgressBar()
         categoriesList()
-
-        return binding.root
+        slidingUpPanelStatus()
+        clickEvents()
     }
 
     private fun categoriesList() {
@@ -35,7 +45,7 @@ class GenresFragment : Fragment() {
                     Log.e("", "")
                     pbGenres.visibility = View.GONE
                     rvCat.visibility = View.VISIBLE
-                    rvCat.adapter = CatListAdapter(response.onlineMp3)
+                    rvCat.adapter = CatListAdapter(this@GenresFragment,response.onlineMp3)
                     rvCat.layoutManager = GridLayoutManager(requireContext(), 2)
                 }
 
@@ -59,8 +69,39 @@ class GenresFragment : Fragment() {
 
     private fun setupBinding() {
         binding = FragmentGenresBinding.inflate(layoutInflater)
-        binding.apply {
+    }
 
+    private fun slidingUpPanelStatus() {
+        MainWidgets.slidingUpPanel.addPanelSlideListener(object : SlidingUpPanelLayout.PanelSlideListener {
+            override fun onPanelSlide(panel: View?, slideOffset: Float) {
+
+            }
+
+            override fun onPanelStateChanged(panel: View?, previousState: SlidingUpPanelLayout.PanelState?, newState: SlidingUpPanelLayout.PanelState?) {
+                when (newState) {
+                    SlidingUpPanelLayout.PanelState.COLLAPSED -> {
+                        MainWidgets.bnv.visibility = View.VISIBLE
+                    }
+
+                    SlidingUpPanelLayout.PanelState.EXPANDED -> {
+                        MainWidgets.bnv.visibility = View.GONE
+                    }
+
+                    else -> {
+
+                    }
+                }
+            }
+        })
+    }
+
+    private fun clickEvents(){
+        binding.apply {
+            requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+                if (MainWidgets.slidingUpPanel.panelState == SlidingUpPanelLayout.PanelState.EXPANDED){
+                    MainWidgets.slidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
+                }
+            }
         }
     }
 }

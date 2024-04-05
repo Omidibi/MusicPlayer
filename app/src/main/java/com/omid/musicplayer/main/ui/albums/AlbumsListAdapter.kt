@@ -1,22 +1,28 @@
 package com.omid.musicplayer.main.ui.albums
 
-import android.content.Intent
+import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.omid.musicplayer.MainWidgets
 import com.omid.musicplayer.R
-import com.omid.musicplayer.activities.albumsByIdListActivity.AlbumsByIdListActivity
 import com.omid.musicplayer.model.models.AlbumsListMp3
 import com.omid.musicplayer.util.configuration.AppConfiguration
 
 class AlbumsListAdapter():RecyclerView.Adapter<AlbumsListVH>() {
+
     private lateinit var albumsList : List<AlbumsListMp3>
+    private lateinit var fragment: Fragment
+    private val bundle = Bundle()
 
-    constructor(albumsList : List<AlbumsListMp3>): this(){
-    this.albumsList = albumsList
-
+    constructor(fragment: Fragment, albumsList : List<AlbumsListMp3>): this(){
+        this.albumsList = albumsList
+        this.fragment = fragment
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlbumsListVH {
@@ -35,12 +41,12 @@ class AlbumsListAdapter():RecyclerView.Adapter<AlbumsListVH>() {
             .error(R.drawable.error)
             .placeholder(R.drawable.loading)
             .into(holder.ivAlbums)
-        holder.cvAlbums.setOnClickListener {
-           val intent = Intent(AppConfiguration.getContext(), AlbumsByIdListActivity::class.java)
 
-            intent.putExtra("albumsListInfo",albumsListInfo)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            AppConfiguration.getContext().startActivity(intent)
+        holder.cvAlbums.setOnClickListener {
+            bundle.putParcelable("albumsListInfo",albumsListInfo)
+            fragment.findNavController().navigate(R.id.action_albumsFragment_to_albumsByIdListFragment,bundle)
+            MainWidgets.bnv.visibility = View.GONE
+            MainWidgets.toolbar.visibility = View.GONE
         }
 
         holder.ivShare.setOnClickListener {

@@ -9,7 +9,6 @@
     <include
         android:id="@+id/ui_player"
         layout="@layout/ui_player">
-
     </include>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
