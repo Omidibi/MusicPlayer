@@ -47,6 +47,9 @@
     <dimen name="_108dp">108dp</dimen>
     <dimen name="_110dp">110dp</dimen>
     <dimen name="_120dp">120dp</dimen>
+    <dimen name="_130dp">130dp</dimen>
+    <dimen name="_140dp">140dp</dimen>
+    <dimen name="_150dp">150dp</dimen>
     <dimen name="_160dp">160dp</dimen>
     <dimen name="_170dp">170dp</dimen>
     <dimen name="_180dp">180dp</dimen>

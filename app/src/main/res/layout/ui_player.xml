@@ -6,384 +6,270 @@
     android:layout_height="match_parent"
     android:background="@color/nero_6">
 
-    <LinearLayout
-        android:id="@+id/ll_down_player"
-        android:layout_width="match_parent"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_down_Player"
+        android:layout_width="@dimen/_0dp"
         android:layout_height="@dimen/_100dp"
-        android:orientation="vertical"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
-            android:id="@+id/ll_seekbar"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_40dp">
+        <SeekBar
+            android:id="@+id/seekbar"
+            android:layout_width="@dimen/_0dp"
+            android:layout_height="@dimen/_40dp"
+            android:progressTint="@color/radicalRed"
+            android:thumbTint="@color/torchRed"
+            android:progressBackgroundTint="@color/silver"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <SeekBar
-                android:id="@+id/seekbar"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:progressTint="@color/torchRed"
-                android:thumb="@null"
-                android:trackTint="@color/shark" />
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/img_song"
+            android:layout_width="@dimen/_60dp"
+            android:layout_height="@dimen/_60dp"
+            android:layout_margin="@dimen/_8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/seekbar" />
 
-        </LinearLayout>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/singer_name"
+            android:layout_width="@dimen/_0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_8dp"
+            android:layout_marginEnd="@dimen/_8dp"
+            android:gravity="center|start"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/dash"
+            app:layout_constraintStart_toEndOf="@id/img_song"
+            app:layout_constraintTop_toBottomOf="@id/seekbar" />
 
-        <LinearLayout
-            android:id="@+id/ll_info"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/dash"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/dash"
+            android:gravity="center"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/show_start"
+            app:layout_constraintStart_toEndOf="@id/img_song"
+            app:layout_constraintTop_toBottomOf="@id/seekbar" />
 
-            <LinearLayout
-                android:id="@+id/ll_img_song"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center">
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/song_name"
+            android:layout_width="@dimen/_0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_8dp"
+            android:layout_marginEnd="@dimen/_8dp"
+            android:gravity="center|end"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/show_start"
+            app:layout_constraintStart_toEndOf="@id/dash"
+            app:layout_constraintTop_toBottomOf="@id/seekbar" />
 
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/img_song"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:layout_margin="@dimen/_4dp" />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/show_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/_12dp"
+            android:gravity="center"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/play_pause"
+            app:layout_constraintTop_toBottomOf="@id/seekbar" />
 
-            </LinearLayout>
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/play_pause"
+            android:layout_width="@dimen/_45dp"
+            android:layout_height="@dimen/_45dp"
+            android:layout_margin="@dimen/_8dp"
+            android:tint="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/seekbar" />
 
-            <LinearLayout
-                android:id="@+id/ll_song_info"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="3"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/singer_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/_15sp"
-
-                    />
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/dash"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="@dimen/_12dp"
-                    android:text="-"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/_15sp"
-
-                    />
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/song_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="@dimen/_12dp"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/_15sp" />
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center">
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/show_start"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/_15sp"
-
-                    />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center">
-
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/play_pause"
-                    android:layout_width="@dimen/_40dp"
-                    android:layout_height="@dimen/_40dp"
-                    android:layout_gravity="center"
-                    android:layout_margin="@dimen/_16dp"
-                    android:tint="@color/white" />
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_up_player"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="visible">
+        android:layout_height="@dimen/_70dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
-            android:id="@+id/ll_up_player"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/img_up_player"
+            android:layout_width="@dimen/_50dp"
+            android:layout_height="@dimen/_50dp"
+            android:layout_marginTop="@dimen/_16dp"
+            android:layout_marginBottom="@dimen/_16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginStart="@dimen/_8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <LinearLayout
-                android:id="@+id/ll_up_info"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_80dp"
-                android:baselineAligned="false"
-                android:orientation="horizontal">
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/up_singer_name"
+            android:layout_width="@dimen/_0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_8dp"
+            android:layout_marginEnd="@dimen/_8dp"
+            android:gravity="center|start"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/up_dash"
+            app:layout_constraintStart_toEndOf="@id/img_up_player"
+            app:layout_constraintTop_toTopOf="parent" />
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="@dimen/_8dp"
-                    android:layout_weight="1"
-                    android:gravity="center">
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/up_dash"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/dash"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/popup_menu"
+            app:layout_constraintStart_toEndOf="@id/img_up_player"
+            app:layout_constraintTop_toTopOf="parent" />
 
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:id="@+id/img_up_player"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center"
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/up_song_name"
+            android:layout_width="@dimen/_0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_8dp"
+            android:layout_marginEnd="@dimen/_8dp"
+            android:gravity="center|end"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/popup_menu"
+            app:layout_constraintStart_toEndOf="@id/up_dash"
+            app:layout_constraintTop_toTopOf="parent" />
 
-                        />
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/popup_menu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/_8dp"
+            android:src="@drawable/overflow_menu"
+            android:tint="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-                </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <LinearLayout
-                    android:id="@+id/ll_up_song_info"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="5"
-                    android:gravity="center"
-                    android:orientation="horizontal">
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_list_song"
+        android:layout_width="@dimen/_0dp"
+        android:visibility="gone"
+        android:layout_height="@dimen/_0dp"
+        app:layout_constraintBottom_toTopOf="@id/cl_status"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cl_up_player" />
 
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/up_singer_name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/_15sp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_status"
+        android:layout_width="@dimen/_0dp"
+        android:layout_height="@dimen/_140dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
-                        />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/up_show_start"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/_20dp"
+            android:layout_margin="@dimen/_8dp"
+            android:gravity="center|bottom"
+            android:textColor="@color/white"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/up_dash"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginStart="@dimen/_12dp"
-                        android:text="-"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/_15sp"
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/up_show_end"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/_20dp"
+            android:layout_margin="@dimen/_8dp"
+            android:gravity="center|bottom"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-                        />
+        <SeekBar
+            android:id="@+id/up_seekbar"
+            android:layout_width="@dimen/_0dp"
+            android:layout_height="@dimen/_50dp"
+            android:progressTint="@color/radicalRed"
+            android:thumbTint="@color/torchRed"
+            android:progressBackgroundTint="@color/silver"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/up_show_start" />
 
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/up_song_name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginStart="@dimen/_12dp"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/_15sp" />
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/random"
+            android:layout_width="@dimen/_40dp"
+            android:layout_height="@dimen/_40dp"
+            android:layout_marginEnd="@dimen/_10dp"
+            android:src="@drawable/shuffle"
+            android:tint="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/preview"
+            app:layout_constraintTop_toBottomOf="@id/up_seekbar" />
 
-                </LinearLayout>
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/preview"
+            android:layout_width="@dimen/_40dp"
+            android:layout_height="@dimen/_40dp"
+            android:layout_marginEnd="@dimen/_10dp"
+            android:src="@drawable/previous"
+            android:tint="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/up_play_pause"
+            app:layout_constraintTop_toBottomOf="@id/up_seekbar" />
 
-            </LinearLayout>
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/up_play_pause"
+            android:layout_width="@dimen/_60dp"
+            android:layout_height="@dimen/_60dp"
+            android:layout_margin="@dimen/_6dp"
+            android:tint="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/up_seekbar" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="400dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ll_status">
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/skip"
+            android:layout_width="@dimen/_40dp"
+            android:layout_height="@dimen/_40dp"
+            android:layout_marginStart="@dimen/_10dp"
+            android:src="@drawable/next"
+            android:tint="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/up_play_pause"
+            app:layout_constraintTop_toBottomOf="@id/up_seekbar" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_list_song"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <LinearLayout
-                android:id="@+id/ll_up_timers"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_40dp"
-                android:background="@android:color/transparent"
-                android:baselineAligned="false"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center|start">
-
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/up_show_start"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_8dp"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/_16sp" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center|end">
-
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/up_show_end"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="@dimen/_8dp"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/_16sp" />
-
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/ll_status"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_40dp">
-
-                    <SeekBar
-                        android:id="@+id/up_seekbar"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:progressTint="@color/torchRed"
-                        android:thumbTint="@color/torchRed"
-                        android:trackTint="@color/shark"
-
-                        />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="2"
-                        android:gravity="center|end">
-
-                        <androidx.appcompat.widget.AppCompatImageView
-                            android:id="@+id/random"
-                            android:layout_width="@dimen/_28dp"
-                            android:layout_height="@dimen/_28dp"
-                            android:layout_gravity="center"
-                            android:layout_margin="@dimen/_4dp"
-                            android:src="@drawable/shuffle"
-                            android:tint="@color/white" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginEnd="@dimen/_16dp"
-                        android:layout_weight="1"
-                        android:gravity="center|end">
-
-                        <androidx.appcompat.widget.AppCompatImageView
-                            android:id="@+id/preview"
-                            android:layout_width="@dimen/_28dp"
-                            android:layout_height="@dimen/_28dp"
-                            android:layout_gravity="center"
-                            android:src="@drawable/previous"
-                            android:tint="@color/white" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center">
-
-                        <androidx.appcompat.widget.AppCompatImageView
-                            android:id="@+id/up_play_pause"
-                            android:layout_width="@dimen/_55dp"
-                            android:layout_height="@dimen/_55dp"
-                            android:layout_gravity="center"
-                            android:tint="@color/white" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="@dimen/_16dp"
-                        android:layout_weight="1"
-                        android:gravity="center|start">
-
-                        <androidx.appcompat.widget.AppCompatImageView
-                            android:id="@+id/skip"
-                            android:layout_width="@dimen/_28dp"
-                            android:layout_height="@dimen/_28dp"
-                            android:layout_gravity="center"
-                            android:src="@drawable/next"
-                            android:tint="@color/white" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="2"
-                        android:gravity="center|start">
-
-                        <androidx.appcompat.widget.AppCompatImageView
-                            android:id="@+id/repeat"
-                            android:layout_width="@dimen/_28dp"
-                            android:layout_height="@dimen/_28dp"
-                            android:layout_gravity="center"
-                            android:src="@drawable/repeat"
-                            android:tint="@color/white" />
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-        </LinearLayout>
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/repeat"
+            android:layout_width="@dimen/_40dp"
+            android:layout_height="@dimen/_40dp"
+            android:layout_marginStart="@dimen/_10dp"
+            android:src="@drawable/repeat"
+            android:tint="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/skip"
+            app:layout_constraintTop_toBottomOf="@id/up_seekbar" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

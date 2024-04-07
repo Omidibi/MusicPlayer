@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 class SongListSlidingUpPanelVH(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val cvSong = itemView.findViewById<CardView>(R.id.cv_song)!!
     val imgSong = itemView.findViewById<AppCompatImageView>(R.id.img_song)!!
+    val imgEq = itemView.findViewById<AppCompatImageView>(R.id.img_eq)!!
     val singerName = itemView.findViewById<AppCompatTextView>(R.id.singer_name)!!
     val songName = itemView.findViewById<AppCompatTextView>(R.id.song_name)!!
     val songDuration = itemView.findViewById<AppCompatTextView>(R.id.song_duration)!!

@@ -26,8 +26,8 @@ import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var sharedViewModel: SharedViewModel
     private lateinit var binding: ActivityMainBinding
+    private lateinit var sharedViewModel: SharedViewModel
     private lateinit var navHost: NavHostFragment
     private lateinit var navController: NavController
     private lateinit var player: ExoPlayer
@@ -170,6 +170,7 @@ class MainActivity : AppCompatActivity() {
                 } else {
                     player.pause()
                     downSlide.uiPlayer.upPlayPause.setImageResource(R.drawable.play)
+                    downSlide.uiPlayer.playPause.setImageResource(R.drawable.play)
                     handler.removeCallbacks(runnable)
                 }
             }
@@ -253,15 +254,15 @@ class MainActivity : AppCompatActivity() {
             }else if (slidingLayout.panelState == SlidingUpPanelLayout.PanelState.EXPANDED) {
                 slidingLayout.panelState = SlidingUpPanelLayout.PanelState.EXPANDED
             }
-            downSlide.uiPlayer.llDownPlayer.visibility = View.VISIBLE
+
             downSlide.uiPlayer.singerName.text = latestMp3.mp3Artist
             downSlide.uiPlayer.songName.text = latestMp3.mp3Title
             downSlide.uiPlayer.upSongName.text = latestMp3.mp3Title
             downSlide.uiPlayer.upSingerName.text = latestMp3.mp3Artist
             downSlide.uiPlayer.showStart.text = getString(R.string._00_00)
             downSlide.uiPlayer.upShowStart.text = getString(R.string._00_00)
-            Glide.with(applicationContext).load(latestMp3.mp3ThumbnailB).circleCrop().into(downSlide.uiPlayer.imgSong)
-            Glide.with(applicationContext).load(latestMp3.mp3ThumbnailB).circleCrop().into(downSlide.uiPlayer.imgUpPlayer)
+            Glide.with(applicationContext).load(latestMp3.mp3ThumbnailB).into(downSlide.uiPlayer.imgSong)
+            Glide.with(applicationContext).load(latestMp3.mp3ThumbnailB).into(downSlide.uiPlayer.imgUpPlayer)
             downSlide.uiPlayer.upShowEnd.text = latestMp3.mp3Duration
             currentIndex = mainLatestList.indexOf(latestMp3)
             downSlide.uiPlayer.playPause.setImageResource(R.drawable.pause)
@@ -370,14 +371,18 @@ class MainActivity : AppCompatActivity() {
                 override fun onPanelStateChanged(panel: View?, previousState: SlidingUpPanelLayout.PanelState?, newState: SlidingUpPanelLayout.PanelState?) {
                     when (newState) {
                         SlidingUpPanelLayout.PanelState.COLLAPSED -> {
-                            downSlide.uiPlayer.llDownPlayer.visibility = View.VISIBLE
+                            downSlide.uiPlayer.clDownPlayer.visibility = View.VISIBLE
                             downSlide.uiPlayer.clUpPlayer.visibility = View.GONE
+                            downSlide.uiPlayer.rvListSong.visibility = View.GONE
+                            downSlide.uiPlayer.clStatus.visibility = View.GONE
                             MainWidgets.bnv.visibility = View.VISIBLE
                         }
 
                         SlidingUpPanelLayout.PanelState.EXPANDED -> {
-                            downSlide.uiPlayer.llDownPlayer.visibility = View.GONE
+                            downSlide.uiPlayer.clDownPlayer.visibility = View.GONE
                             downSlide.uiPlayer.clUpPlayer.visibility = View.VISIBLE
+                            downSlide.uiPlayer.rvListSong.visibility = View.VISIBLE
+                            downSlide.uiPlayer.clStatus.visibility = View.VISIBLE
                             MainWidgets.bnv.visibility = View.GONE
                         }
 

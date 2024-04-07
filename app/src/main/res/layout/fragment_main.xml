@@ -2,11 +2,10 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/a"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/nero_7"
-    tools:context=".main.ui.mainFragment.MainFragment">
+    tools:context=".dashbord.ui.mainFragment.MainFragment">
 
     <ProgressBar
         android:id="@+id/pb_loading"
@@ -30,7 +29,8 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/_4dp">
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cv_banner"
@@ -47,7 +47,7 @@
                     android:layout_height="match_parent">
 
                     <androidx.viewpager.widget.ViewPager
-                        android:id="@+id/viewPager"
+                        android:id="@+id/vp_banner"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -58,7 +58,7 @@
                         android:id="@+id/pageIndicatorView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/_16dp"
+                        android:layout_marginBottom="@dimen/_2dp"
                         android:padding="@dimen/_12dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -69,7 +69,7 @@
                         app:piv_radius="@dimen/_8dp"
                         app:piv_selectedColor="@color/torchRed"
                         app:piv_unselectedColor="@color/white"
-                        app:piv_viewPager="@id/viewPager" />
+                        app:piv_viewPager="@id/vp_banner" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -80,34 +80,83 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_16dp"
+                android:gravity="center"
                 android:text="@string/new_Songs"
                 android:textColor="@color/white"
+                android:textSize="@dimen/_15sp"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cv_banner" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/more_newSongs"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_16dp"
+                android:gravity="center"
+                android:text="@string/more"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_15sp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/cv_banner" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_newSongs"
                 android:layout_width="@dimen/_0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/_180dp"
                 android:layout_margin="@dimen/_16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/title_newSongs" />
 
             <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/title_special_Songs"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_16dp"
+                android:gravity="center"
+                android:text="@string/special"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_15sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rv_newSongs" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/more_special_Songs"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_16dp"
+                android:gravity="center"
+                android:text="@string/more"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_15sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rv_newSongs" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_special_Songs"
+                android:layout_width="@dimen/_0dp"
+                android:layout_height="@dimen/_180dp"
+                android:layout_margin="@dimen/_16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/title_special_Songs" />
+
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/title_latestSongs"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_16dp"
+                android:gravity="center"
                 android:text="@string/latest_Songs"
                 android:textColor="@color/white"
+                android:textSize="@dimen/_15sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/rv_newSongs" />
+                app:layout_constraintTop_toBottomOf="@id/rv_special_Songs" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_latestSongs"
                 android:layout_width="@dimen/_0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/_180dp"
                 android:layout_margin="@dimen/_16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -118,15 +167,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_16dp"
+                android:gravity="center"
                 android:text="@string/recent_artist"
                 android:textColor="@color/white"
+                android:textSize="@dimen/_15sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/rv_latestSongs" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_recent_artist"
                 android:layout_width="@dimen/_0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/_200dp"
                 android:layout_margin="@dimen/_16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

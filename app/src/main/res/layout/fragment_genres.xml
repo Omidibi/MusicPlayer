@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/nero_7"
-    tools:context=".main.ui.genres.GenresFragment">
+    tools:context=".dashbord.ui.genres.GenresFragment">
 
     <ProgressBar
         android:id="@+id/pb_genres"

@@ -6,8 +6,8 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cv_new_songs"
-        android:layout_width="@dimen/_180dp"
-        android:layout_height="@dimen/_160dp"
+        android:layout_width="@dimen/_170dp"
+        android:layout_height="@dimen/_150dp"
         android:layout_margin="@dimen/_10dp"
         app:cardCornerRadius="@dimen/_8dp">
 
@@ -31,7 +31,9 @@
                 android:id="@+id/music_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
+                android:elevation="@dimen/_10dp"
+                android:gravity="center"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -42,11 +44,22 @@
                 android:id="@+id/artist_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
+                android:elevation="@dimen/_10dp"
+                android:gravity="center"
+                android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/music_name" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_40dp"
+                android:background="#777777"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
