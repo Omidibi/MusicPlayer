@@ -15,5 +15,5 @@ data class PlaylistByIdMp3(
     @SerializedName("playlist_name")
     val playlistName: String,
     @SerializedName("songs_list")
-    val songsList: List<Songs>
+    val songsList: List<LatestMp3>
 ) : Parcelable

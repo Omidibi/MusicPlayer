@@ -9,7 +9,7 @@ import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.omid.musicplayer.MainWidgets
+import com.omid.musicplayer.activity.MainWidgets
 import com.omid.musicplayer.databinding.FragmentMenuBinding
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
 

@@ -10,7 +10,7 @@ import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.omid.musicplayer.MainWidgets
+import com.omid.musicplayer.activity.MainWidgets
 import com.omid.musicplayer.api.WebServiceCaller
 import com.omid.musicplayer.databinding.FragmentSearchBinding
 import com.omid.musicplayer.model.listener.IListener

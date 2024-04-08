@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/playListsFragment"
-        android:name="com.omid.musicplayer.dashbord.ui.playLists.PlayListsFragment"
+        android:name="com.omid.musicplayer.ui.dashboard.playLists.PlayListsFragment"
         android:label="fragment_playlists"
-        tools:layout="@layout/fragment_playlists" >
+        tools:layout="@layout/fragment_playlists">
         <action
             android:id="@+id/action_playListsFragment_to_playlistByIdListFragment"
             app:destination="@id/playlistByIdListFragment" />
@@ -17,9 +17,9 @@
 
     <fragment
         android:id="@+id/albumsFragment"
-        android:name="com.omid.musicplayer.dashbord.ui.albums.AlbumsFragment"
+        android:name="com.omid.musicplayer.ui.dashboard.albums.AlbumsFragment"
         android:label="fragment_albums"
-        tools:layout="@layout/fragment_albums" >
+        tools:layout="@layout/fragment_albums">
         <action
             android:id="@+id/action_albumsFragment_to_albumsByIdListFragment"
             app:destination="@id/albumsByIdListFragment" />
@@ -27,15 +27,19 @@
 
     <fragment
         android:id="@+id/artistsFragment"
-        android:name="com.omid.musicplayer.dashbord.ui.artists.ArtistsFragment"
+        android:name="com.omid.musicplayer.ui.dashboard.artists.ArtistsFragment"
         android:label="fragment_artists"
-        tools:layout="@layout/fragment_artists" />
+        tools:layout="@layout/fragment_artists" >
+        <action
+            android:id="@+id/action_artistsFragment_to_songListByArtistNameFragment"
+            app:destination="@id/songListByArtistNameFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/genresFragment"
-        android:name="com.omid.musicplayer.dashbord.ui.genres.GenresFragment"
+        android:name="com.omid.musicplayer.ui.dashboard.genres.GenresFragment"
         android:label="fragment_genres"
-        tools:layout="@layout/fragment_genres" >
+        tools:layout="@layout/fragment_genres">
         <action
             android:id="@+id/action_genresFragment_to_songsListByCatIdFragment"
             app:destination="@id/songsListByCatIdFragment" />
@@ -55,23 +59,54 @@
 
     <fragment
         android:id="@+id/mainFragment"
-        android:name="com.omid.musicplayer.dashbord.ui.mainFragment.MainFragment"
+        android:name="com.omid.musicplayer.ui.dashboard.mainFragment.MainFragment"
         android:label="fragment_main"
-        tools:layout="@layout/fragment_main" />
+        tools:layout="@layout/fragment_main">
+        <action
+            android:id="@+id/action_mainFragment_to_songListByArtistNameFragment"
+            app:destination="@id/songListByArtistNameFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_newSongsMoreFragment"
+            app:destination="@id/newSongsMoreFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_specialSongsMoreFragment"
+            app:destination="@id/specialSongsMoreFragment" />
+    </fragment>
+
     <fragment
         android:id="@+id/albumsByIdListFragment"
         android:name="com.omid.musicplayer.fragments.albumsByIdListFragment.AlbumsByIdListFragment"
         android:label="fragment_albums_by_id_list"
         tools:layout="@layout/fragment_albums_by_id_list" />
+
     <fragment
         android:id="@+id/songsListByCatIdFragment"
         android:name="com.omid.musicplayer.fragments.songsListByCatIdFragment.SongsListByCatIdFragment"
         android:label="fragment_songs_list_by_cat_id"
         tools:layout="@layout/fragment_songs_list_by_cat_id" />
+
     <fragment
         android:id="@+id/playlistByIdListFragment"
         android:name="com.omid.musicplayer.fragments.playlistByIdListFragment.PlaylistByIdListFragment"
         android:label="fragment_playlist_by_id_list"
         tools:layout="@layout/fragment_playlist_by_id_list" />
+
+    <fragment
+        android:id="@+id/songListByArtistNameFragment"
+        android:name="com.omid.musicplayer.fragments.songListByArtistNameFragment.SongListByArtistNameFragment"
+        android:label="fragment_song_list_by_artist_name"
+        tools:layout="@layout/fragment_song_list_by_artist_name" />
+
+    <fragment
+        android:id="@+id/newSongsMoreFragment"
+        android:name="com.omid.musicplayer.fragments.newSongsMoreFragment.NewSongsMoreFragment"
+        android:label="fragment_new_songs_more"
+        tools:layout="@layout/fragment_new_songs_more" />
+
+    <fragment
+        android:id="@+id/specialSongsMoreFragment"
+        android:name="com.omid.musicplayer.fragments.specialSongsMoreFragment.SpecialSongsMoreFragment"
+        android:label="fragment_special_songs_more"
+        tools:layout="@layout/fragment_special_songs_more" />
 
 </navigation>

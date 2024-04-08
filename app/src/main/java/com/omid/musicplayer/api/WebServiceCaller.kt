@@ -10,13 +10,14 @@ import com.omid.musicplayer.model.models.PlayLists
 import com.omid.musicplayer.model.models.PlaylistByIdList
 import com.omid.musicplayer.model.models.RecentArtistList
 import com.omid.musicplayer.model.models.SearchSong
-import com.omid.musicplayer.model.models.SingleSong
+import com.omid.musicplayer.model.models.SongListByArtistName
 import com.omid.musicplayer.model.models.SongsByCatId
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class WebServiceCaller {
+
     private val iService = ApiRetrofit.retrofit.create(IService::class.java)
 
     fun getLatestSongs(iListener: IListener<LatestSong>) {
@@ -145,18 +146,20 @@ class WebServiceCaller {
         })
     }
 
-    fun getSingleSong(mp3Id: String, deviceId: String, iListener: IListener<SingleSong>) {
-        iService.singleSong(mp3Id, deviceId).enqueue(object : Callback<SingleSong> {
-            override fun onResponse(call: Call<SingleSong>, response: Response<SingleSong>) {
+    fun getSongListByArtistName(artistName: String, iListener: IListener<SongListByArtistName>) {
+        iService.songListByArtistName(artistName).enqueue(object : Callback<SongListByArtistName> {
+            override fun onResponse(
+                call: Call<SongListByArtistName>,
+                response: Response<SongListByArtistName>
+            ) {
                 iListener.onSuccess(call, response.body()!!)
             }
 
-            override fun onFailure(call: Call<SingleSong>, t: Throwable) {
+            override fun onFailure(call: Call<SongListByArtistName>, t: Throwable) {
                 iListener.onFailure(call, t, "Error")
             }
 
         })
-
     }
 
     fun getSearchSong(searchText: String, iListener: IListener<SearchSong>) {

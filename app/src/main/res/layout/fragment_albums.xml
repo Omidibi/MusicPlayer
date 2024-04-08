@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/nero_7"
-    tools:context=".dashbord.ui.albums.AlbumsFragment">
+    tools:context=".ui.dashboard.albums.AlbumsFragment">
 
     <ProgressBar
         android:id="@+id/pb_albums"

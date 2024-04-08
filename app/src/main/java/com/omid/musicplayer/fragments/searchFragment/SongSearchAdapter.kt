@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.omid.musicplayer.R
 import com.omid.musicplayer.model.models.SearchSongMp3
-import com.omid.musicplayer.util.configuration.AppConfiguration
+import com.omid.musicplayer.utils.configuration.AppConfiguration
 
 class SongSearchAdapter(private val searchList: List<SearchSongMp3>): RecyclerView.Adapter<SongSearchVH>() {
 
