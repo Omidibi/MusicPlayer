@@ -1,22 +1,19 @@
 package com.omid.musicplayer.ui.dashboard.genres
 
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.addCallback
-import androidx.core.content.ContextCompat
-import androidx.core.graphics.drawable.DrawableCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
-import com.omid.musicplayer.activity.MainWidgets
-import com.omid.musicplayer.R
 import com.omid.musicplayer.api.WebServiceCaller
 import com.omid.musicplayer.databinding.FragmentGenresBinding
 import com.omid.musicplayer.model.listener.IListener
 import com.omid.musicplayer.model.models.CategoriesList
-import com.sothree.slidinguppanel.SlidingUpPanelLayout
+import com.omid.musicplayer.utils.practicalCodes.DashboardFragmentsPracticalCodes
+import com.omid.musicplayer.utils.practicalCodes.ProgressBarStatus
 import retrofit2.Call
 
 class GenresFragment : Fragment() {
@@ -31,7 +28,7 @@ class GenresFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        aboutProgressBar()
+        progressBarStatus()
         categoriesList()
         slidingUpPanelStatus()
         clickEvents()
@@ -59,49 +56,20 @@ class GenresFragment : Fragment() {
         }
     }
 
-    private fun aboutProgressBar() {
-        binding.apply {
-            val wrapDrawable = DrawableCompat.wrap(pbGenres.indeterminateDrawable)
-            DrawableCompat.setTint(wrapDrawable, ContextCompat.getColor(requireContext(), R.color.torchRed))
-            pbGenres.indeterminateDrawable = DrawableCompat.unwrap(wrapDrawable)
-        }
+    private fun progressBarStatus() {
+        ProgressBarStatus.pbStatus(binding.pbGenres)
     }
 
     private fun setupBinding() {
+        requireActivity().requestedOrientation = (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
         binding = FragmentGenresBinding.inflate(layoutInflater)
     }
 
     private fun slidingUpPanelStatus() {
-        MainWidgets.slidingUpPanel.addPanelSlideListener(object : SlidingUpPanelLayout.PanelSlideListener {
-            override fun onPanelSlide(panel: View?, slideOffset: Float) {
-
-            }
-
-            override fun onPanelStateChanged(panel: View?, previousState: SlidingUpPanelLayout.PanelState?, newState: SlidingUpPanelLayout.PanelState?) {
-                when (newState) {
-                    SlidingUpPanelLayout.PanelState.COLLAPSED -> {
-                        MainWidgets.bnv.visibility = View.VISIBLE
-                    }
-
-                    SlidingUpPanelLayout.PanelState.EXPANDED -> {
-                        MainWidgets.bnv.visibility = View.GONE
-                    }
-
-                    else -> {
-
-                    }
-                }
-            }
-        })
+        DashboardFragmentsPracticalCodes.slidingUpPanelStatus()
     }
 
     private fun clickEvents(){
-        binding.apply {
-            requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
-                if (MainWidgets.slidingUpPanel.panelState == SlidingUpPanelLayout.PanelState.EXPANDED){
-                    MainWidgets.slidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
-                }
-            }
-        }
+        DashboardFragmentsPracticalCodes.backPressed(this@GenresFragment)
     }
 }

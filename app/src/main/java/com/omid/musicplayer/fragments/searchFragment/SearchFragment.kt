@@ -6,16 +6,15 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.omid.musicplayer.activity.MainWidgets
 import com.omid.musicplayer.api.WebServiceCaller
 import com.omid.musicplayer.databinding.FragmentSearchBinding
 import com.omid.musicplayer.model.listener.IListener
 import com.omid.musicplayer.model.models.SearchSong
-import com.sothree.slidinguppanel.SlidingUpPanelLayout
+import com.omid.musicplayer.utils.practicalCodes.FragmentsPracticalCodes
+import com.omid.musicplayer.utils.practicalCodes.MainWidgetStatus
 import retrofit2.Call
 
 class SearchFragment : Fragment() {
@@ -43,20 +42,11 @@ class SearchFragment : Fragment() {
     private fun clickEvent() {
         binding.apply {
 
-            requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
-                if (MainWidgets.slidingUpPanel.panelState == SlidingUpPanelLayout.PanelState.EXPANDED){
-                    MainWidgets.slidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
-                }else{
-                    findNavController().popBackStack()
-                    MainWidgets.bnv.visibility = View.VISIBLE
-                    MainWidgets.toolbar.visibility = View.VISIBLE
-                }
-            }
+            FragmentsPracticalCodes.backPressed(this@SearchFragment)
 
             ivBack.setOnClickListener {
                 findNavController().popBackStack()
-                MainWidgets.bnv.visibility = View.VISIBLE
-                MainWidgets.toolbar.visibility = View.VISIBLE
+                MainWidgetStatus.visible()
             }
 
             clIvClearText.setOnClickListener {
@@ -96,26 +86,6 @@ class SearchFragment : Fragment() {
     }
 
     private fun slidingUpPanelStatus() {
-        MainWidgets.slidingUpPanel.addPanelSlideListener(object : SlidingUpPanelLayout.PanelSlideListener {
-            override fun onPanelSlide(panel: View?, slideOffset: Float) {
-
-            }
-
-            override fun onPanelStateChanged(panel: View?, previousState: SlidingUpPanelLayout.PanelState?, newState: SlidingUpPanelLayout.PanelState?) {
-                when (newState) {
-                    SlidingUpPanelLayout.PanelState.COLLAPSED -> {
-                        MainWidgets.bnv.visibility = View.GONE
-                    }
-
-                    SlidingUpPanelLayout.PanelState.EXPANDED -> {
-                        MainWidgets.bnv.visibility = View.GONE
-                    }
-
-                    else -> {
-
-                    }
-                }
-            }
-        })
+        FragmentsPracticalCodes.slidingUpPanelStatus()
     }
 }

@@ -1,13 +1,18 @@
 package com.omid.musicplayer.activity
 
 import android.content.pm.ActivityInfo
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
 import android.view.View
+import android.widget.PopupMenu
 import android.widget.SeekBar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.forEach
 import androidx.lifecycle.ViewModelProvider
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
@@ -209,6 +214,10 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
+
+            downSlide.uiPlayer.popupMenu.setOnClickListener {
+                setupPopupMenu()
+            }
         }
     }
 
@@ -394,6 +403,33 @@ class MainActivity : AppCompatActivity() {
                 }
 
             })
+        }
+    }
+
+    private fun setupPopupMenu() {
+        binding.apply {
+            val popup = PopupMenu(applicationContext, downSlide.uiPlayer.popupMenu)
+            popup.inflate(R.menu.popup_menu)
+            popup.show()
+            popup.menu.forEach { item ->
+                SpannableString(item.title.toString()).apply {
+                    this.setSpan(ForegroundColorSpan(Color.BLACK), 0, this.length, 0)
+                    item.title = this
+                }
+            }
+            popup.setOnMenuItemClickListener { menuItem ->
+                when (menuItem.itemId) {
+                    R.id.download -> {
+
+                    }
+
+                    R.id.add_to_favorite -> {
+
+                    }
+
+                }
+                false
+            }
         }
     }
 }

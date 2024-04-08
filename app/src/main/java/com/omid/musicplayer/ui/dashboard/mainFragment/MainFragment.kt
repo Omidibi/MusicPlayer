@@ -7,16 +7,12 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.addCallback
-import androidx.core.content.ContextCompat
-import androidx.core.graphics.drawable.DrawableCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager.widget.ViewPager
 import com.omid.musicplayer.R
-import com.omid.musicplayer.activity.MainWidgets
 import com.omid.musicplayer.activity.SharedViewModel
 import com.omid.musicplayer.api.WebServiceCaller
 import com.omid.musicplayer.databinding.FragmentMainBinding
@@ -25,8 +21,10 @@ import com.omid.musicplayer.model.models.BannerModel
 import com.omid.musicplayer.model.models.LatestMp3
 import com.omid.musicplayer.model.models.LatestSong
 import com.omid.musicplayer.model.models.RecentArtistList
+import com.omid.musicplayer.utils.practicalCodes.DashboardFragmentsPracticalCodes
+import com.omid.musicplayer.utils.practicalCodes.MainWidgetStatus
+import com.omid.musicplayer.utils.practicalCodes.ProgressBarStatus
 import com.omid.musicplayer.utils.sendData.IOnSongClickListener
-import com.sothree.slidinguppanel.SlidingUpPanelLayout
 import retrofit2.Call
 import java.util.Timer
 import java.util.TimerTask
@@ -49,7 +47,7 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupBanner()
-        aboutProgressBar()
+        progressBarStatus()
         latestSongs()
         recentArtist()
         newSongs()
@@ -59,9 +57,9 @@ class MainFragment : Fragment() {
     }
 
     private fun setupBinding() {
-        binding = FragmentMainBinding.inflate(layoutInflater)
         requireActivity().requestedOrientation = (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
-       sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
+        binding = FragmentMainBinding.inflate(layoutInflater)
+        sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
         newSong = mutableListOf()
         specialSong = mutableListOf()
         banner = mutableListOf()
@@ -238,12 +236,8 @@ class MainFragment : Fragment() {
         }
     }
 
-    private fun aboutProgressBar() {
-        binding.apply {
-            val wrapDrawable = DrawableCompat.wrap(pbLoading.indeterminateDrawable)
-            DrawableCompat.setTint(wrapDrawable, ContextCompat.getColor(requireContext(), R.color.torchRed))
-            pbLoading.indeterminateDrawable = DrawableCompat.unwrap(wrapDrawable)
-        }
+    private fun progressBarStatus() {
+        ProgressBarStatus.pbStatus(binding.pbLoading)
     }
 
     private fun latestSongs() {
@@ -294,47 +288,22 @@ class MainFragment : Fragment() {
     }
 
     private fun slidingUpPanelStatus() {
-        MainWidgets.slidingUpPanel.addPanelSlideListener(object : SlidingUpPanelLayout.PanelSlideListener {
-            override fun onPanelSlide(panel: View?, slideOffset: Float) {
-
-            }
-
-            override fun onPanelStateChanged(panel: View?, previousState: SlidingUpPanelLayout.PanelState?, newState: SlidingUpPanelLayout.PanelState?) {
-                when (newState) {
-                    SlidingUpPanelLayout.PanelState.COLLAPSED -> {
-                        MainWidgets.bnv.visibility = View.VISIBLE
-                    }
-
-                    SlidingUpPanelLayout.PanelState.EXPANDED -> {
-                        MainWidgets.bnv.visibility = View.GONE
-                    }
-
-                    else -> {
-
-                    }
-                }
-            }
-        })
+        DashboardFragmentsPracticalCodes.slidingUpPanelStatus()
     }
 
     private fun clickEvents(){
         binding.apply {
-            requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
-                if (MainWidgets.slidingUpPanel.panelState == SlidingUpPanelLayout.PanelState.EXPANDED){
-                    MainWidgets.slidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
-                }
-            }
+
+            DashboardFragmentsPracticalCodes.backPressed(this@MainFragment)
 
             moreNewSongs.setOnClickListener {
                 findNavController().navigate(R.id.action_mainFragment_to_newSongsMoreFragment)
-                MainWidgets.bnv.visibility = View.GONE
-                MainWidgets.toolbar.visibility = View.GONE
+                MainWidgetStatus.gone()
             }
 
             moreSpecialSongs.setOnClickListener {
                 findNavController().navigate(R.id.action_mainFragment_to_specialSongsMoreFragment)
-                MainWidgets.bnv.visibility = View.GONE
-                MainWidgets.toolbar.visibility = View.GONE
+                MainWidgetStatus.gone()
             }
         }
     }

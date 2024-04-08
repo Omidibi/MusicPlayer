@@ -55,7 +55,17 @@
         android:id="@+id/menuFragment"
         android:name="com.omid.musicplayer.fragments.menuFragment.MenuFragment"
         android:label="fragment_menu"
-        tools:layout="@layout/fragment_menu" />
+        tools:layout="@layout/fragment_menu" >
+        <action
+            android:id="@+id/action_menuFragment_to_aboutFragment"
+            app:destination="@id/aboutFragment" />
+        <action
+            android:id="@+id/action_menuFragment_to_downloadsFragment"
+            app:destination="@id/downloadsFragment" />
+        <action
+            android:id="@+id/action_menuFragment_to_favoritesFragment"
+            app:destination="@id/favoritesFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/mainFragment"
@@ -108,5 +118,23 @@
         android:name="com.omid.musicplayer.fragments.specialSongsMoreFragment.SpecialSongsMoreFragment"
         android:label="fragment_special_songs_more"
         tools:layout="@layout/fragment_special_songs_more" />
+
+    <fragment
+        android:id="@+id/aboutFragment"
+        android:name="com.omid.musicplayer.fragments.aboutFragment.AboutFragment"
+        android:label="fragment_about"
+        tools:layout="@layout/fragment_about" />
+
+    <fragment
+        android:id="@+id/downloadsFragment"
+        android:name="com.omid.musicplayer.fragments.downloadsFragment.DownloadsFragment"
+        android:label="fragment_downloads"
+        tools:layout="@layout/fragment_downloads" />
+
+    <fragment
+        android:id="@+id/favoritesFragment"
+        android:name="com.omid.musicplayer.fragments.favoritesFragment.FavoritesFragment"
+        android:label="fragment_favorites"
+        tools:layout="@layout/fragment_favorites" />
 
 </navigation>

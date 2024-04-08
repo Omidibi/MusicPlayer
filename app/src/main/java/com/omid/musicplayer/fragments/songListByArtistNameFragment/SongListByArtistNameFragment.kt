@@ -6,12 +6,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.omid.musicplayer.activity.MainWidgets
 import com.omid.musicplayer.activity.SharedViewModel
 import com.omid.musicplayer.api.WebServiceCaller
 import com.omid.musicplayer.databinding.FragmentSongListByArtistNameBinding
@@ -19,8 +17,10 @@ import com.omid.musicplayer.model.listener.IListener
 import com.omid.musicplayer.model.models.ArtistsMp3
 import com.omid.musicplayer.model.models.LatestMp3
 import com.omid.musicplayer.model.models.SongListByArtistName
+import com.omid.musicplayer.utils.practicalCodes.FragmentsPracticalCodes
+import com.omid.musicplayer.utils.practicalCodes.MainWidgetStatus
+import com.omid.musicplayer.utils.practicalCodes.ProgressBarStatus
 import com.omid.musicplayer.utils.sendData.IOnSongClickListener
-import com.sothree.slidinguppanel.SlidingUpPanelLayout
 import retrofit2.Call
 
 class SongListByArtistNameFragment : Fragment() {
@@ -38,6 +38,7 @@ class SongListByArtistNameFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         getData()
+        progressBarStatus()
         slidingUpPanelStatus()
         clickEvents()
         getSongListByArtistName()
@@ -60,46 +61,22 @@ class SongListByArtistNameFragment : Fragment() {
         }
     }
 
+    private fun progressBarStatus() {
+        ProgressBarStatus.pbStatus(binding.pb)
+    }
+
     private fun slidingUpPanelStatus() {
-        MainWidgets.slidingUpPanel.addPanelSlideListener(object : SlidingUpPanelLayout.PanelSlideListener {
-            override fun onPanelSlide(panel: View?, slideOffset: Float) {
-
-            }
-
-            override fun onPanelStateChanged(panel: View?, previousState: SlidingUpPanelLayout.PanelState?, newState: SlidingUpPanelLayout.PanelState?) {
-                when (newState) {
-                    SlidingUpPanelLayout.PanelState.COLLAPSED -> {
-                        MainWidgets.bnv.visibility = View.GONE
-                    }
-
-                    SlidingUpPanelLayout.PanelState.EXPANDED -> {
-                        MainWidgets.bnv.visibility = View.GONE
-                    }
-
-                    else -> {
-
-                    }
-                }
-            }
-        })
+        FragmentsPracticalCodes.slidingUpPanelStatus()
     }
 
     private fun clickEvents(){
         binding.apply {
-            requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
-                if (MainWidgets.slidingUpPanel.panelState == SlidingUpPanelLayout.PanelState.EXPANDED){
-                    MainWidgets.slidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
-                } else {
-                    findNavController().popBackStack()
-                    MainWidgets.bnv.visibility = View.VISIBLE
-                    MainWidgets.toolbar.visibility = View.VISIBLE
-                }
-            }
+
+            FragmentsPracticalCodes.backPressed(this@SongListByArtistNameFragment)
 
             ivBack.setOnClickListener {
                 findNavController().popBackStack()
-                MainWidgets.bnv.visibility = View.VISIBLE
-                MainWidgets.toolbar.visibility = View.VISIBLE
+                MainWidgetStatus.visible()
             }
         }
     }

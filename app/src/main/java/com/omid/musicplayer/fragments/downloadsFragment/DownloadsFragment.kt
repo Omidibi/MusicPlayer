@@ -1,4 +1,4 @@
-package com.omid.musicplayer.fragments.specialSongsMoreFragment
+package com.omid.musicplayer.fragments.downloadsFragment
 
 import android.content.pm.ActivityInfo
 import android.os.Bundle
@@ -7,13 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.omid.musicplayer.databinding.FragmentSpecialSongsMoreBinding
+import com.omid.musicplayer.databinding.FragmentDownloadsBinding
 import com.omid.musicplayer.utils.practicalCodes.FragmentsPracticalCodes
-import com.omid.musicplayer.utils.practicalCodes.MainWidgetStatus
 
-class SpecialSongsMoreFragment : Fragment() {
+class DownloadsFragment : Fragment() {
 
-    private lateinit var binding: FragmentSpecialSongsMoreBinding
+    private lateinit var binding: FragmentDownloadsBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         setupBinding()
@@ -22,23 +21,22 @@ class SpecialSongsMoreFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        clickEvents()
+        clickEvent()
         slidingUpPanelStatus()
     }
 
     private fun setupBinding(){
         requireActivity().requestedOrientation = (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
-        binding = FragmentSpecialSongsMoreBinding.inflate(layoutInflater)
+        binding = FragmentDownloadsBinding.inflate(layoutInflater)
     }
 
-    private fun clickEvents(){
+    private fun clickEvent() {
         binding.apply {
 
-            FragmentsPracticalCodes.backPressed(this@SpecialSongsMoreFragment)
+            FragmentsPracticalCodes.onlyBack(this@DownloadsFragment)
 
             ivBack.setOnClickListener {
                 findNavController().popBackStack()
-                MainWidgetStatus.visible()
             }
         }
     }

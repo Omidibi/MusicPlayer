@@ -7,12 +7,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.omid.musicplayer.activity.MainWidgets
 import com.omid.musicplayer.activity.SharedViewModel
 import com.omid.musicplayer.api.WebServiceCaller
 import com.omid.musicplayer.databinding.FragmentPlaylistByIdListBinding
@@ -20,8 +18,10 @@ import com.omid.musicplayer.model.listener.IListener
 import com.omid.musicplayer.model.models.LatestMp3
 import com.omid.musicplayer.model.models.PlayListsMp3
 import com.omid.musicplayer.model.models.PlaylistByIdList
+import com.omid.musicplayer.utils.practicalCodes.FragmentsPracticalCodes
+import com.omid.musicplayer.utils.practicalCodes.MainWidgetStatus
+import com.omid.musicplayer.utils.practicalCodes.ProgressBarStatus
 import com.omid.musicplayer.utils.sendData.IOnSongClickListener
-import com.sothree.slidinguppanel.SlidingUpPanelLayout
 import retrofit2.Call
 
 class PlaylistByIdListFragment : Fragment() {
@@ -38,6 +38,7 @@ class PlaylistByIdListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        progressBarStatus()
         playlistById()
         clickEvent()
         slidingUpPanelStatus()
@@ -57,31 +58,30 @@ class PlaylistByIdListFragment : Fragment() {
         }
     }
 
+    private fun progressBarStatus() {
+        ProgressBarStatus.pbStatus(binding.pbPlaylistByIdList)
+    }
+
     private fun clickEvent() {
         binding.apply {
 
-            requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
-                if (MainWidgets.slidingUpPanel.panelState == SlidingUpPanelLayout.PanelState.EXPANDED){
-                    MainWidgets.slidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
-                }else{
-                    findNavController().popBackStack()
-                    MainWidgets.bnv.visibility = View.VISIBLE
-                    MainWidgets.toolbar.visibility = View.VISIBLE
-                }
-            }
+            FragmentsPracticalCodes.backPressed(this@PlaylistByIdListFragment)
 
             imgBack.setOnClickListener {
                 findNavController().popBackStack()
-                MainWidgets.bnv.visibility = View.VISIBLE
-                MainWidgets.toolbar.visibility = View.VISIBLE
+                MainWidgetStatus.visible()
             }
         }
     }
 
     private fun playlistById() {
         binding.apply {
+            pbPlaylistByIdList.visibility = View.VISIBLE
+            rvPlaylistList.visibility = View.GONE
             webServiceCaller.getPlaylistById(playlistMp3?.pid!!,object :IListener<PlaylistByIdList>{
                 override fun onSuccess(call: Call<PlaylistByIdList>, response: PlaylistByIdList) {
+                    pbPlaylistByIdList.visibility = View.GONE
+                    rvPlaylistList.visibility = View.VISIBLE
                     Log.e("", "")
                     for (i in 0..<response.onlineMp3.size) {
                         val songs = response.onlineMp3[i].songsList
@@ -105,26 +105,6 @@ class PlaylistByIdListFragment : Fragment() {
     }
 
     private fun slidingUpPanelStatus() {
-        MainWidgets.slidingUpPanel.addPanelSlideListener(object : SlidingUpPanelLayout.PanelSlideListener {
-            override fun onPanelSlide(panel: View?, slideOffset: Float) {
-
-            }
-
-            override fun onPanelStateChanged(panel: View?, previousState: SlidingUpPanelLayout.PanelState?, newState: SlidingUpPanelLayout.PanelState?) {
-                when (newState) {
-                    SlidingUpPanelLayout.PanelState.COLLAPSED -> {
-                        MainWidgets.bnv.visibility = View.GONE
-                    }
-
-                    SlidingUpPanelLayout.PanelState.EXPANDED -> {
-                        MainWidgets.bnv.visibility = View.GONE
-                    }
-
-                    else -> {
-
-                    }
-                }
-            }
-        })
+        FragmentsPracticalCodes.slidingUpPanelStatus()
     }
 }

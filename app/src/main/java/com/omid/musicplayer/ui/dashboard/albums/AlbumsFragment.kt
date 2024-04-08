@@ -1,22 +1,19 @@
 package com.omid.musicplayer.ui.dashboard.albums
 
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.addCallback
-import androidx.core.content.ContextCompat
-import androidx.core.graphics.drawable.DrawableCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.omid.musicplayer.activity.MainWidgets
-import com.omid.musicplayer.R
 import com.omid.musicplayer.api.WebServiceCaller
 import com.omid.musicplayer.databinding.FragmentAlbumsBinding
 import com.omid.musicplayer.model.listener.IListener
 import com.omid.musicplayer.model.models.AlbumsList
-import com.sothree.slidinguppanel.SlidingUpPanelLayout
+import com.omid.musicplayer.utils.practicalCodes.DashboardFragmentsPracticalCodes
+import com.omid.musicplayer.utils.practicalCodes.ProgressBarStatus
 import retrofit2.Call
 
 class AlbumsFragment : Fragment() {
@@ -31,22 +28,19 @@ class AlbumsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        aboutProgressBar()
+        progressBarStatus()
         albumsList()
         slidingUpPanelStatus()
         clickEvents()
     }
 
     private fun setupBinding() {
+        requireActivity().requestedOrientation = (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
         binding = FragmentAlbumsBinding.inflate(layoutInflater)
     }
 
-    private fun aboutProgressBar() {
-        binding.apply {
-            val wrapDrawable = DrawableCompat.wrap(pbAlbums.indeterminateDrawable)
-            DrawableCompat.setTint(wrapDrawable, ContextCompat.getColor(requireContext(), R.color.torchRed))
-            pbAlbums.indeterminateDrawable = DrawableCompat.unwrap(wrapDrawable)
-        }
+    private fun progressBarStatus() {
+        ProgressBarStatus.pbStatus(binding.pbAlbums)
     }
 
     private fun albumsList() {
@@ -76,40 +70,10 @@ class AlbumsFragment : Fragment() {
     }
 
     private fun slidingUpPanelStatus() {
-        binding.apply {
-            MainWidgets.slidingUpPanel.addPanelSlideListener(object : SlidingUpPanelLayout.PanelSlideListener {
-                override fun onPanelSlide(panel: View?, slideOffset: Float) {
-
-                }
-
-                override fun onPanelStateChanged(panel: View?, previousState: SlidingUpPanelLayout.PanelState?, newState: SlidingUpPanelLayout.PanelState?) {
-                    when (newState) {
-                        SlidingUpPanelLayout.PanelState.COLLAPSED -> {
-                            MainWidgets.bnv.visibility = View.VISIBLE
-                        }
-
-                        SlidingUpPanelLayout.PanelState.EXPANDED -> {
-                            MainWidgets.bnv.visibility = View.GONE
-                        }
-
-                        else -> {
-
-                        }
-                    }
-                }
-
-            })
-        }
+        DashboardFragmentsPracticalCodes.slidingUpPanelStatus()
     }
 
     private fun clickEvents(){
-        binding.apply {
-            requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
-                if (MainWidgets.slidingUpPanel.panelState == SlidingUpPanelLayout.PanelState.EXPANDED){
-                    MainWidgets.slidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
-                }
-            }
-        }
+        DashboardFragmentsPracticalCodes.backPressed(this@AlbumsFragment)
     }
-
 }

@@ -6,12 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.omid.musicplayer.activity.MainWidgets
+import com.omid.musicplayer.R
 import com.omid.musicplayer.databinding.FragmentMenuBinding
-import com.sothree.slidinguppanel.SlidingUpPanelLayout
+import com.omid.musicplayer.utils.practicalCodes.FragmentsPracticalCodes
+import com.omid.musicplayer.utils.practicalCodes.MainWidgetStatus
 
 class MenuFragment : Fragment() {
 
@@ -36,44 +36,23 @@ class MenuFragment : Fragment() {
     private fun clickEvent() {
         binding.apply {
 
-            requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner){
-                if (MainWidgets.slidingUpPanel.panelState == SlidingUpPanelLayout.PanelState.EXPANDED){
-                    MainWidgets.slidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
-                } else {
-                    findNavController().popBackStack()
-                    MainWidgets.bnv.visibility = View.VISIBLE
-                    MainWidgets.toolbar.visibility = View.VISIBLE
-                }
-            }
+            FragmentsPracticalCodes.backPressed(this@MenuFragment)
 
             ivBack.setOnClickListener {
                 findNavController().popBackStack()
-                MainWidgets.bnv.visibility = View.VISIBLE
-                MainWidgets.toolbar.visibility = View.VISIBLE
-            }
-
-            clVideoArchive.setOnClickListener {
-                Toast.makeText(requireContext(), "clVideoArchive is OK", Toast.LENGTH_LONG).show()
+                MainWidgetStatus.visible()
             }
 
             clDownloads.setOnClickListener {
-                Toast.makeText(requireContext(), "clDownloads is OK", Toast.LENGTH_LONG).show()
+                findNavController().navigate(R.id.action_menuFragment_to_downloadsFragment)
             }
 
             clFavorites.setOnClickListener {
-                Toast.makeText(requireContext(), "clFavorites is OK", Toast.LENGTH_LONG).show()
-            }
-
-            clRate.setOnClickListener {
-                Toast.makeText(requireContext(), "clRate is OK", Toast.LENGTH_LONG).show()
+                findNavController().navigate(R.id.action_menuFragment_to_favoritesFragment)
             }
 
             clAbout.setOnClickListener {
-                Toast.makeText(requireContext(), "clAbout is OK", Toast.LENGTH_LONG).show()
-            }
-
-            clPrivacyPolicy.setOnClickListener {
-                Toast.makeText(requireContext(), "clPrivacyPolicy is OK", Toast.LENGTH_LONG).show()
+                findNavController().navigate(R.id.action_menuFragment_to_aboutFragment)
             }
 
             clShare.setOnClickListener {
@@ -83,26 +62,6 @@ class MenuFragment : Fragment() {
     }
 
     private fun slidingUpPanelStatus() {
-        MainWidgets.slidingUpPanel.addPanelSlideListener(object : SlidingUpPanelLayout.PanelSlideListener {
-            override fun onPanelSlide(panel: View?, slideOffset: Float) {
-
-            }
-
-            override fun onPanelStateChanged(panel: View?, previousState: SlidingUpPanelLayout.PanelState?, newState: SlidingUpPanelLayout.PanelState?) {
-                when (newState) {
-                    SlidingUpPanelLayout.PanelState.COLLAPSED -> {
-                        MainWidgets.bnv.visibility = View.GONE
-                    }
-
-                    SlidingUpPanelLayout.PanelState.EXPANDED -> {
-                        MainWidgets.bnv.visibility = View.GONE
-                    }
-
-                    else -> {
-
-                    }
-                }
-            }
-        })
+        FragmentsPracticalCodes.slidingUpPanelStatus()
     }
 }
