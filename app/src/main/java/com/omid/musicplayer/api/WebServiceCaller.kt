@@ -20,33 +20,12 @@ class WebServiceCaller {
 
     private val iService = ApiRetrofit.retrofit.create(IService::class.java)
 
-    fun getLatestSongs(iListener: IListener<LatestSong>) {
-        iService.latestSongs().enqueue(object : Callback<LatestSong> {
-            override fun onResponse(call: Call<LatestSong>, response: Response<LatestSong>) {
-                iListener.onSuccess(call, response.body()!!)
-            }
-
-            override fun onFailure(call: Call<LatestSong>, t: Throwable) {
-                iListener.onFailure(call, t, "Error")
-            }
-
-        })
+    suspend fun getLatestSongs(): LatestSong? {
+        iService.latestSongs().apply { return if (this.isSuccessful) this.body() else null }
     }
 
-    fun getRecentArtist(iListener: IListener<RecentArtistList>) {
-        iService.recentArtist().enqueue(object : Callback<RecentArtistList> {
-            override fun onResponse(
-                call: Call<RecentArtistList>,
-                response: Response<RecentArtistList>
-            ) {
-                iListener.onSuccess(call, response.body()!!)
-            }
-
-            override fun onFailure(call: Call<RecentArtistList>, t: Throwable) {
-                iListener.onFailure(call, t, "Error")
-            }
-
-        })
+    suspend fun getRecentArtist(): RecentArtistList? {
+        iService.recentArtist().apply { return if (this.isSuccessful) this.body() else null}
     }
 
     fun getArtistsList(iListener: IListener<ArtistsList>) {

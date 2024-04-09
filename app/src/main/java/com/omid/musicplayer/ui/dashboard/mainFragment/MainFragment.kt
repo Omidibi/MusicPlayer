@@ -4,6 +4,7 @@ import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,27 +14,27 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager.widget.ViewPager
 import com.omid.musicplayer.R
+import com.omid.musicplayer.activity.MainWidgets
 import com.omid.musicplayer.activity.SharedViewModel
-import com.omid.musicplayer.api.WebServiceCaller
 import com.omid.musicplayer.databinding.FragmentMainBinding
-import com.omid.musicplayer.model.listener.IListener
 import com.omid.musicplayer.model.models.BannerModel
 import com.omid.musicplayer.model.models.LatestMp3
-import com.omid.musicplayer.model.models.LatestSong
-import com.omid.musicplayer.model.models.RecentArtistList
+import com.omid.musicplayer.utils.internetLiveData.CheckNetworkConnection
+import com.omid.musicplayer.utils.networkAvailable.NetworkAvailable
 import com.omid.musicplayer.utils.practicalCodes.DashboardFragmentsPracticalCodes
 import com.omid.musicplayer.utils.practicalCodes.MainWidgetStatus
 import com.omid.musicplayer.utils.practicalCodes.ProgressBarStatus
 import com.omid.musicplayer.utils.sendData.IOnSongClickListener
-import retrofit2.Call
+import com.sothree.slidinguppanel.SlidingUpPanelLayout
 import java.util.Timer
 import java.util.TimerTask
 
 class MainFragment : Fragment() {
 
     private lateinit var binding: FragmentMainBinding
-    private val webServiceCaller = WebServiceCaller()
     private lateinit var sharedViewModel : SharedViewModel
+    private lateinit var mainViewModel: MainViewModel
+    private lateinit var checkNetworkConnection: CheckNetworkConnection
     private lateinit var newSong: MutableList<LatestMp3>
     private lateinit var specialSong: MutableList<LatestMp3>
     private lateinit var banner: MutableList<BannerModel>
@@ -46,10 +47,11 @@ class MainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        checkNetwork()
         setupBanner()
         progressBarStatus()
-        latestSongs()
-        recentArtist()
+        mainObservers()
+        srlStatus()
         newSongs()
         specialSong()
         slidingUpPanelStatus()
@@ -60,6 +62,8 @@ class MainFragment : Fragment() {
         requireActivity().requestedOrientation = (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
         binding = FragmentMainBinding.inflate(layoutInflater)
         sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
+        mainViewModel = ViewModelProvider(requireActivity())[MainViewModel::class.java]
+        checkNetworkConnection = CheckNetworkConnection(requireActivity().application)
         newSong = mutableListOf()
         specialSong = mutableListOf()
         banner = mutableListOf()
@@ -240,50 +244,74 @@ class MainFragment : Fragment() {
         ProgressBarStatus.pbStatus(binding.pbLoading)
     }
 
-    private fun latestSongs() {
+    private fun checkNetwork(){
         binding.apply {
-            pbLoading.visibility = View.VISIBLE
-            mainScroll.visibility = View.GONE
-            webServiceCaller.getLatestSongs(object : IListener<LatestSong> {
-                override fun onSuccess(call: Call<LatestSong>, response: LatestSong) {
-                    pbLoading.visibility = View.GONE
-                    mainScroll.visibility = View.VISIBLE
-                    val adapter = LatestSongsAdapter(requireActivity(), response.onlineMp3, object : IOnSongClickListener {
-                        override fun onSongClick(latestSongInfo: LatestMp3, latestSongsList: List<LatestMp3>) {
-                            sharedViewModel.latestMp3.value = latestSongInfo
-                            sharedViewModel.latestMp3List.value = latestSongsList
-                        }
-                    })
-                    rvLatestSongs.adapter = adapter
-                    rvLatestSongs.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-                }
-
-                override fun onFailure(call: Call<LatestSong>, t: Throwable, errorResponse: String) {
-                    pbLoading.visibility = View.VISIBLE
-                    mainScroll.visibility = View.GONE
-                }
-            })
+            if (NetworkAvailable.isNetworkAvailable(requireContext())) {
+                srl.visibility = View.VISIBLE
+                pbLoading.visibility = View.GONE
+                liveNoConnection.visibility = View.GONE
+            } else {
+                srl.visibility = View.GONE
+                pbLoading.visibility = View.GONE
+                liveNoConnection.visibility = View.VISIBLE
+            }
         }
     }
 
-    private fun recentArtist() {
+    private fun mainObservers(){
         binding.apply {
-            pbLoading.visibility = View.VISIBLE
-            mainScroll.visibility = View.GONE
-            webServiceCaller.getRecentArtist(object : IListener<RecentArtistList> {
-                override fun onSuccess(call: Call<RecentArtistList>, response: RecentArtistList) {
+            checkNetworkConnection.observe(viewLifecycleOwner) { isConnected->
+                srl.visibility = View.GONE
+                pbLoading.visibility = View.VISIBLE
+                liveNoConnection.visibility = View.GONE
+                if (isConnected) {
+                    mainViewModel.latestSong.observe(viewLifecycleOwner) { latestSong ->
+                        srl.visibility = View.VISIBLE
+                        pbLoading.visibility = View.GONE
+                        liveNoConnection.visibility = View.GONE
+                        val adapter = LatestSongsAdapter(requireActivity(), latestSong.onlineMp3, object : IOnSongClickListener {
+                            override fun onSongClick(latestSongInfo: LatestMp3, latestSongsList: List<LatestMp3>) {
+                                sharedViewModel.latestMp3.value = latestSongInfo
+                                sharedViewModel.latestMp3List.value = latestSongsList
+                            }
+                        })
+                        rvLatestSongs.adapter = adapter
+                        rvLatestSongs.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+                    }
+                    mainViewModel.recentArtistList.observe(viewLifecycleOwner) { recentArtistList ->
+                        srl.visibility = View.VISIBLE
+                        pbLoading.visibility = View.GONE
+                        liveNoConnection.visibility = View.GONE
+                        rvRecentArtist.adapter = RecentArtistAdapter(this@MainFragment,recentArtistList.onlineMp3)
+                        rvRecentArtist.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+                    }
+                }else {
+                    srl.visibility = View.GONE
                     pbLoading.visibility = View.GONE
-                    mainScroll.visibility = View.VISIBLE
-                    rvRecentArtist.adapter = RecentArtistAdapter(this@MainFragment,response.onlineMp3)
-                    rvRecentArtist.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+                    liveNoConnection.visibility = View.VISIBLE
+                    MainWidgets.slidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.HIDDEN
+                    currentPage = 0
+                    try {
+                        MainWidgets.player.stop()
+                    }catch (e: UninitializedPropertyAccessException) {
+                        e.message?.let { Log.e("Catch", it) }
+                    }
                 }
+            }
+        }
+    }
 
-                override fun onFailure(call: Call<RecentArtistList>, t: Throwable, errorResponse: String) {
-                    pbLoading.visibility = View.VISIBLE
-                    mainScroll.visibility = View.GONE
-                }
-
-            })
+    private fun srlStatus(){
+        binding.apply {
+            srl.setOnRefreshListener {
+                pbLoading.visibility = View.VISIBLE
+                liveNoConnection.visibility = View.GONE
+                srl.visibility = View.GONE
+                mainViewModel.getLatestSongs()
+                mainViewModel.getRecentArtist()
+                currentPage = 0
+                srl.isRefreshing = false
+            }
         }
     }
 

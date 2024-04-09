@@ -12,8 +12,7 @@ import com.omid.musicplayer.utils.sendData.IOnSongClickListener
 class SongsListByCatIdAdapter(private val songsListByCatId : List<LatestMp3>,private val iSelected: IOnSongClickListener): RecyclerView.Adapter<SongsListByCatIdVH>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SongsListByCatIdVH {
-        val view = LayoutInflater.from(AppConfiguration.getContext()).inflate(R.layout.songs_by_cat_id_row,null)
-        return SongsListByCatIdVH(view)
+        return SongsListByCatIdVH(LayoutInflater.from(AppConfiguration.getContext()).inflate(R.layout.songs_by_cat_id_row,null))
     }
 
     override fun getItemCount(): Int {

@@ -12,19 +12,20 @@ import com.omid.musicplayer.model.models.SearchSong
 import com.omid.musicplayer.model.models.SongListByArtistName
 import com.omid.musicplayer.model.models.SongsByCatId
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface IService {
 
     @GET("api.php?latest")
-    fun latestSongs(): Call<LatestSong>
+    suspend fun latestSongs(): Response<LatestSong>
 
     @GET("api.php?cat_list")
     fun categories(): Call<CategoriesList>
 
     @GET("api.php?recent_artist_list")
-    fun recentArtist(): Call<RecentArtistList>
+    suspend fun recentArtist(): Response<RecentArtistList>
 
     @GET("api.php?artist_list")
     fun artistsList(): Call<ArtistsList>

@@ -278,6 +278,7 @@ class MainActivity : AppCompatActivity() {
             downSlide.uiPlayer.playPause.setImageResource(R.drawable.pause)
             downSlide.uiPlayer.upPlayPause.setImageResource(R.drawable.pause)
             player = ExoPlayer.Builder(applicationContext).build()
+            MainWidgets.player = player
             player.volume = currentVolume
             player.repeatMode = if (isRepeat) Player.REPEAT_MODE_ONE else Player.REPEAT_MODE_OFF
             player.setMediaItem(MediaItem.fromUri(Uri.parse(latestMp3.mp3Url)))
