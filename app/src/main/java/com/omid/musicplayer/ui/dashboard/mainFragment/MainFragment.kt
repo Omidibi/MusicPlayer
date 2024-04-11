@@ -19,7 +19,6 @@ import com.omid.musicplayer.activity.SharedViewModel
 import com.omid.musicplayer.databinding.FragmentMainBinding
 import com.omid.musicplayer.model.models.BannerModel
 import com.omid.musicplayer.model.models.LatestMp3
-import com.omid.musicplayer.utils.internetLiveData.CheckNetworkConnection
 import com.omid.musicplayer.utils.networkAvailable.NetworkAvailable
 import com.omid.musicplayer.utils.practicalCodes.DashboardFragmentsPracticalCodes
 import com.omid.musicplayer.utils.practicalCodes.MainWidgetStatus
@@ -34,7 +33,6 @@ class MainFragment : Fragment() {
     private lateinit var binding: FragmentMainBinding
     private lateinit var sharedViewModel : SharedViewModel
     private lateinit var mainViewModel: MainViewModel
-    private lateinit var checkNetworkConnection: CheckNetworkConnection
     private lateinit var newSong: MutableList<LatestMp3>
     private lateinit var specialSong: MutableList<LatestMp3>
     private lateinit var banner: MutableList<BannerModel>
@@ -63,7 +61,6 @@ class MainFragment : Fragment() {
         binding = FragmentMainBinding.inflate(layoutInflater)
         sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
         mainViewModel = ViewModelProvider(requireActivity())[MainViewModel::class.java]
-        checkNetworkConnection = CheckNetworkConnection(requireActivity().application)
         newSong = mutableListOf()
         specialSong = mutableListOf()
         banner = mutableListOf()
@@ -260,7 +257,7 @@ class MainFragment : Fragment() {
 
     private fun mainObservers(){
         binding.apply {
-            checkNetworkConnection.observe(viewLifecycleOwner) { isConnected->
+            mainViewModel.checkNetworkConnection.observe(viewLifecycleOwner) { isConnected->
                 srl.visibility = View.GONE
                 pbLoading.visibility = View.VISIBLE
                 liveNoConnection.visibility = View.GONE

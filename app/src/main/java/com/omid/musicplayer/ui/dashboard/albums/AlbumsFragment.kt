@@ -7,19 +7,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.omid.musicplayer.api.WebServiceCaller
+import com.omid.musicplayer.activity.MainWidgets
 import com.omid.musicplayer.databinding.FragmentAlbumsBinding
-import com.omid.musicplayer.model.listener.IListener
-import com.omid.musicplayer.model.models.AlbumsList
+import com.omid.musicplayer.utils.networkAvailable.NetworkAvailable
 import com.omid.musicplayer.utils.practicalCodes.DashboardFragmentsPracticalCodes
 import com.omid.musicplayer.utils.practicalCodes.ProgressBarStatus
-import retrofit2.Call
+import com.sothree.slidinguppanel.SlidingUpPanelLayout
 
 class AlbumsFragment : Fragment() {
 
     private lateinit var binding: FragmentAlbumsBinding
-    private val webServiceCaller = WebServiceCaller()
+    private lateinit var albumsListViewModel: AlbumsListViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         setupBinding()
@@ -29,7 +29,9 @@ class AlbumsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         progressBarStatus()
-        albumsList()
+        networkAvailable()
+        srlStatus()
+        albumsListObservers()
         slidingUpPanelStatus()
         clickEvents()
     }
@@ -37,35 +39,65 @@ class AlbumsFragment : Fragment() {
     private fun setupBinding() {
         requireActivity().requestedOrientation = (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
         binding = FragmentAlbumsBinding.inflate(layoutInflater)
+        albumsListViewModel = ViewModelProvider(requireActivity())[AlbumsListViewModel::class.java]
     }
 
     private fun progressBarStatus() {
         ProgressBarStatus.pbStatus(binding.pbAlbums)
     }
 
-    private fun albumsList() {
+    private fun networkAvailable(){
         binding.apply {
-            pbAlbums.visibility = View.VISIBLE
-            webServiceCaller.getAlbums(object : IListener<AlbumsList>{
-                override fun onSuccess(call: Call<AlbumsList>, response: AlbumsList) {
-                    Log.e("", "")
+            if (NetworkAvailable.isNetworkAvailable(requireContext())) {
+                pbAlbums.visibility = View.GONE
+                srl.visibility = View.VISIBLE
+                liveNoConnection.visibility = View.GONE
+            }else {
+                pbAlbums.visibility = View.GONE
+                srl.visibility = View.GONE
+                liveNoConnection.visibility = View.VISIBLE
+            }
+        }
+    }
+
+    private fun albumsListObservers() {
+        binding.apply {
+            albumsListViewModel.checkNetworkConnection.observe(viewLifecycleOwner) { isConnect->
+                pbAlbums.visibility = View.VISIBLE
+                srl.visibility = View.GONE
+                liveNoConnection.visibility = View.GONE
+                if (isConnect) {
+                    albumsListViewModel.albumList.observe(viewLifecycleOwner) { albumList->
+                        pbAlbums.visibility = View.GONE
+                        srl.visibility = View.VISIBLE
+                        liveNoConnection.visibility = View.GONE
+                        rvAlbumsList.adapter = AlbumsListAdapter(this@AlbumsFragment, albumList.onlineMp3)
+                        rvAlbumsList.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+                    }
+                } else {
                     pbAlbums.visibility = View.GONE
-                    rvAlbumsList.visibility = View.VISIBLE
-                    rvAlbumsList.adapter =
-                        AlbumsListAdapter(
-                            this@AlbumsFragment,
-                            response.onlineMp3
-                        )
-                    rvAlbumsList.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+                    srl.visibility = View.GONE
+                    liveNoConnection.visibility = View.VISIBLE
+                    MainWidgets.slidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.HIDDEN
+                    try {
+                        MainWidgets.player.stop()
+                    }catch (e: UninitializedPropertyAccessException) {
+                        e.message?.let { Log.e("Catch", it) }
+                    }
                 }
+            }
+        }
+    }
 
-                override fun onFailure(call: Call<AlbumsList>, t: Throwable, errorResponse: String) {
-                    Log.e("", "")
-                    pbAlbums.visibility = View.VISIBLE
-                    rvAlbumsList.visibility = View.GONE
-                }
-
-            })
+    private fun srlStatus(){
+        binding.apply {
+            srl.setOnRefreshListener {
+                pbAlbums.visibility = View.VISIBLE
+                srl.visibility = View.GONE
+                liveNoConnection.visibility = View.GONE
+                albumsListViewModel.getAlbumList()
+                srl.isRefreshing = false
+            }
         }
     }
 

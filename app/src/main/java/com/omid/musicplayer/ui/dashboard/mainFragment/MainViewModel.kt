@@ -14,12 +14,12 @@ import kotlinx.coroutines.launch
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val webServiceCaller = WebServiceCaller()
-    private val networkConnection = CheckNetworkConnection(application)
+    val checkNetworkConnection = CheckNetworkConnection(application)
     val latestSong = MutableLiveData<LatestSong>()
     val recentArtistList = MutableLiveData<RecentArtistList>()
 
     init {
-        networkConnection.observeForever{ isConnected->
+        checkNetworkConnection.observeForever{ isConnected->
             if (isConnected) {
                 getLatestSongs()
                 getRecentArtist()
@@ -28,7 +28,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun getLatestSongs(){
-        if (networkConnection.value == true) {
+        if (checkNetworkConnection.value == true) {
             CoroutineScope(Dispatchers.IO).launch {
                 webServiceCaller.getLatestSongs().apply {
                     latestSong.postValue(this)
@@ -38,7 +38,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun getRecentArtist() {
-        if (networkConnection.value == true) {
+        if (checkNetworkConnection.value == true) {
             CoroutineScope(Dispatchers.IO).launch {
                 webServiceCaller.getRecentArtist().apply {
                     recentArtistList.postValue(this)

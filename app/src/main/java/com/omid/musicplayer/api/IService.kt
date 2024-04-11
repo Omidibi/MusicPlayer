@@ -11,6 +11,7 @@ import com.omid.musicplayer.model.models.RecentArtistList
 import com.omid.musicplayer.model.models.SearchSong
 import com.omid.musicplayer.model.models.SongListByArtistName
 import com.omid.musicplayer.model.models.SongsByCatId
+import io.reactivex.rxjava3.core.Observable
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.GET
@@ -19,28 +20,28 @@ import retrofit2.http.Query
 interface IService {
 
     @GET("api.php?latest")
-    suspend fun latestSongs(): Response<LatestSong>
+    suspend fun latestSongs(): Response<LatestSong> //***
 
     @GET("api.php?cat_list")
-    fun categories(): Call<CategoriesList>
+    fun categories(): Observable<CategoriesList> //***
 
     @GET("api.php?recent_artist_list")
-    suspend fun recentArtist(): Response<RecentArtistList>
+    suspend fun recentArtist(): Response<RecentArtistList> //***
 
     @GET("api.php?artist_list")
-    fun artistsList(): Call<ArtistsList>
+    fun artistsList(): Observable<ArtistsList> //***
 
     @GET("api.php?album_list")
-    fun albums(): Call<AlbumsList>
+    fun albums(): Observable<AlbumsList> //***
 
     @GET("api.php?")
-    fun albumsById(@Query("album_id") id: String): Call<AlbumByIdList>
+    suspend fun albumsById(@Query("album_id") id: String): Response<AlbumByIdList> //***
 
     @GET("api.php?playlist")
-    fun playLists(): Call<PlayLists>
+    fun playLists(): Observable<PlayLists> //***
 
     @GET("api.php?")
-    fun playlistById(@Query("playlist_id") id: String): Call<PlaylistByIdList>
+    suspend fun playlistById(@Query("playlist_id") id: String): Response<PlaylistByIdList> //***
 
     @GET("api.php?")
     fun songsListByCatId(@Query("cat_id") id: String): Call<SongsByCatId>

@@ -1,5 +1,6 @@
 package com.omid.musicplayer.api
 
+import androidx.lifecycle.MutableLiveData
 import com.omid.musicplayer.model.listener.IListener
 import com.omid.musicplayer.model.models.AlbumByIdList
 import com.omid.musicplayer.model.models.AlbumsList
@@ -12,6 +13,9 @@ import com.omid.musicplayer.model.models.RecentArtistList
 import com.omid.musicplayer.model.models.SearchSong
 import com.omid.musicplayer.model.models.SongListByArtistName
 import com.omid.musicplayer.model.models.SongsByCatId
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.schedulers.Schedulers
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -19,6 +23,10 @@ import retrofit2.Response
 class WebServiceCaller {
 
     private val iService = ApiRetrofit.retrofit.create(IService::class.java)
+    val albumList = MutableLiveData<AlbumsList>()
+    val artistList = MutableLiveData<ArtistsList>()
+    val categoriesList = MutableLiveData<CategoriesList>()
+    val playLists = MutableLiveData<PlayLists>()
 
     suspend fun getLatestSongs(): LatestSong? {
         iService.latestSongs().apply { return if (this.isSuccessful) this.body() else null }
@@ -28,88 +36,68 @@ class WebServiceCaller {
         iService.recentArtist().apply { return if (this.isSuccessful) this.body() else null}
     }
 
-    fun getArtistsList(iListener: IListener<ArtistsList>) {
-        iService.artistsList().enqueue(object : Callback<ArtistsList> {
-            override fun onResponse(call: Call<ArtistsList>, response: Response<ArtistsList>) {
-                iListener.onSuccess(call, response.body()!!)
-            }
+    fun getArtistsList() {
+        CompositeDisposable().apply {
+            val disposable = iService.artistsList()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ artistList->
+                    this@WebServiceCaller.artistList.postValue(artistList)
+                },{ error->
 
-            override fun onFailure(call: Call<ArtistsList>, t: Throwable) {
-                iListener.onFailure(call, t, "Error")
-            }
-
-        })
+                })
+                this.add(disposable)
+        }
     }
 
-    fun getPlayLists(iListener: IListener<PlayLists>) {
-        iService.playLists().enqueue(object : Callback<PlayLists> {
-            override fun onResponse(call: Call<PlayLists>, response: Response<PlayLists>) {
-                iListener.onSuccess(call, response.body()!!)
-            }
+    fun getPlayLists() {
+        CompositeDisposable().apply {
+            val disposable = iService.playLists()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ playLists->
+                    this@WebServiceCaller.playLists.postValue(playLists)
+                },{ error->
 
-            override fun onFailure(call: Call<PlayLists>, t: Throwable) {
-                iListener.onFailure(call, t, "Error")
-            }
-
-        })
+                })
+            this.add(disposable)
+        }
     }
 
-    fun getPlaylistById(playlistId: String, iListener: IListener<PlaylistByIdList>) {
-        iService.playlistById(playlistId).enqueue(object : Callback<PlaylistByIdList> {
-            override fun onResponse(
-                call: Call<PlaylistByIdList>,
-                response: Response<PlaylistByIdList>
-            ) {
-                iListener.onSuccess(call, response.body()!!)
-            }
-
-            override fun onFailure(call: Call<PlaylistByIdList>, t: Throwable) {
-                iListener.onFailure(call, t, "Error")
-            }
-
-        })
+    suspend fun getPlaylistById(playlistId: String): PlaylistByIdList? {
+        iService.playlistById(playlistId).apply { return if (this.isSuccessful) this.body() else null }
     }
 
-    fun getAlbums(iListener: IListener<AlbumsList>) {
-        iService.albums().enqueue(object : Callback<AlbumsList> {
-            override fun onResponse(call: Call<AlbumsList>, response: Response<AlbumsList>) {
-                iListener.onSuccess(call, response.body()!!)
-            }
+    fun getAlbums() {
+        CompositeDisposable().apply {
+            val disposable = iService.albums()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ albumList->
+                           this@WebServiceCaller.albumList.postValue(albumList)
+                },{ error ->
 
-            override fun onFailure(call: Call<AlbumsList>, t: Throwable) {
-                iListener.onFailure(call, t, "Error")
-            }
-
-        })
+                })
+            this.add(disposable)
+        }
     }
 
-    fun getAlbumsById(albumId: String, iListener: IListener<AlbumByIdList>) {
-        iService.albumsById(albumId).enqueue(object : Callback<AlbumByIdList> {
-            override fun onResponse(call: Call<AlbumByIdList>, response: Response<AlbumByIdList>) {
-                iListener.onSuccess(call, response.body()!!)
-            }
-
-            override fun onFailure(call: Call<AlbumByIdList>, t: Throwable) {
-                iListener.onFailure(call, t, "Error")
-            }
-
-        })
+    suspend fun getAlbumsById(albumId: String): AlbumByIdList? {
+        iService.albumsById(albumId).apply { return if (this.isSuccessful) this.body() else null }
     }
 
-    fun getCategories(iListener: IListener<CategoriesList>) {
-        iService.categories().enqueue(object : Callback<CategoriesList> {
-            override fun onResponse(
-                call: Call<CategoriesList>,
-                response: Response<CategoriesList>
-            ) {
-                iListener.onSuccess(call, response.body()!!)
-            }
+    fun getCategories() {
+        CompositeDisposable().apply {
+            val disposable = iService.categories()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ categoriesList ->
+                    this@WebServiceCaller.categoriesList.postValue(categoriesList)
+                },{ error->
 
-            override fun onFailure(call: Call<CategoriesList>, t: Throwable) {
-                iListener.onFailure(call, t, "Error")
-            }
-
-        })
+                })
+            this.add(disposable)
+        }
     }
 
     fun getSongsListByCatId(catId: String, iListener: IListener<SongsByCatId>) {

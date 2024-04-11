@@ -3,6 +3,7 @@ package com.omid.musicplayer.fragments.albumsByIdListFragment
 import android.content.pm.ActivityInfo
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,24 +11,23 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.omid.musicplayer.activity.MainWidgets
 import com.omid.musicplayer.activity.SharedViewModel
-import com.omid.musicplayer.api.WebServiceCaller
 import com.omid.musicplayer.databinding.FragmentAlbumsByIdListBinding
-import com.omid.musicplayer.model.listener.IListener
-import com.omid.musicplayer.model.models.AlbumByIdList
+import com.omid.musicplayer.fragments.ValuesToPass
 import com.omid.musicplayer.model.models.AlbumsListMp3
 import com.omid.musicplayer.model.models.LatestMp3
+import com.omid.musicplayer.utils.networkAvailable.NetworkAvailable
 import com.omid.musicplayer.utils.practicalCodes.FragmentsPracticalCodes
 import com.omid.musicplayer.utils.practicalCodes.MainWidgetStatus
 import com.omid.musicplayer.utils.practicalCodes.ProgressBarStatus
 import com.omid.musicplayer.utils.sendData.IOnSongClickListener
-import retrofit2.Call
+import com.sothree.slidinguppanel.SlidingUpPanelLayout
 
 class AlbumsByIdListFragment : Fragment() {
 
     private lateinit var binding: FragmentAlbumsByIdListBinding
-    private val webServiceCaller = WebServiceCaller()
-    private var albumsListInfo: AlbumsListMp3? = null
+    private lateinit var albumsByIdListViewModel: AlbumsByIdListViewModel
     private lateinit var sharedViewModel: SharedViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -38,7 +38,9 @@ class AlbumsByIdListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         progressBarStatus()
-        albumsByIdList()
+        networkAvailable()
+        albumsByIdListObservers()
+        srlStatus()
         slidingUpPanelStatus()
         clickEvents()
     }
@@ -47,13 +49,14 @@ class AlbumsByIdListFragment : Fragment() {
         binding = FragmentAlbumsByIdListBinding.inflate(layoutInflater)
         requireActivity().requestedOrientation = (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
         sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
+        albumsByIdListViewModel = ViewModelProvider(requireActivity())[AlbumsByIdListViewModel::class.java]
         binding.apply {
-            albumsListInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                requireArguments().getParcelable("albumsListInfo", AlbumsListMp3::class.java)
+            ValuesToPass.albumsListMp3 = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                requireArguments().getParcelable("albumsListInfo", AlbumsListMp3::class.java) !!
             } else {
-                requireArguments().getParcelable("albumsListInfo")
+                requireArguments().getParcelable("albumsListInfo")!!
             }
-            nameAlbum.text = albumsListInfo?.albumName
+            nameAlbum.text = ValuesToPass.albumsListMp3.albumName
         }
     }
 
@@ -61,29 +64,64 @@ class AlbumsByIdListFragment : Fragment() {
         ProgressBarStatus.pbStatus(binding.pbAlbumByIdList)
     }
 
-    private fun albumsByIdList() {
+    private fun networkAvailable(){
         binding.apply {
-            pbAlbumByIdList.visibility = View.VISIBLE
-            rvAlbumsList.visibility = View.GONE
-            webServiceCaller.getAlbumsById(albumsListInfo?.aid!!, object : IListener<AlbumByIdList> {
-                override fun onSuccess(call: Call<AlbumByIdList>, response: AlbumByIdList) {
+            if (NetworkAvailable.isNetworkAvailable(requireContext())) {
+                pbAlbumByIdList.visibility = View.GONE
+                srl.visibility = View.VISIBLE
+                liveNoConnection.visibility = View.GONE
+            }else {
+                pbAlbumByIdList.visibility = View.GONE
+                srl.visibility = View.GONE
+                liveNoConnection.visibility = View.VISIBLE
+            }
+        }
+    }
+
+    private fun albumsByIdListObservers() {
+        binding.apply {
+            albumsByIdListViewModel.checkNetworkConnection.observe(viewLifecycleOwner) { isConnected->
+                pbAlbumByIdList.visibility = View.VISIBLE
+                srl.visibility = View.GONE
+                liveNoConnection.visibility = View.GONE
+                if (isConnected) {
+                    albumsByIdListViewModel.albumByIdList.observe(viewLifecycleOwner) { albumByIdList->
+                        pbAlbumByIdList.visibility = View.GONE
+                        srl.visibility = View.VISIBLE
+                        liveNoConnection.visibility = View.GONE
+                        rvAlbumsList.adapter = AlbumsByIdAdapter(albumByIdList.onlineMp3,object : IOnSongClickListener {
+                            override fun onSongClick(latestSongInfo: LatestMp3, latestSongsList: List<LatestMp3>) {
+                                sharedViewModel.latestMp3List.value = latestSongsList
+                                sharedViewModel.latestMp3.value = latestSongInfo
+                            }
+
+                        })
+                        rvAlbumsList.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+                    }
+                } else {
                     pbAlbumByIdList.visibility = View.GONE
-                    rvAlbumsList.visibility = View.VISIBLE
-                   rvAlbumsList.adapter = AlbumsByIdAdapter(response.onlineMp3,object : IOnSongClickListener{
-                       override fun onSongClick(latestSongInfo: LatestMp3, latestSongsList: List<LatestMp3>) {
-                           sharedViewModel.latestMp3List.value = latestSongsList
-                           sharedViewModel.latestMp3.value = latestSongInfo
-                       }
-
-                   })
-                   rvAlbumsList.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+                    srl.visibility = View.GONE
+                    liveNoConnection.visibility = View.VISIBLE
+                    MainWidgets.slidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.HIDDEN
+                    try {
+                        MainWidgets.player.stop()
+                    }catch (e: UninitializedPropertyAccessException) {
+                        e.message?.let { Log.e("Catch", it) }
+                    }
                 }
+            }
+        }
+    }
 
-                override fun onFailure(call: Call<AlbumByIdList>, t: Throwable, errorResponse: String) {
-
-                }
-
-            })
+    private fun srlStatus(){
+        binding.apply {
+            srl.setOnRefreshListener {
+                pbAlbumByIdList.visibility = View.VISIBLE
+                srl.visibility = View.GONE
+                liveNoConnection.visibility = View.GONE
+                albumsByIdListViewModel.getAlbumsById(ValuesToPass.albumsListMp3.aid)
+                srl.isRefreshing = false
+            }
         }
     }
 

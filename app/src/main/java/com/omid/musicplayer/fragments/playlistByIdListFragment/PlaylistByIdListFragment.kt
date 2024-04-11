@@ -11,25 +11,24 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.omid.musicplayer.activity.MainWidgets
 import com.omid.musicplayer.activity.SharedViewModel
-import com.omid.musicplayer.api.WebServiceCaller
 import com.omid.musicplayer.databinding.FragmentPlaylistByIdListBinding
-import com.omid.musicplayer.model.listener.IListener
+import com.omid.musicplayer.fragments.ValuesToPass
 import com.omid.musicplayer.model.models.LatestMp3
 import com.omid.musicplayer.model.models.PlayListsMp3
-import com.omid.musicplayer.model.models.PlaylistByIdList
+import com.omid.musicplayer.utils.networkAvailable.NetworkAvailable
 import com.omid.musicplayer.utils.practicalCodes.FragmentsPracticalCodes
 import com.omid.musicplayer.utils.practicalCodes.MainWidgetStatus
 import com.omid.musicplayer.utils.practicalCodes.ProgressBarStatus
 import com.omid.musicplayer.utils.sendData.IOnSongClickListener
-import retrofit2.Call
+import com.sothree.slidinguppanel.SlidingUpPanelLayout
 
 class PlaylistByIdListFragment : Fragment() {
 
     private lateinit var binding: FragmentPlaylistByIdListBinding
-    private val webServiceCaller = WebServiceCaller()
-    private var playlistMp3: PlayListsMp3? = null
     private lateinit var sharedViewModel: SharedViewModel
+    private lateinit var playlistByIdListViewModel: PlaylistByIdListViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         setupBindingAndInitialize()
@@ -39,7 +38,9 @@ class PlaylistByIdListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         progressBarStatus()
-        playlistById()
+        networkAvailable()
+        playlistByIdObservers()
+        srlStatus()
         clickEvent()
         slidingUpPanelStatus()
     }
@@ -48,13 +49,14 @@ class PlaylistByIdListFragment : Fragment() {
         binding = FragmentPlaylistByIdListBinding.inflate(layoutInflater)
         requireActivity().requestedOrientation = (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
         sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
+        playlistByIdListViewModel = ViewModelProvider(requireActivity())[PlaylistByIdListViewModel::class.java]
         binding.apply {
-            playlistMp3 = if (Build.VERSION.SDK_INT > Build.VERSION_CODES.TIRAMISU) {
-               requireArguments().getParcelable("playListsInfo", PlayListsMp3::class.java)
+            ValuesToPass.playListsMp3 = if (Build.VERSION.SDK_INT > Build.VERSION_CODES.TIRAMISU) {
+               requireArguments().getParcelable("playListsInfo", PlayListsMp3::class.java)!!
             } else {
-                requireArguments().getParcelable("playListsInfo")
+                requireArguments().getParcelable("playListsInfo")!!
             }
-            namePlaylist.text = playlistMp3?.playlistName
+            namePlaylist.text = ValuesToPass.playListsMp3.playlistName
         }
     }
 
@@ -74,33 +76,68 @@ class PlaylistByIdListFragment : Fragment() {
         }
     }
 
-    private fun playlistById() {
+    private fun srlStatus(){
         binding.apply {
-            pbPlaylistByIdList.visibility = View.VISIBLE
-            rvPlaylistList.visibility = View.GONE
-            webServiceCaller.getPlaylistById(playlistMp3?.pid!!,object :IListener<PlaylistByIdList>{
-                override fun onSuccess(call: Call<PlaylistByIdList>, response: PlaylistByIdList) {
-                    pbPlaylistByIdList.visibility = View.GONE
-                    rvPlaylistList.visibility = View.VISIBLE
-                    Log.e("", "")
-                    for (i in 0..<response.onlineMp3.size) {
-                        val songs = response.onlineMp3[i].songsList
-                        rvPlaylistList.adapter = PlaylistByIdAdapter(songs,object : IOnSongClickListener{
-                            override fun onSongClick(latestSongInfo: LatestMp3, latestSongsList: List<LatestMp3>) {
-                                sharedViewModel.latestMp3.value = latestSongInfo
-                                sharedViewModel.latestMp3List.value = latestSongsList
-                            }
+            srl.setOnRefreshListener {
+                pbPlaylistByIdList.visibility = View.VISIBLE
+                srl.visibility = View.GONE
+                liveNoConnection.visibility = View.GONE
+                playlistByIdListViewModel.getPlaylistById(ValuesToPass.playListsMp3.pid)
+                srl.isRefreshing = false
+            }
+        }
+    }
 
-                        })
+    private fun playlistByIdObservers() {
+        binding.apply {
+            playlistByIdListViewModel.checkNetworkConnection.observe(viewLifecycleOwner) { isConnected->
+                pbPlaylistByIdList.visibility = View.VISIBLE
+                srl.visibility = View.GONE
+                liveNoConnection.visibility = View.GONE
+                if (isConnected) {
+                    playlistByIdListViewModel.playListByIdList.observe(viewLifecycleOwner) { playListByIdList->
+                        pbPlaylistByIdList.visibility = View.GONE
+                        srl.visibility = View.VISIBLE
+                        liveNoConnection.visibility = View.GONE
+                        for (i in 0..<playListByIdList.onlineMp3.size) {
+                            val songs = playListByIdList.onlineMp3[i].songsList
+                            rvPlaylistList.adapter = PlaylistByIdAdapter(songs,object :
+                                IOnSongClickListener {
+                                override fun onSongClick(latestSongInfo: LatestMp3, latestSongsList: List<LatestMp3>) {
+                                    sharedViewModel.latestMp3.value = latestSongInfo
+                                    sharedViewModel.latestMp3List.value = latestSongsList
+                                }
+
+                            })
+                        }
+                        rvPlaylistList.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
                     }
-                    rvPlaylistList.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+                }else {
+                    pbPlaylistByIdList.visibility = View.GONE
+                    srl.visibility = View.GONE
+                    liveNoConnection.visibility = View.VISIBLE
+                    MainWidgets.slidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.HIDDEN
+                    try {
+                        MainWidgets.player.stop()
+                    }catch (e: UninitializedPropertyAccessException) {
+                        e.message?.let { Log.e("Catch", it) }
+                    }
                 }
+            }
+        }
+    }
 
-                override fun onFailure(call: Call<PlaylistByIdList>, t: Throwable, errorResponse: String) {
-                    Log.e("", "")
-                }
-
-            })
+    private fun networkAvailable(){
+        binding.apply {
+            if (NetworkAvailable.isNetworkAvailable(requireContext())) {
+                pbPlaylistByIdList.visibility = View.GONE
+                srl.visibility = View.VISIBLE
+                liveNoConnection.visibility = View.GONE
+            }else {
+                pbPlaylistByIdList.visibility = View.GONE
+                srl.visibility = View.GONE
+                liveNoConnection.visibility = View.VISIBLE
+            }
         }
     }
 
