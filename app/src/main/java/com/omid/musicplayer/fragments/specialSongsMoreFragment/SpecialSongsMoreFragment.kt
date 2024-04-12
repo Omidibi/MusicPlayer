@@ -2,6 +2,7 @@ package com.omid.musicplayer.fragments.specialSongsMoreFragment
 
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,18 +11,23 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.omid.musicplayer.R
+import com.omid.musicplayer.activity.MainWidgets
 import com.omid.musicplayer.activity.SharedViewModel
 import com.omid.musicplayer.databinding.FragmentSpecialSongsMoreBinding
 import com.omid.musicplayer.model.models.LatestMp3
+import com.omid.musicplayer.utils.internetLiveData.CheckNetworkConnection
+import com.omid.musicplayer.utils.networkAvailable.NetworkAvailable
 import com.omid.musicplayer.utils.practicalCodes.FragmentsPracticalCodes
 import com.omid.musicplayer.utils.practicalCodes.MainWidgetStatus
 import com.omid.musicplayer.utils.sendData.IOnSongClickListener
+import com.sothree.slidinguppanel.SlidingUpPanelLayout
 
 class SpecialSongsMoreFragment : Fragment() {
 
     private lateinit var binding: FragmentSpecialSongsMoreBinding
     private lateinit var specialSong: MutableList<LatestMp3>
     private lateinit var sharedViewModel : SharedViewModel
+    private lateinit var checkNetworkConnection: CheckNetworkConnection
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         setupBinding()
@@ -30,16 +36,53 @@ class SpecialSongsMoreFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        networkAvailable()
         specialSong()
         clickEvents()
         slidingUpPanelStatus()
+        observer()
     }
 
     private fun setupBinding(){
         requireActivity().requestedOrientation = (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
         binding = FragmentSpecialSongsMoreBinding.inflate(layoutInflater)
+        checkNetworkConnection = CheckNetworkConnection(requireActivity().application)
         sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
         specialSong = mutableListOf()
+    }
+
+    private fun networkAvailable(){
+        binding.apply {
+            if (NetworkAvailable.isNetworkAvailable(requireContext())) {
+                rvMoreSpecial.visibility = View.VISIBLE
+                liveNoConnection.visibility = View.GONE
+            }else {
+                rvMoreSpecial.visibility = View.GONE
+                liveNoConnection.visibility = View.VISIBLE
+            }
+        }
+    }
+
+    private fun observer(){
+        binding.apply {
+            checkNetworkConnection.observe(viewLifecycleOwner) { isConnect->
+                if (isConnect) {
+                    liveNoConnection.visibility = View.GONE
+                    rvMoreSpecial.visibility = View.VISIBLE
+                }else {
+                    liveNoConnection.visibility = View.VISIBLE
+                    rvMoreSpecial.visibility = View.GONE
+                    MainWidgets.slidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.HIDDEN
+                    try {
+                        MainWidgets.player.stop()
+                    }catch (e: UninitializedPropertyAccessException) {
+                        Log.e("catch",e.message.toString())
+                    }
+
+                }
+
+            }
+        }
     }
 
     private fun clickEvents(){

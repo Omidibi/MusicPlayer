@@ -1,34 +1,44 @@
 package com.omid.musicplayer.fragments.songListByArtistNameFragment
 
+import android.content.Context
 import android.content.pm.ActivityInfo
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.omid.musicplayer.activity.MainWidgets
 import com.omid.musicplayer.activity.SharedViewModel
-import com.omid.musicplayer.api.WebServiceCaller
 import com.omid.musicplayer.databinding.FragmentSongListByArtistNameBinding
-import com.omid.musicplayer.model.listener.IListener
 import com.omid.musicplayer.model.models.ArtistsMp3
 import com.omid.musicplayer.model.models.LatestMp3
-import com.omid.musicplayer.model.models.SongListByArtistName
+import com.omid.musicplayer.utils.internetLiveData.CheckNetworkConnection
+import com.omid.musicplayer.utils.networkAvailable.NetworkAvailable
 import com.omid.musicplayer.utils.practicalCodes.FragmentsPracticalCodes
 import com.omid.musicplayer.utils.practicalCodes.MainWidgetStatus
 import com.omid.musicplayer.utils.practicalCodes.ProgressBarStatus
 import com.omid.musicplayer.utils.sendData.IOnSongClickListener
-import retrofit2.Call
+import com.sothree.slidinguppanel.SlidingUpPanelLayout
 
 class SongListByArtistNameFragment : Fragment() {
 
     private lateinit var binding: FragmentSongListByArtistNameBinding
-    private lateinit var recentArtist : ArtistsMp3
-    private val webServiceCaller = WebServiceCaller()
+    private lateinit var owner: LifecycleOwner
     private lateinit var sharedViewModel : SharedViewModel
+    private lateinit var songListByArtistNameViewModel: SongListByArtistNameViewModel
+    private lateinit var checkNetworkConnection: CheckNetworkConnection
+    private lateinit var artistsMp3 : ArtistsMp3
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        owner = this
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         setupBinding()
@@ -41,23 +51,27 @@ class SongListByArtistNameFragment : Fragment() {
         progressBarStatus()
         slidingUpPanelStatus()
         clickEvents()
-        getSongListByArtistName()
+        networkAvailable()
+        getSongListByArtistNameObservers()
+        srlStatus()
     }
 
     private fun setupBinding(){
         requireActivity().requestedOrientation = (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
         binding = FragmentSongListByArtistNameBinding.inflate(layoutInflater)
+        checkNetworkConnection = CheckNetworkConnection(requireActivity().application)
         sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
+        songListByArtistNameViewModel = ViewModelProvider(this)[SongListByArtistNameViewModel::class.java]
     }
 
     private fun getData(){
         binding.apply {
-            recentArtist = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+            artistsMp3 = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
                 requireArguments().getParcelable("ArtistInfo",ArtistsMp3::class.java)!!
             }else {
                 requireArguments().getParcelable("ArtistInfo")!!
             }
-            titleToolbar.text = recentArtist.artistName
+            titleToolbar.text = artistsMp3.artistName
         }
     }
 
@@ -81,29 +95,64 @@ class SongListByArtistNameFragment : Fragment() {
         }
     }
 
-    private fun getSongListByArtistName(){
+    private fun networkAvailable(){
         binding.apply {
-            pb.visibility = View.VISIBLE
-            rvListByArtisName.visibility = View.GONE
-            webServiceCaller.getSongListByArtistName(recentArtist.artistName,object : IListener<SongListByArtistName>{
-                override fun onSuccess(call: Call<SongListByArtistName>, response: SongListByArtistName) {
+            if (NetworkAvailable.isNetworkAvailable(requireContext())) {
+                pb.visibility = View.GONE
+                srl.visibility = View.VISIBLE
+                liveNoConnection.visibility = View.GONE
+            }else {
+                pb.visibility = View.GONE
+                srl.visibility = View.GONE
+                liveNoConnection.visibility = View.VISIBLE
+            }
+        }
+    }
+
+    private fun getSongListByArtistNameObservers(){
+        binding.apply {
+            checkNetworkConnection.observe(owner) { isConnected->
+                pb.visibility = View.VISIBLE
+                srl.visibility = View.GONE
+                liveNoConnection.visibility = View.GONE
+                if (isConnected) {
+                    songListByArtistNameViewModel.getSongListByArtistName(artistsMp3.artistName).observe(owner) { songListByArtistName->
+                        pb.visibility = View.GONE
+                        srl.visibility = View.VISIBLE
+                        liveNoConnection.visibility = View.GONE
+                        rvListByArtisName.adapter = SongListByArtistNameAdapter(songListByArtistName!!.songListByArtistName,object : IOnSongClickListener {
+                            override fun onSongClick(latestSongInfo: LatestMp3, latestSongsList: List<LatestMp3>) {
+                                sharedViewModel.latestMp3.value = latestSongInfo
+                                sharedViewModel.latestMp3List.value = latestSongsList
+                            }
+
+                        })
+                        rvListByArtisName.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL,false)
+                    }
+                }else {
                     pb.visibility = View.GONE
-                    rvListByArtisName.visibility = View.VISIBLE
-                    rvListByArtisName.adapter = SongListByArtistNameAdapter(response.songListByArtistName,object : IOnSongClickListener{
-                        override fun onSongClick(latestSongInfo: LatestMp3, latestSongsList: List<LatestMp3>) {
-                            sharedViewModel.latestMp3.value = latestSongInfo
-                            sharedViewModel.latestMp3List.value = latestSongsList
-                        }
-
-                    })
-                    rvListByArtisName.layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false)
+                    srl.visibility = View.GONE
+                    liveNoConnection.visibility = View.VISIBLE
+                    MainWidgets.slidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.HIDDEN
+                    try {
+                        MainWidgets.player.stop()
+                    }catch (e: UninitializedPropertyAccessException) {
+                        e.message?.let { Log.e("Catch", it) }
+                    }
                 }
+            }
+        }
+    }
 
-                override fun onFailure(call: Call<SongListByArtistName>, t: Throwable, errorResponse: String) {
-
-                }
-
-            })
+    private fun srlStatus(){
+        binding.apply {
+            srl.setOnRefreshListener {
+                pb.visibility = View.VISIBLE
+                srl.visibility = View.GONE
+                liveNoConnection.visibility = View.GONE
+                songListByArtistNameViewModel.getSongListByArtistName(artistsMp3.artistName)
+                srl.isRefreshing = false
+            }
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.omid.musicplayer.ui.dashboard.albums
 
+import android.content.Context
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.util.Log
@@ -7,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.omid.musicplayer.activity.MainWidgets
@@ -19,7 +21,13 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout
 class AlbumsFragment : Fragment() {
 
     private lateinit var binding: FragmentAlbumsBinding
+    private lateinit var owner: LifecycleOwner
     private lateinit var albumsListViewModel: AlbumsListViewModel
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        owner = this
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         setupBinding()
@@ -39,7 +47,7 @@ class AlbumsFragment : Fragment() {
     private fun setupBinding() {
         requireActivity().requestedOrientation = (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
         binding = FragmentAlbumsBinding.inflate(layoutInflater)
-        albumsListViewModel = ViewModelProvider(requireActivity())[AlbumsListViewModel::class.java]
+        albumsListViewModel = ViewModelProvider(this)[AlbumsListViewModel::class.java]
     }
 
     private fun progressBarStatus() {
@@ -62,12 +70,12 @@ class AlbumsFragment : Fragment() {
 
     private fun albumsListObservers() {
         binding.apply {
-            albumsListViewModel.checkNetworkConnection.observe(viewLifecycleOwner) { isConnect->
+            albumsListViewModel.checkNetworkConnection.observe(owner) { isConnect->
                 pbAlbums.visibility = View.VISIBLE
                 srl.visibility = View.GONE
                 liveNoConnection.visibility = View.GONE
                 if (isConnect) {
-                    albumsListViewModel.albumList.observe(viewLifecycleOwner) { albumList->
+                    albumsListViewModel.albumList.observe(owner) { albumList->
                         pbAlbums.visibility = View.GONE
                         srl.visibility = View.VISIBLE
                         liveNoConnection.visibility = View.GONE

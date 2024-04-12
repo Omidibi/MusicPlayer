@@ -1,5 +1,6 @@
 package com.omid.musicplayer.ui.dashboard.mainFragment
 
+import android.content.Context
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.os.Handler
@@ -9,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -31,12 +33,18 @@ import java.util.TimerTask
 class MainFragment : Fragment() {
 
     private lateinit var binding: FragmentMainBinding
+    private lateinit var owner: LifecycleOwner
     private lateinit var sharedViewModel : SharedViewModel
     private lateinit var mainViewModel: MainViewModel
     private lateinit var newSong: MutableList<LatestMp3>
     private lateinit var specialSong: MutableList<LatestMp3>
     private lateinit var banner: MutableList<BannerModel>
     private var currentPage = 0
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        owner = this
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         setupBinding()
@@ -60,7 +68,7 @@ class MainFragment : Fragment() {
         requireActivity().requestedOrientation = (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
         binding = FragmentMainBinding.inflate(layoutInflater)
         sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
-        mainViewModel = ViewModelProvider(requireActivity())[MainViewModel::class.java]
+        mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
         newSong = mutableListOf()
         specialSong = mutableListOf()
         banner = mutableListOf()
@@ -257,12 +265,12 @@ class MainFragment : Fragment() {
 
     private fun mainObservers(){
         binding.apply {
-            mainViewModel.checkNetworkConnection.observe(viewLifecycleOwner) { isConnected->
+            mainViewModel.checkNetworkConnection.observe(owner) { isConnected->
                 srl.visibility = View.GONE
                 pbLoading.visibility = View.VISIBLE
                 liveNoConnection.visibility = View.GONE
                 if (isConnected) {
-                    mainViewModel.latestSong.observe(viewLifecycleOwner) { latestSong ->
+                    mainViewModel.latestSong.observe(owner) { latestSong ->
                         srl.visibility = View.VISIBLE
                         pbLoading.visibility = View.GONE
                         liveNoConnection.visibility = View.GONE
@@ -275,7 +283,7 @@ class MainFragment : Fragment() {
                         rvLatestSongs.adapter = adapter
                         rvLatestSongs.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
                     }
-                    mainViewModel.recentArtistList.observe(viewLifecycleOwner) { recentArtistList ->
+                    mainViewModel.recentArtistList.observe(owner) { recentArtistList ->
                         srl.visibility = View.VISIBLE
                         pbLoading.visibility = View.GONE
                         liveNoConnection.visibility = View.GONE

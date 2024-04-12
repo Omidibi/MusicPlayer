@@ -1,5 +1,6 @@
 package com.omid.musicplayer.fragments.albumsByIdListFragment
 
+import android.content.Context
 import android.content.pm.ActivityInfo
 import android.os.Build
 import android.os.Bundle
@@ -8,15 +9,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.omid.musicplayer.activity.MainWidgets
 import com.omid.musicplayer.activity.SharedViewModel
 import com.omid.musicplayer.databinding.FragmentAlbumsByIdListBinding
-import com.omid.musicplayer.fragments.ValuesToPass
 import com.omid.musicplayer.model.models.AlbumsListMp3
 import com.omid.musicplayer.model.models.LatestMp3
+import com.omid.musicplayer.utils.internetLiveData.CheckNetworkConnection
 import com.omid.musicplayer.utils.networkAvailable.NetworkAvailable
 import com.omid.musicplayer.utils.practicalCodes.FragmentsPracticalCodes
 import com.omid.musicplayer.utils.practicalCodes.MainWidgetStatus
@@ -27,8 +29,16 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout
 class AlbumsByIdListFragment : Fragment() {
 
     private lateinit var binding: FragmentAlbumsByIdListBinding
+    private lateinit var owner: LifecycleOwner
     private lateinit var albumsByIdListViewModel: AlbumsByIdListViewModel
     private lateinit var sharedViewModel: SharedViewModel
+    private lateinit var albumsListMp3 : AlbumsListMp3
+    private lateinit var checkNetworkConnection: CheckNetworkConnection
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        owner = this
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         setupBindingAndInitialize()
@@ -48,15 +58,16 @@ class AlbumsByIdListFragment : Fragment() {
     private fun setupBindingAndInitialize() {
         binding = FragmentAlbumsByIdListBinding.inflate(layoutInflater)
         requireActivity().requestedOrientation = (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
+        checkNetworkConnection = CheckNetworkConnection(requireActivity().application)
         sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
-        albumsByIdListViewModel = ViewModelProvider(requireActivity())[AlbumsByIdListViewModel::class.java]
+        albumsByIdListViewModel = ViewModelProvider(this)[AlbumsByIdListViewModel::class.java]
         binding.apply {
-            ValuesToPass.albumsListMp3 = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            albumsListMp3 = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 requireArguments().getParcelable("albumsListInfo", AlbumsListMp3::class.java) !!
             } else {
                 requireArguments().getParcelable("albumsListInfo")!!
             }
-            nameAlbum.text = ValuesToPass.albumsListMp3.albumName
+            nameAlbum.text = albumsListMp3.albumName
         }
     }
 
@@ -80,16 +91,16 @@ class AlbumsByIdListFragment : Fragment() {
 
     private fun albumsByIdListObservers() {
         binding.apply {
-            albumsByIdListViewModel.checkNetworkConnection.observe(viewLifecycleOwner) { isConnected->
+            checkNetworkConnection.observe(owner) { isConnected->
                 pbAlbumByIdList.visibility = View.VISIBLE
                 srl.visibility = View.GONE
                 liveNoConnection.visibility = View.GONE
                 if (isConnected) {
-                    albumsByIdListViewModel.albumByIdList.observe(viewLifecycleOwner) { albumByIdList->
+                    albumsByIdListViewModel.getAlbumsById(albumsListMp3.aid).observe(owner) { albumByIdList->
                         pbAlbumByIdList.visibility = View.GONE
                         srl.visibility = View.VISIBLE
                         liveNoConnection.visibility = View.GONE
-                        rvAlbumsList.adapter = AlbumsByIdAdapter(albumByIdList.onlineMp3,object : IOnSongClickListener {
+                        rvAlbumsList.adapter = AlbumsByIdAdapter(albumByIdList!!.onlineMp3,object : IOnSongClickListener {
                             override fun onSongClick(latestSongInfo: LatestMp3, latestSongsList: List<LatestMp3>) {
                                 sharedViewModel.latestMp3List.value = latestSongsList
                                 sharedViewModel.latestMp3.value = latestSongInfo
@@ -119,7 +130,7 @@ class AlbumsByIdListFragment : Fragment() {
                 pbAlbumByIdList.visibility = View.VISIBLE
                 srl.visibility = View.GONE
                 liveNoConnection.visibility = View.GONE
-                albumsByIdListViewModel.getAlbumsById(ValuesToPass.albumsListMp3.aid)
+                albumsByIdListViewModel.getAlbumsById(albumsListMp3.aid)
                 srl.isRefreshing = false
             }
         }

@@ -1,5 +1,6 @@
 package com.omid.musicplayer.ui.dashboard.playLists
 
+import android.content.Context
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.util.Log
@@ -7,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.omid.musicplayer.activity.MainWidgets
@@ -19,7 +21,13 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout
 class PlayListsFragment : Fragment() {
 
     private lateinit var binding: FragmentPlaylistsBinding
+    private lateinit var owner: LifecycleOwner
     private lateinit var playListsViewModel: PlayListsViewModel
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        owner = this
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         setupBinding()
@@ -39,7 +47,7 @@ class PlayListsFragment : Fragment() {
     private fun setupBinding() {
         requireActivity().requestedOrientation = (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
         binding = FragmentPlaylistsBinding.inflate(layoutInflater)
-        playListsViewModel = ViewModelProvider(requireActivity())[PlayListsViewModel::class.java]
+        playListsViewModel = ViewModelProvider(this)[PlayListsViewModel::class.java]
     }
 
     private fun progressBarStatus() {
@@ -62,12 +70,12 @@ class PlayListsFragment : Fragment() {
 
     private fun playListsObservers() {
         binding.apply {
-            playListsViewModel.checkNetworkConnection.observe(viewLifecycleOwner) { isConnected->
+            playListsViewModel.checkNetworkConnection.observe(owner) { isConnected->
                 pbPlaylist.visibility = View.VISIBLE
                 srl.visibility = View.GONE
                 liveNoConnection.visibility = View.GONE
                 if (isConnected) {
-                    playListsViewModel.playLists.observe(viewLifecycleOwner) { playLists->
+                    playListsViewModel.playLists.observe(owner) { playLists->
                         pbPlaylist.visibility = View.GONE
                         srl.visibility = View.VISIBLE
                         liveNoConnection.visibility = View.GONE

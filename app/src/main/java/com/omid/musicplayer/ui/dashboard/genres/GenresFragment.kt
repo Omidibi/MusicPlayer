@@ -1,5 +1,6 @@
 package com.omid.musicplayer.ui.dashboard.genres
 
+import android.content.Context
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.util.Log
@@ -7,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.omid.musicplayer.activity.MainWidgets
@@ -19,7 +21,13 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout
 class GenresFragment : Fragment() {
 
     private lateinit var binding: FragmentGenresBinding
+    private lateinit var owner: LifecycleOwner
     private lateinit var genresViewModel: GenresViewModel
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        owner = this
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         setupBinding()
@@ -52,12 +60,12 @@ class GenresFragment : Fragment() {
 
     private fun categoriesListObservers() {
         binding.apply {
-            genresViewModel.checkNetworkConnection.observe(viewLifecycleOwner) { isConnected->
+            genresViewModel.checkNetworkConnection.observe(owner) { isConnected->
                 pbGenres.visibility = View.VISIBLE
                 srl.visibility = View.GONE
                 liveNoConnection.visibility = View.GONE
                 if (isConnected) {
-                    genresViewModel.categoriesList.observe(viewLifecycleOwner) { categoriesList->
+                    genresViewModel.categoriesList.observe(owner) { categoriesList->
                         pbGenres.visibility = View.GONE
                         srl.visibility = View.VISIBLE
                         liveNoConnection.visibility = View.GONE
@@ -86,7 +94,7 @@ class GenresFragment : Fragment() {
     private fun setupBinding() {
         requireActivity().requestedOrientation = (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
         binding = FragmentGenresBinding.inflate(layoutInflater)
-        genresViewModel = ViewModelProvider(requireActivity())[GenresViewModel::class.java]
+        genresViewModel = ViewModelProvider(this)[GenresViewModel::class.java]
     }
 
     private fun slidingUpPanelStatus() {
