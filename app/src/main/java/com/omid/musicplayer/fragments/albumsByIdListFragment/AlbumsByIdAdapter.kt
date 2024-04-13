@@ -32,14 +32,14 @@ class AlbumsByIdAdapter() :RecyclerView.Adapter<AlbumsByIdVH>() {
     override fun onBindViewHolder(holder: AlbumsByIdVH, position: Int) {
         holder.apply {
             val albumsByIdListInfo = albumsByIdList[position]
-            singerName.text = albumsByIdListInfo.mp3Artist
+            artistName.text = albumsByIdListInfo.mp3Artist
             songName.text = albumsByIdListInfo.mp3Title
             Glide.with(AppConfiguration.getContext()).load(albumsByIdListInfo.albumImageThumb)
                 .error(R.drawable.error)
                 .placeholder(R.drawable.loading)
                 .into(imgAlbum)
 
-            clAlbumsByIdList.setOnClickListener {
+            cvAlbumsByIdList.setOnClickListener {
                 val latestMp3 = LatestMp3(albumsByIdListInfo.catId,albumsByIdListInfo.categoryImage,albumsByIdListInfo.categoryImageThumb,albumsByIdListInfo.categoryName,albumsByIdListInfo.cid,albumsByIdListInfo.id,albumsByIdListInfo.mp3Artist,albumsByIdListInfo.mp3Description,albumsByIdListInfo.mp3Duration,albumsByIdListInfo.mp3ThumbnailB,albumsByIdListInfo.mp3ThumbnailS,albumsByIdListInfo.mp3Title,albumsByIdListInfo.mp3Type,albumsByIdListInfo.mp3Url,albumsByIdListInfo.rateAvg,albumsByIdListInfo.totalDownload,albumsByIdListInfo.totalRate,albumsByIdListInfo.totalViews)
                 iSelected.onSongClick(latestMp3, albumsByIdList.map { it.toLatestMp3() })
             }

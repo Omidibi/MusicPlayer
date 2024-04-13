@@ -270,6 +270,13 @@ class MainFragment : Fragment() {
                 pbLoading.visibility = View.VISIBLE
                 liveNoConnection.visibility = View.GONE
                 if (isConnected) {
+                    MainWidgets.bnv.visibility = View.VISIBLE
+                    if (MainWidgets.isPlay) {
+                        MainWidgets.slidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
+                    }else {
+                        MainWidgets.slidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.HIDDEN
+                    }
+
                     mainViewModel.latestSong.observe(owner) { latestSong ->
                         srl.visibility = View.VISIBLE
                         pbLoading.visibility = View.GONE
@@ -295,9 +302,12 @@ class MainFragment : Fragment() {
                     pbLoading.visibility = View.GONE
                     liveNoConnection.visibility = View.VISIBLE
                     MainWidgets.slidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.HIDDEN
+                    MainWidgets.playPause.setImageResource(R.drawable.play)
+                    MainWidgets.upPlayPause.setImageResource(R.drawable.play)
+                    MainWidgets.bnv.visibility = View.VISIBLE
                     currentPage = 0
                     try {
-                        MainWidgets.player.stop()
+                        MainWidgets.player.pause()
                     }catch (e: UninitializedPropertyAccessException) {
                         e.message?.let { Log.e("Catch", it) }
                     }

@@ -2,18 +2,17 @@ package com.omid.musicplayer.fragments.searchFragment
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.omid.musicplayer.R
-import com.omid.musicplayer.model.models.SearchSongMp3
+import com.omid.musicplayer.model.models.LatestMp3
 import com.omid.musicplayer.utils.configuration.AppConfiguration
+import com.omid.musicplayer.utils.sendData.IOnSongClickListener
 
-class SongSearchAdapter(private val searchList: List<SearchSongMp3>): RecyclerView.Adapter<SongSearchVH>() {
+class SongSearchAdapter(private val searchList: List<LatestMp3>,private val iSend: IOnSongClickListener): RecyclerView.Adapter<SongSearchVH>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SongSearchVH {
-        val view = LayoutInflater.from(AppConfiguration.getContext()).inflate(R.layout.search_list_row,null)
-        return SongSearchVH(view)
+        return SongSearchVH(LayoutInflater.from(AppConfiguration.getContext()).inflate(R.layout.search_list_row,null))
     }
 
     override fun getItemCount(): Int {
@@ -31,7 +30,7 @@ class SongSearchAdapter(private val searchList: List<SearchSongMp3>): RecyclerVi
                 .into(ivSongSearch)
 
             cvSongSearch.setOnClickListener {
-                Toast.makeText(AppConfiguration.getContext(),"is ok",Toast.LENGTH_SHORT).show()
+                iSend.onSongClick(searchListInfo,searchList)
             }
         }
     }

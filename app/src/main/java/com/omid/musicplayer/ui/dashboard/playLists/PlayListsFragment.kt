@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
+import com.omid.musicplayer.R
 import com.omid.musicplayer.activity.MainWidgets
 import com.omid.musicplayer.databinding.FragmentPlaylistsBinding
 import com.omid.musicplayer.utils.networkAvailable.NetworkAvailable
@@ -75,6 +76,13 @@ class PlayListsFragment : Fragment() {
                 srl.visibility = View.GONE
                 liveNoConnection.visibility = View.GONE
                 if (isConnected) {
+                    MainWidgets.bnv.visibility = View.VISIBLE
+                    if (MainWidgets.isPlay) {
+                        MainWidgets.slidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
+                    }else {
+                        MainWidgets.slidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.HIDDEN
+                    }
+
                     playListsViewModel.playLists.observe(owner) { playLists->
                         pbPlaylist.visibility = View.GONE
                         srl.visibility = View.VISIBLE
@@ -86,9 +94,12 @@ class PlayListsFragment : Fragment() {
                     pbPlaylist.visibility = View.GONE
                     srl.visibility = View.GONE
                     liveNoConnection.visibility = View.VISIBLE
+                    MainWidgets.bnv.visibility = View.VISIBLE
+                    MainWidgets.playPause.setImageResource(R.drawable.play)
+                    MainWidgets.upPlayPause.setImageResource(R.drawable.play)
                     MainWidgets.slidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.HIDDEN
                     try {
-                        MainWidgets.player.stop()
+                        MainWidgets.player.pause()
                     }catch (e: UninitializedPropertyAccessException) {
                         e.message?.let { Log.e("Catch", it) }
                     }

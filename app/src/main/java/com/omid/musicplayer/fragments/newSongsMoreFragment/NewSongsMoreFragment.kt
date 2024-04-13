@@ -67,14 +67,21 @@ class NewSongsMoreFragment : Fragment() {
         binding.apply {
             checkNetworkConnection.observe(viewLifecycleOwner) { isConnect->
                 if (isConnect) {
+                    if (MainWidgets.isPlay) {
+                        MainWidgets.slidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
+                    }else {
+                        MainWidgets.slidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.HIDDEN
+                    }
                     liveNoConnection.visibility = View.GONE
                     rvMoreNew.visibility = View.VISIBLE
                 }else {
                     liveNoConnection.visibility = View.VISIBLE
                     rvMoreNew.visibility = View.GONE
                     MainWidgets.slidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.HIDDEN
+                    MainWidgets.playPause.setImageResource(R.drawable.play)
+                    MainWidgets.upPlayPause.setImageResource(R.drawable.play)
                     try {
-                        MainWidgets.player.stop()
+                        MainWidgets.player.pause()
                     }catch (e: UninitializedPropertyAccessException) {
                         Log.e("catch",e.message.toString())
                     }

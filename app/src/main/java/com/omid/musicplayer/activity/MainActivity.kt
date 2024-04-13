@@ -64,6 +64,8 @@ class MainActivity : AppCompatActivity() {
             MainWidgets.slidingUpPanel = slidingLayout
             MainWidgets.bnv = bnvMain
             MainWidgets.toolbar = upSlide.mainToolbar
+            MainWidgets.playPause = downSlide.uiPlayer.playPause
+            MainWidgets.upPlayPause = downSlide.uiPlayer.upPlayPause
             mainLatestList = mutableListOf()
             navHost = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
             navController = navHost.navController
@@ -284,6 +286,7 @@ class MainActivity : AppCompatActivity() {
             player.setMediaItem(MediaItem.fromUri(Uri.parse(latestMp3.mp3Url)))
             player.prepare()
             player.play()
+            MainWidgets.isPlay = true
             downSlide.uiPlayer.seekbar.progress = 0
             downSlide.uiPlayer.upSeekbar.progress = 0
             player.addListener(object : Player.Listener {
@@ -307,6 +310,7 @@ class MainActivity : AppCompatActivity() {
                         downSlide.uiPlayer.upSeekbar.progress = 0
                         downSlide.uiPlayer.upShowStart.text = latestMp3.mp3Duration
                         downSlide.uiPlayer.showStart.text = getString(R.string._00_00)
+                        downSlide.uiPlayer.upShowStart.text = getString(R.string._00_00)
                         downSlide.uiPlayer.playPause.setImageResource(R.drawable.play)
                         downSlide.uiPlayer.upPlayPause.setImageResource(R.drawable.play)
                         handler.removeCallbacks(runnable)

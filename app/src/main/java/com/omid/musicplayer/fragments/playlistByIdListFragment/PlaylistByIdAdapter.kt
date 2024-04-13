@@ -25,8 +25,8 @@ class PlaylistByIdAdapter(private val playlistByIdMp3: List<LatestMp3>,private v
             val playlistByIdInfo = playlistByIdMp3[position]
             Glide.with(AppConfiguration.getContext()).load(playlistByIdInfo.mp3ThumbnailB).into(imgPlaylist)
             songName.text = playlistByIdInfo.mp3Title
-            singerName.text = playlistByIdInfo.mp3Artist
-            clPlaylistByIdList.setOnClickListener {
+            artistName.text = playlistByIdInfo.mp3Artist
+            cvPlaylistByIdList.setOnClickListener {
                 iSelected.onSongClick(playlistByIdInfo,playlistByIdMp3)
             }
         }

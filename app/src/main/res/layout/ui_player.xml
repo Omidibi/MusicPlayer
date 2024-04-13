@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_ui_player"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,8 +11,8 @@
         android:id="@+id/cl_down_Player"
         android:layout_width="@dimen/_0dp"
         android:layout_height="@dimen/_100dp"
-        android:visibility="gone"
         android:background="@color/nero_6"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -20,9 +21,9 @@
             android:id="@+id/seekbar"
             android:layout_width="@dimen/_0dp"
             android:layout_height="@dimen/_40dp"
+            android:progressBackgroundTint="@color/silver"
             android:progressTint="@color/radicalRed"
             android:thumbTint="@color/torchRed"
-            android:progressBackgroundTint="@color/silver"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -53,8 +54,8 @@
             android:id="@+id/dash"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/dash"
             android:gravity="center"
+            android:text="@string/dash"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/show_start"
@@ -101,8 +102,8 @@
         android:id="@+id/cl_up_player"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_70dp"
-        android:visibility="gone"
         android:background="@color/nero_6"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -111,10 +112,10 @@
             android:id="@+id/img_up_player"
             android:layout_width="@dimen/_50dp"
             android:layout_height="@dimen/_50dp"
+            android:layout_marginStart="@dimen/_8dp"
             android:layout_marginTop="@dimen/_16dp"
             android:layout_marginBottom="@dimen/_16dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginStart="@dimen/_8dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -171,12 +172,12 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_list_song"
         android:layout_width="@dimen/_0dp"
-        android:visibility="gone"
         android:layout_height="@dimen/_0dp"
-        app:layout_constraintBottom_toTopOf="@id/cl_status"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/cl_status"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cl_up_player" />
+        app:layout_constraintTop_toBottomOf="@+id/cl_up_player" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_status"
@@ -212,9 +213,9 @@
             android:id="@+id/up_seekbar"
             android:layout_width="@dimen/_0dp"
             android:layout_height="@dimen/_50dp"
+            android:progressBackgroundTint="@color/silver"
             android:progressTint="@color/radicalRed"
             android:thumbTint="@color/torchRed"
-            android:progressBackgroundTint="@color/silver"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/up_show_start" />

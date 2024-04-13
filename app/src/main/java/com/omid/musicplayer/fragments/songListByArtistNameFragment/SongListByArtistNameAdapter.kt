@@ -23,10 +23,10 @@ class SongListByArtistNameAdapter(private val listByArtistName : List<LatestMp3>
         holder.apply {
             val listByArtistNameInfo = listByArtistName[position]
             Glide.with(AppConfiguration.getContext()).load(listByArtistNameInfo.mp3ThumbnailB).into(imgArtistName)
-            singerName.text = listByArtistNameInfo.mp3Artist
+            artistName.text = listByArtistNameInfo.mp3Artist
             songName.text = listByArtistNameInfo.mp3Title
 
-            clArtistName.setOnClickListener {
+            cvArtistSongs.setOnClickListener {
                 iSelected.onSongClick(listByArtistNameInfo,listByArtistName)
             }
 
