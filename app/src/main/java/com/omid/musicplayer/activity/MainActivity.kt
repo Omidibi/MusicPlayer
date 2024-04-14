@@ -11,6 +11,7 @@ import android.text.style.ForegroundColorSpan
 import android.view.View
 import android.widget.PopupMenu
 import android.widget.SeekBar
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.forEach
 import androidx.lifecycle.ViewModelProvider
@@ -25,6 +26,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.omid.musicplayer.R
 import com.omid.musicplayer.databinding.ActivityMainBinding
+import com.omid.musicplayer.db.RoomDBInstance
 import com.omid.musicplayer.model.models.LatestMp3
 import com.omid.musicplayer.utils.sendData.IOnSongClickListener
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
@@ -54,6 +56,13 @@ class MainActivity : AppCompatActivity() {
         clickEvents()
         fragmentStatusInActivity()
         slidingUpPanelStatusInActivity()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.downSlide.uiPlayer.popupMenu.setOnClickListener {
+            setupPopupMenu()
+        }
     }
 
     private fun setupBinding() {
@@ -217,9 +226,9 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-            downSlide.uiPlayer.popupMenu.setOnClickListener {
+            /*downSlide.uiPlayer.popupMenu.setOnClickListener {
                 setupPopupMenu()
-            }
+            }*/
         }
     }
 
@@ -429,9 +438,13 @@ class MainActivity : AppCompatActivity() {
                     }
 
                     R.id.add_to_favorite -> {
-
+                        if (RoomDBInstance.roomDbInstance.dao().searchById(latestMp3.id).isEmpty()){
+                            RoomDBInstance.roomDbInstance.dao().insert(latestMp3)
+                            Toast.makeText(applicationContext,"${latestMp3.mp3Title} Added To Favorites List", Toast.LENGTH_LONG).show()
+                        } else {
+                            Toast.makeText(applicationContext,"${latestMp3.mp3Title} There is in Favorites List", Toast.LENGTH_LONG).show()
+                        }
                     }
-
                 }
                 false
             }

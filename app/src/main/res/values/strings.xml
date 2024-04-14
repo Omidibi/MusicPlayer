@@ -21,11 +21,14 @@
     <string name="about">About</string>
     <string name="privacyPolicy">Privacy Policy</string>
     <string name="share_on">Share On</string>
+    <string name="share">Share</string>
     <string name="recent_artist">Recent Artist</string>
     <string name="nothing_found">Nothing Found!</string>
     <string name="_00_00">00:00</string>
     <string name="dash">-</string>
     <string name="download">download</string>
     <string name="favorite">Favorite</string>
+    <string name="UnFavorite">UnFavorite</string>
+    <string name="delete">delete</string>
     <string name="no_internet_connection">No Internet Connection</string>
 </resources>
