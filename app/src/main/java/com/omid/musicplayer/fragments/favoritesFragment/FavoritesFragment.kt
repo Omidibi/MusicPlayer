@@ -3,6 +3,7 @@ package com.omid.musicplayer.fragments.favoritesFragment
 import android.content.Context
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,18 +12,24 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.omid.musicplayer.R
+import com.omid.musicplayer.activity.MainWidgets
 import com.omid.musicplayer.activity.SharedViewModel
 import com.omid.musicplayer.databinding.FragmentFavoritesBinding
 import com.omid.musicplayer.db.RoomDBInstance
 import com.omid.musicplayer.model.models.LatestMp3
+import com.omid.musicplayer.utils.internetLiveData.CheckNetworkConnection
+import com.omid.musicplayer.utils.networkAvailable.NetworkAvailable
 import com.omid.musicplayer.utils.practicalCodes.FragmentsPracticalCodes
 import com.omid.musicplayer.utils.sendData.IOnSongClickListener
+import com.sothree.slidinguppanel.SlidingUpPanelLayout
 
 class FavoritesFragment : Fragment() {
 
     private lateinit var binding: FragmentFavoritesBinding
     private lateinit var sharedViewModel: SharedViewModel
     private lateinit var owner: LifecycleOwner
+    private lateinit var checkNetworkConnection: CheckNetworkConnection
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -36,8 +43,10 @@ class FavoritesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        networkAvailable()
         clickEvent()
         slidingUpPanelStatus()
+        observer()
     }
 
     override fun onResume() {
@@ -49,6 +58,21 @@ class FavoritesFragment : Fragment() {
         requireActivity().requestedOrientation = (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
         binding = FragmentFavoritesBinding.inflate(layoutInflater)
         sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
+        checkNetworkConnection = CheckNetworkConnection(requireActivity().application)
+    }
+
+    private fun networkAvailable(){
+        binding.apply {
+            if (NetworkAvailable.isNetworkAvailable(requireContext())) {
+                pb.visibility = View.GONE
+                rvFvt.visibility = View.VISIBLE
+                liveNoConnection.visibility = View.GONE
+            }else {
+                pb.visibility = View.GONE
+                rvFvt.visibility = View.GONE
+                liveNoConnection.visibility = View.VISIBLE
+            }
+        }
     }
 
     private fun clickEvent() {
@@ -62,9 +86,41 @@ class FavoritesFragment : Fragment() {
         }
     }
 
+    private fun observer(){
+        binding.apply {
+            checkNetworkConnection.observe(owner) { isConnected->
+                pb.visibility = View.VISIBLE
+                rvFvt.visibility = View.GONE
+                liveNoConnection.visibility = View.GONE
+                if (isConnected) {
+                    if (MainWidgets.isPlay) {
+                        MainWidgets.slidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
+                    }else {
+                        MainWidgets.slidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.HIDDEN
+                    }
+                    pb.visibility = View.GONE
+                    rvFvt.visibility = View.VISIBLE
+                    liveNoConnection.visibility = View.GONE
+                }else {
+                    pb.visibility = View.GONE
+                    rvFvt.visibility = View.GONE
+                    liveNoConnection.visibility = View.VISIBLE
+                    MainWidgets.slidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.HIDDEN
+                    MainWidgets.playPause.setImageResource(R.drawable.play)
+                    MainWidgets.upPlayPause.setImageResource(R.drawable.play)
+                    try {
+                        MainWidgets.player.pause()
+                    }catch (e: UninitializedPropertyAccessException) {
+                        e.message?.let { Log.e("Catch", it) }
+                    }
+                }
+            }
+        }
+    }
+
     private fun showFvtList(){
         binding.apply {
-            rvFvt.adapter = FavoritesAdapter(RoomDBInstance.roomDbInstance.dao().showAllLatest(),object : IOnSongClickListener{
+            rvFvt.adapter = FavoritesAdapter(RoomDBInstance.roomDbInstance.dao().showAll(),object : IOnSongClickListener{
                 override fun onSongClick(latestSongInfo: LatestMp3, latestSongsList: List<LatestMp3>) {
                    sharedViewModel.latestMp3.value = latestSongInfo
                     sharedViewModel.latestMp3List.value = latestSongsList
