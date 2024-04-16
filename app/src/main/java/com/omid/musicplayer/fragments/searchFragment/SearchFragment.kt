@@ -16,9 +16,7 @@ import com.omid.musicplayer.R
 import com.omid.musicplayer.activity.MainWidgets
 import com.omid.musicplayer.activity.SharedViewModel
 import com.omid.musicplayer.databinding.FragmentSearchBinding
-import com.omid.musicplayer.model.models.LatestMp3
-import com.omid.musicplayer.utils.internetLiveData.CheckNetworkConnection
-import com.omid.musicplayer.utils.networkAvailable.NetworkAvailable
+import com.omid.musicplayer.model.LatestMp3
 import com.omid.musicplayer.utils.practicalCodes.FragmentsPracticalCodes
 import com.omid.musicplayer.utils.practicalCodes.MainWidgetStatus
 import com.omid.musicplayer.utils.practicalCodes.ProgressBarStatus
@@ -31,7 +29,6 @@ class SearchFragment : Fragment() {
     private lateinit var searchViewModel: SearchViewModel
     private lateinit var sharedViewModel: SharedViewModel
     private lateinit var owner: LifecycleOwner
-    private lateinit var checkNetworkConnection: CheckNetworkConnection
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -55,14 +52,13 @@ class SearchFragment : Fragment() {
     private fun setupBinding() {
         binding = FragmentSearchBinding.inflate(layoutInflater)
         requireActivity().requestedOrientation = (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
-        checkNetworkConnection = CheckNetworkConnection(requireActivity().application)
         searchViewModel = ViewModelProvider(this)[SearchViewModel::class.java]
         sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
     }
 
     private fun networkAvailable() {
         binding.apply {
-            if (NetworkAvailable.isNetworkAvailable(requireContext())) {
+            if (searchViewModel.checkNetworkAvailable()) {
                 pbSearch.visibility = View.GONE
                 rvSearchSong.visibility = View.VISIBLE
                 liveNoConnection.visibility = View.GONE
@@ -96,7 +92,7 @@ class SearchFragment : Fragment() {
 
     private fun checkNetLiveData(){
         binding.apply {
-            checkNetworkConnection.observe(owner) { isConnected->
+            searchViewModel.checkNetworkConnection.observe(owner) { isConnected->
                 if (isConnected) {
                     if (MainWidgets.isPlay) {
                         MainWidgets.slidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED

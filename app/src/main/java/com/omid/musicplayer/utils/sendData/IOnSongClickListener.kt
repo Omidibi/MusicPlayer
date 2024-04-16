@@ -1,6 +1,6 @@
 package com.omid.musicplayer.utils.sendData
 
-import com.omid.musicplayer.model.models.LatestMp3
+import com.omid.musicplayer.model.LatestMp3
 
 interface IOnSongClickListener {
 

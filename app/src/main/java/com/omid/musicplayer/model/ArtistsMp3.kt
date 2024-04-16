@@ -1,4 +1,4 @@
-package com.omid.musicplayer.model.models
+package com.omid.musicplayer.model
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName

@@ -17,10 +17,8 @@ import com.omid.musicplayer.R
 import com.omid.musicplayer.activity.MainWidgets
 import com.omid.musicplayer.activity.SharedViewModel
 import com.omid.musicplayer.databinding.FragmentAlbumsByIdListBinding
-import com.omid.musicplayer.model.models.AlbumsListMp3
-import com.omid.musicplayer.model.models.LatestMp3
-import com.omid.musicplayer.utils.internetLiveData.CheckNetworkConnection
-import com.omid.musicplayer.utils.networkAvailable.NetworkAvailable
+import com.omid.musicplayer.model.AlbumsListMp3
+import com.omid.musicplayer.model.LatestMp3
 import com.omid.musicplayer.utils.practicalCodes.FragmentsPracticalCodes
 import com.omid.musicplayer.utils.practicalCodes.MainWidgetStatus
 import com.omid.musicplayer.utils.practicalCodes.ProgressBarStatus
@@ -34,7 +32,6 @@ class AlbumsByIdListFragment : Fragment() {
     private lateinit var albumsByIdListViewModel: AlbumsByIdListViewModel
     private lateinit var sharedViewModel: SharedViewModel
     private lateinit var albumsListMp3 : AlbumsListMp3
-    private lateinit var checkNetworkConnection: CheckNetworkConnection
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -59,7 +56,6 @@ class AlbumsByIdListFragment : Fragment() {
     private fun setupBindingAndInitialize() {
         binding = FragmentAlbumsByIdListBinding.inflate(layoutInflater)
         requireActivity().requestedOrientation = (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
-        checkNetworkConnection = CheckNetworkConnection(requireActivity().application)
         sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
         albumsByIdListViewModel = ViewModelProvider(this)[AlbumsByIdListViewModel::class.java]
         binding.apply {
@@ -78,7 +74,7 @@ class AlbumsByIdListFragment : Fragment() {
 
     private fun networkAvailable(){
         binding.apply {
-            if (NetworkAvailable.isNetworkAvailable(requireContext())) {
+            if (albumsByIdListViewModel.checkNetworkAvailable()) {
                 pbAlbumByIdList.visibility = View.GONE
                 srl.visibility = View.VISIBLE
                 liveNoConnection.visibility = View.GONE
@@ -92,7 +88,7 @@ class AlbumsByIdListFragment : Fragment() {
 
     private fun albumsByIdListObservers() {
         binding.apply {
-            checkNetworkConnection.observe(owner) { isConnected->
+            albumsByIdListViewModel.checkNetworkConnection.observe(owner) { isConnected->
                 pbAlbumByIdList.visibility = View.VISIBLE
                 srl.visibility = View.GONE
                 liveNoConnection.visibility = View.GONE

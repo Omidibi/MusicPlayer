@@ -11,6 +11,7 @@ object MainWidgets {
 
     lateinit var bnv: BottomNavigationView
     lateinit var slidingUpPanel: SlidingUpPanelLayout
+
     @SuppressLint("StaticFieldLeak")
     lateinit var toolbar: Toolbar
     lateinit var player: ExoPlayer

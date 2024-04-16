@@ -11,11 +11,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.omid.musicplayer.R
 import com.omid.musicplayer.db.RoomDBInstance
-import com.omid.musicplayer.model.models.LatestMp3
+import com.omid.musicplayer.model.LatestMp3
 import com.omid.musicplayer.utils.configuration.AppConfiguration
 import com.omid.musicplayer.utils.sendData.IOnSongClickListener
 
-class FavoritesAdapter(private val latestMp3: MutableList<LatestMp3>,private val iSelect: IOnSongClickListener): RecyclerView.Adapter<FavoritesVH>() {
+class FavoritesAdapter(private val latestMp3: MutableList<LatestMp3>, private val iSelect: IOnSongClickListener): RecyclerView.Adapter<FavoritesVH>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavoritesVH {
         return FavoritesVH(LayoutInflater.from(AppConfiguration.getContext()).inflate(R.layout.fvt_row,null))
@@ -43,7 +43,7 @@ class FavoritesAdapter(private val latestMp3: MutableList<LatestMp3>,private val
         }
     }
 
-    private fun setupPopupMenu(holder: FavoritesVH,latestMp3Info : LatestMp3,latestMp3List : MutableList<LatestMp3>,position: Int) {
+    private fun setupPopupMenu(holder: FavoritesVH, latestMp3Info : LatestMp3, latestMp3List : MutableList<LatestMp3>, position: Int) {
             val popup = PopupMenu(AppConfiguration.getContext(), holder.popupFvt)
             popup.inflate(R.menu.fvt_popup_menu)
             popup.show()

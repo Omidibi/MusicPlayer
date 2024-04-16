@@ -13,7 +13,7 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.omid.musicplayer.R
-import com.omid.musicplayer.model.models.LatestMp3
+import com.omid.musicplayer.model.LatestMp3
 import com.omid.musicplayer.utils.configuration.AppConfiguration
 import com.omid.musicplayer.utils.sendData.IOnSongClickListener
 

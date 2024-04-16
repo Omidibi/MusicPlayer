@@ -3,8 +3,8 @@ package com.omid.musicplayer.db
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import com.omid.musicplayer.model.models.DownloadedMp3
-import com.omid.musicplayer.model.models.LatestMp3
+import com.omid.musicplayer.model.DownloadedMp3
+import com.omid.musicplayer.model.LatestMp3
 
 @Dao
 interface IDao {
@@ -26,12 +26,6 @@ interface IDao {
 
     @Query("Delete From tbl_downloads Where idPrimaryKey Like :idPrimaryKey")
     fun deleteDownload(idPrimaryKey: Int): Int
-
-    @Query("Select * From tbl_latest Where idPrimaryKey Like :idPrimaryKey")
-    fun searchByIdPrimary(idPrimaryKey: Int): MutableList<LatestMp3>
-
-    @Query("Select * From tbl_downloads Where idPrimaryKey Like :idPrimaryKey")
-    fun searchByIdPrimaryDownload(idPrimaryKey: Int): MutableList<DownloadedMp3>
 
     @Query("Select * From tbl_latest Where id Like :id")
     fun searchById(id: String): MutableList<LatestMp3>

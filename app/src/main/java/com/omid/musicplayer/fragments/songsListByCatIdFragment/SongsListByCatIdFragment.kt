@@ -17,10 +17,8 @@ import com.omid.musicplayer.R
 import com.omid.musicplayer.activity.MainWidgets
 import com.omid.musicplayer.activity.SharedViewModel
 import com.omid.musicplayer.databinding.FragmentSongsListByCatIdBinding
-import com.omid.musicplayer.model.models.CategoriesMp3
-import com.omid.musicplayer.model.models.LatestMp3
-import com.omid.musicplayer.utils.internetLiveData.CheckNetworkConnection
-import com.omid.musicplayer.utils.networkAvailable.NetworkAvailable
+import com.omid.musicplayer.model.CategoriesMp3
+import com.omid.musicplayer.model.LatestMp3
 import com.omid.musicplayer.utils.practicalCodes.FragmentsPracticalCodes
 import com.omid.musicplayer.utils.practicalCodes.MainWidgetStatus
 import com.omid.musicplayer.utils.practicalCodes.ProgressBarStatus
@@ -32,7 +30,6 @@ class SongsListByCatIdFragment : Fragment() {
     private lateinit var binding: FragmentSongsListByCatIdBinding
     private lateinit var sharedViewModel: SharedViewModel
     private lateinit var owner: LifecycleOwner
-    private lateinit var checkNetworkConnection: CheckNetworkConnection
     private lateinit var songsListByCatIdViewModel: SongsListByCatIdViewModel
     private lateinit var categoriesMp3 : CategoriesMp3
 
@@ -58,7 +55,7 @@ class SongsListByCatIdFragment : Fragment() {
 
     private fun networkAvailable(){
         binding.apply {
-            if (NetworkAvailable.isNetworkAvailable(requireContext())) {
+            if (songsListByCatIdViewModel.checkNetworkAvailable()) {
                 pb.visibility = View.GONE
                 srl.visibility = View.VISIBLE
                 liveNoConnection.visibility = View.GONE
@@ -72,7 +69,7 @@ class SongsListByCatIdFragment : Fragment() {
 
     private fun songsListByCatIDObservers() {
         binding.apply {
-            checkNetworkConnection.observe(owner) { isConnected->
+            songsListByCatIdViewModel.checkNetworkConnection.observe(owner) { isConnected->
                 pb.visibility = View.VISIBLE
                 srl.visibility = View.GONE
                 liveNoConnection.visibility = View.GONE
@@ -130,7 +127,6 @@ class SongsListByCatIdFragment : Fragment() {
         requireActivity().requestedOrientation = (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
         sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
         songsListByCatIdViewModel = ViewModelProvider(this)[SongsListByCatIdViewModel::class.java]
-        checkNetworkConnection = CheckNetworkConnection(requireActivity().application)
         binding.apply {
             categoriesMp3 = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 requireArguments().getParcelable("catListInfo", CategoriesMp3::class.java)!!

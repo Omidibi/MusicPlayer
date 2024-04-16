@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.omid.musicplayer.activity.MainWidgets
 import com.omid.musicplayer.R
-import com.omid.musicplayer.model.models.ArtistsMp3
+import com.omid.musicplayer.model.ArtistsMp3
 import com.omid.musicplayer.utils.configuration.AppConfiguration
 
 class ArtistAdapter(private val fragment: Fragment,private val artistsList : List<ArtistsMp3>): RecyclerView.Adapter<ArtistVH>() {

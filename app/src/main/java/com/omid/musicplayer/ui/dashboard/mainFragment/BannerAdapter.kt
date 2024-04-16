@@ -7,7 +7,7 @@ import androidx.appcompat.widget.AppCompatImageView
 import androidx.viewpager.widget.PagerAdapter
 import com.bumptech.glide.Glide
 import com.omid.musicplayer.R
-import com.omid.musicplayer.model.models.BannerModel
+import com.omid.musicplayer.model.BannerModel
 import com.omid.musicplayer.utils.configuration.AppConfiguration
 
 class BannerAdapter(private var bannerList: List<BannerModel>) : PagerAdapter() {

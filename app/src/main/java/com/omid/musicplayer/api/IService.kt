@@ -1,16 +1,16 @@
 package com.omid.musicplayer.api
 
-import com.omid.musicplayer.model.models.AlbumByIdList
-import com.omid.musicplayer.model.models.AlbumsList
-import com.omid.musicplayer.model.models.ArtistsList
-import com.omid.musicplayer.model.models.CategoriesList
-import com.omid.musicplayer.model.models.LatestSong
-import com.omid.musicplayer.model.models.PlayLists
-import com.omid.musicplayer.model.models.PlaylistByIdList
-import com.omid.musicplayer.model.models.RecentArtistList
-import com.omid.musicplayer.model.models.SearchSong
-import com.omid.musicplayer.model.models.SongListByArtistName
-import com.omid.musicplayer.model.models.SongsByCatId
+import com.omid.musicplayer.model.AlbumByIdList
+import com.omid.musicplayer.model.AlbumsList
+import com.omid.musicplayer.model.ArtistsList
+import com.omid.musicplayer.model.CategoriesList
+import com.omid.musicplayer.model.LatestSong
+import com.omid.musicplayer.model.PlayLists
+import com.omid.musicplayer.model.PlaylistByIdList
+import com.omid.musicplayer.model.RecentArtistList
+import com.omid.musicplayer.model.SearchSong
+import com.omid.musicplayer.model.SongListByArtistName
+import com.omid.musicplayer.model.SongsByCatId
 import io.reactivex.rxjava3.core.Observable
 import retrofit2.Response
 import retrofit2.http.GET

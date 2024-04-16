@@ -6,8 +6,8 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.omid.musicplayer.R
-import com.omid.musicplayer.model.models.AlbumByIdMp3
-import com.omid.musicplayer.model.models.LatestMp3
+import com.omid.musicplayer.model.AlbumByIdMp3
+import com.omid.musicplayer.model.LatestMp3
 import com.omid.musicplayer.utils.configuration.AppConfiguration
 import com.omid.musicplayer.utils.sendData.IOnSongClickListener
 
@@ -16,7 +16,7 @@ class AlbumsByIdAdapter() :RecyclerView.Adapter<AlbumsByIdVH>() {
     private lateinit var albumsByIdList : List<AlbumByIdMp3>
     private lateinit var iSelected: IOnSongClickListener
 
-    constructor(albumsByIdList : List<AlbumByIdMp3>,iSelected: IOnSongClickListener): this(){
+    constructor(albumsByIdList : List<AlbumByIdMp3>, iSelected: IOnSongClickListener): this(){
         this.albumsByIdList = albumsByIdList
         this.iSelected = iSelected
     }

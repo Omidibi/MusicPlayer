@@ -16,7 +16,7 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.omid.musicplayer.activity.MainWidgets
 import com.omid.musicplayer.R
-import com.omid.musicplayer.model.models.PlayListsMp3
+import com.omid.musicplayer.model.PlayListsMp3
 import com.omid.musicplayer.utils.configuration.AppConfiguration
 
 class PlayListsAdapter(private val fragment: Fragment,private val plyLists : List<PlayListsMp3>): RecyclerView.Adapter<PlayListsVH>() {

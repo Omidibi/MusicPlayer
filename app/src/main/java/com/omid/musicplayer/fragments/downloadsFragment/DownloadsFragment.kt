@@ -16,10 +16,7 @@ import com.omid.musicplayer.R
 import com.omid.musicplayer.activity.MainWidgets
 import com.omid.musicplayer.activity.SharedViewModel
 import com.omid.musicplayer.databinding.FragmentDownloadsBinding
-import com.omid.musicplayer.db.RoomDBInstance
-import com.omid.musicplayer.model.models.LatestMp3
-import com.omid.musicplayer.utils.internetLiveData.CheckNetworkConnection
-import com.omid.musicplayer.utils.networkAvailable.NetworkAvailable
+import com.omid.musicplayer.model.LatestMp3
 import com.omid.musicplayer.utils.practicalCodes.FragmentsPracticalCodes
 import com.omid.musicplayer.utils.sendData.IOnSongClickListener
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
@@ -29,7 +26,7 @@ class DownloadsFragment : Fragment() {
     private lateinit var binding: FragmentDownloadsBinding
     private lateinit var sharedViewModel: SharedViewModel
     private lateinit var owner: LifecycleOwner
-    private lateinit var checkNetworkConnection: CheckNetworkConnection
+    private lateinit var downloadViewModel: DownloadsViewModel
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -58,12 +55,12 @@ class DownloadsFragment : Fragment() {
         requireActivity().requestedOrientation = (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
         binding = FragmentDownloadsBinding.inflate(layoutInflater)
         sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
-        checkNetworkConnection = CheckNetworkConnection(requireActivity().application)
+        downloadViewModel = ViewModelProvider(this)[DownloadsViewModel::class.java]
     }
 
     private fun networkAvailable(){
         binding.apply {
-            if (NetworkAvailable.isNetworkAvailable(requireContext())) {
+            if (downloadViewModel.networkAvailable()) {
                 pb.visibility = View.GONE
                 rvDownload.visibility = View.VISIBLE
                 liveNoConnection.visibility = View.GONE
@@ -88,7 +85,7 @@ class DownloadsFragment : Fragment() {
 
     private fun observer(){
         binding.apply {
-            checkNetworkConnection.observe(owner) { isConnected->
+            downloadViewModel.checkNetworkConnection.observe(owner) { isConnected->
                 pb.visibility = View.VISIBLE
                 rvDownload.visibility = View.GONE
                 liveNoConnection.visibility = View.GONE
@@ -120,7 +117,7 @@ class DownloadsFragment : Fragment() {
 
     private fun showDownloadList(){
         binding.apply {
-            rvDownload.adapter = DownloadsAdapter(RoomDBInstance.roomDbInstance.dao().showAllDownload(),object : IOnSongClickListener{
+            rvDownload.adapter = DownloadsAdapter(downloadViewModel.showAllDownload(),object : IOnSongClickListener{
                 override fun onSongClick(latestSongInfo: LatestMp3, latestSongsList: List<LatestMp3>) {
                     sharedViewModel.latestMp3List.value = latestSongsList
                     sharedViewModel.latestMp3.value = latestSongInfo

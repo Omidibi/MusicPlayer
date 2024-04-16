@@ -19,9 +19,8 @@ import com.omid.musicplayer.R
 import com.omid.musicplayer.activity.MainWidgets
 import com.omid.musicplayer.activity.SharedViewModel
 import com.omid.musicplayer.databinding.FragmentMainBinding
-import com.omid.musicplayer.model.models.BannerModel
-import com.omid.musicplayer.model.models.LatestMp3
-import com.omid.musicplayer.utils.networkAvailable.NetworkAvailable
+import com.omid.musicplayer.model.BannerModel
+import com.omid.musicplayer.model.LatestMp3
 import com.omid.musicplayer.utils.practicalCodes.DashboardFragmentsPracticalCodes
 import com.omid.musicplayer.utils.practicalCodes.MainWidgetStatus
 import com.omid.musicplayer.utils.practicalCodes.ProgressBarStatus
@@ -251,7 +250,7 @@ class MainFragment : Fragment() {
 
     private fun checkNetwork(){
         binding.apply {
-            if (NetworkAvailable.isNetworkAvailable(requireContext())) {
+            if (mainViewModel.networkAvailable()) {
                 srl.visibility = View.VISIBLE
                 pbLoading.visibility = View.GONE
                 liveNoConnection.visibility = View.GONE

@@ -15,7 +15,7 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.omid.musicplayer.activity.MainWidgets
 import com.omid.musicplayer.R
-import com.omid.musicplayer.model.models.ArtistsMp3
+import com.omid.musicplayer.model.ArtistsMp3
 import com.omid.musicplayer.utils.configuration.AppConfiguration
 
 class RecentArtistAdapter(private val fragment: MainFragment, private val recentArtist : List<ArtistsMp3>): RecyclerView.Adapter<RecentArtistVH>() {

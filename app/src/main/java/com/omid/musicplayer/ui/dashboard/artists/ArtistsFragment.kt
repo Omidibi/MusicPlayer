@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.omid.musicplayer.R
 import com.omid.musicplayer.activity.MainWidgets
 import com.omid.musicplayer.databinding.FragmentArtistsBinding
-import com.omid.musicplayer.utils.networkAvailable.NetworkAvailable
 import com.omid.musicplayer.utils.practicalCodes.DashboardFragmentsPracticalCodes
 import com.omid.musicplayer.utils.practicalCodes.ProgressBarStatus
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
@@ -57,7 +56,7 @@ class ArtistsFragment : Fragment() {
 
     private fun networkAvailable(){
         binding.apply {
-            if (NetworkAvailable.isNetworkAvailable(requireContext())) {
+            if (artistViewModel.networkAvailable()) {
                 pbArtist.visibility = View.GONE
                 srl.visibility = View.VISIBLE
                 liveNoConnection.visibility = View.GONE

@@ -9,7 +9,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.omid.musicplayer.activity.MainWidgets
 import com.omid.musicplayer.R
-import com.omid.musicplayer.model.models.CategoriesMp3
+import com.omid.musicplayer.model.CategoriesMp3
 import com.omid.musicplayer.utils.configuration.AppConfiguration
 
 class CatListAdapter (private val fragment: Fragment,private val catList : List<CategoriesMp3>): RecyclerView.Adapter<CatListVH>() {

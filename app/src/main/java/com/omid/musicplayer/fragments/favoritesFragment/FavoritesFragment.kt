@@ -16,10 +16,7 @@ import com.omid.musicplayer.R
 import com.omid.musicplayer.activity.MainWidgets
 import com.omid.musicplayer.activity.SharedViewModel
 import com.omid.musicplayer.databinding.FragmentFavoritesBinding
-import com.omid.musicplayer.db.RoomDBInstance
-import com.omid.musicplayer.model.models.LatestMp3
-import com.omid.musicplayer.utils.internetLiveData.CheckNetworkConnection
-import com.omid.musicplayer.utils.networkAvailable.NetworkAvailable
+import com.omid.musicplayer.model.LatestMp3
 import com.omid.musicplayer.utils.practicalCodes.FragmentsPracticalCodes
 import com.omid.musicplayer.utils.sendData.IOnSongClickListener
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
@@ -29,7 +26,7 @@ class FavoritesFragment : Fragment() {
     private lateinit var binding: FragmentFavoritesBinding
     private lateinit var sharedViewModel: SharedViewModel
     private lateinit var owner: LifecycleOwner
-    private lateinit var checkNetworkConnection: CheckNetworkConnection
+    private lateinit var favoritesViewModel: FavoritesViewModel
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -58,12 +55,12 @@ class FavoritesFragment : Fragment() {
         requireActivity().requestedOrientation = (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
         binding = FragmentFavoritesBinding.inflate(layoutInflater)
         sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
-        checkNetworkConnection = CheckNetworkConnection(requireActivity().application)
+        favoritesViewModel = ViewModelProvider(this)[FavoritesViewModel::class.java]
     }
 
     private fun networkAvailable(){
         binding.apply {
-            if (NetworkAvailable.isNetworkAvailable(requireContext())) {
+            if (favoritesViewModel.networkAvailable()) {
                 pb.visibility = View.GONE
                 rvFvt.visibility = View.VISIBLE
                 liveNoConnection.visibility = View.GONE
@@ -88,7 +85,7 @@ class FavoritesFragment : Fragment() {
 
     private fun observer(){
         binding.apply {
-            checkNetworkConnection.observe(owner) { isConnected->
+            favoritesViewModel.checkNetworkConnection.observe(owner) { isConnected->
                 pb.visibility = View.VISIBLE
                 rvFvt.visibility = View.GONE
                 liveNoConnection.visibility = View.GONE
@@ -120,14 +117,13 @@ class FavoritesFragment : Fragment() {
 
     private fun showFvtList(){
         binding.apply {
-            rvFvt.adapter = FavoritesAdapter(RoomDBInstance.roomDbInstance.dao().showAll(),object : IOnSongClickListener{
+            rvFvt.adapter = FavoritesAdapter(favoritesViewModel.showAllFavorite(),object : IOnSongClickListener{
                 override fun onSongClick(latestSongInfo: LatestMp3, latestSongsList: List<LatestMp3>) {
                    sharedViewModel.latestMp3.value = latestSongInfo
                     sharedViewModel.latestMp3List.value = latestSongsList
                 }
 
             })
-
             rvFvt.layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false)
         }
     }

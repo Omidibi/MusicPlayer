@@ -11,12 +11,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.omid.musicplayer.R
 import com.omid.musicplayer.db.RoomDBInstance
-import com.omid.musicplayer.model.models.DownloadedMp3
-import com.omid.musicplayer.model.models.LatestMp3
+import com.omid.musicplayer.model.DownloadedMp3
+import com.omid.musicplayer.model.LatestMp3
 import com.omid.musicplayer.utils.configuration.AppConfiguration
 import com.omid.musicplayer.utils.sendData.IOnSongClickListener
 
-class DownloadsAdapter(private val downloadedMp3: MutableList<DownloadedMp3>,private val iSelected: IOnSongClickListener):RecyclerView.Adapter<DownloadsVH>() {
+class DownloadsAdapter(private val downloadedMp3: MutableList<DownloadedMp3>, private val iSelected: IOnSongClickListener):RecyclerView.Adapter<DownloadsVH>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DownloadsVH {
         return DownloadsVH(LayoutInflater.from(AppConfiguration.getContext()).inflate(R.layout.download_row,null))

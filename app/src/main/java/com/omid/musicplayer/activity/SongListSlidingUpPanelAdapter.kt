@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.omid.musicplayer.R
-import com.omid.musicplayer.model.models.LatestMp3
+import com.omid.musicplayer.model.LatestMp3
 import com.omid.musicplayer.utils.configuration.AppConfiguration
 import com.omid.musicplayer.utils.sendData.IOnSongClickListener
 

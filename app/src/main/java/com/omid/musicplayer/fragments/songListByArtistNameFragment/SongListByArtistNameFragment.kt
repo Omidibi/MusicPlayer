@@ -17,10 +17,8 @@ import com.omid.musicplayer.R
 import com.omid.musicplayer.activity.MainWidgets
 import com.omid.musicplayer.activity.SharedViewModel
 import com.omid.musicplayer.databinding.FragmentSongListByArtistNameBinding
-import com.omid.musicplayer.model.models.ArtistsMp3
-import com.omid.musicplayer.model.models.LatestMp3
-import com.omid.musicplayer.utils.internetLiveData.CheckNetworkConnection
-import com.omid.musicplayer.utils.networkAvailable.NetworkAvailable
+import com.omid.musicplayer.model.ArtistsMp3
+import com.omid.musicplayer.model.LatestMp3
 import com.omid.musicplayer.utils.practicalCodes.FragmentsPracticalCodes
 import com.omid.musicplayer.utils.practicalCodes.MainWidgetStatus
 import com.omid.musicplayer.utils.practicalCodes.ProgressBarStatus
@@ -33,7 +31,6 @@ class SongListByArtistNameFragment : Fragment() {
     private lateinit var owner: LifecycleOwner
     private lateinit var sharedViewModel : SharedViewModel
     private lateinit var songListByArtistNameViewModel: SongListByArtistNameViewModel
-    private lateinit var checkNetworkConnection: CheckNetworkConnection
     private lateinit var artistsMp3 : ArtistsMp3
 
     override fun onAttach(context: Context) {
@@ -60,7 +57,6 @@ class SongListByArtistNameFragment : Fragment() {
     private fun setupBinding(){
         requireActivity().requestedOrientation = (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
         binding = FragmentSongListByArtistNameBinding.inflate(layoutInflater)
-        checkNetworkConnection = CheckNetworkConnection(requireActivity().application)
         sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
         songListByArtistNameViewModel = ViewModelProvider(this)[SongListByArtistNameViewModel::class.java]
     }
@@ -68,7 +64,7 @@ class SongListByArtistNameFragment : Fragment() {
     private fun getData(){
         binding.apply {
             artistsMp3 = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
-                requireArguments().getParcelable("ArtistInfo",ArtistsMp3::class.java)!!
+                requireArguments().getParcelable("ArtistInfo", ArtistsMp3::class.java)!!
             }else {
                 requireArguments().getParcelable("ArtistInfo")!!
             }
@@ -98,7 +94,7 @@ class SongListByArtistNameFragment : Fragment() {
 
     private fun networkAvailable(){
         binding.apply {
-            if (NetworkAvailable.isNetworkAvailable(requireContext())) {
+            if (songListByArtistNameViewModel.checkNetworkAvailable()) {
                 pb.visibility = View.GONE
                 srl.visibility = View.VISIBLE
                 liveNoConnection.visibility = View.GONE
@@ -112,7 +108,7 @@ class SongListByArtistNameFragment : Fragment() {
 
     private fun getSongListByArtistNameObservers(){
         binding.apply {
-            checkNetworkConnection.observe(owner) { isConnected->
+            songListByArtistNameViewModel.checkNetworkConnection.observe(owner) { isConnected->
                 pb.visibility = View.VISIBLE
                 srl.visibility = View.GONE
                 liveNoConnection.visibility = View.GONE

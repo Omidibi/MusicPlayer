@@ -4,8 +4,10 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import com.omid.musicplayer.api.WebServiceCaller
-import com.omid.musicplayer.model.models.PlayLists
+import com.omid.musicplayer.model.PlayLists
+import com.omid.musicplayer.utils.configuration.AppConfiguration
 import com.omid.musicplayer.utils.internetLiveData.CheckNetworkConnection
+import com.omid.musicplayer.utils.networkAvailable.NetworkAvailable
 
 class PlayListsViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -25,5 +27,9 @@ class PlayListsViewModel(application: Application) : AndroidViewModel(applicatio
         if (checkNetworkConnection.value == true) {
             webServiceCaller.getPlayLists()
         }
+    }
+
+    fun networkAvailable(): Boolean {
+        return NetworkAvailable.isNetworkAvailable(AppConfiguration.getContext())
     }
 }

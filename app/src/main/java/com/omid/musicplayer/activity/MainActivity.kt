@@ -39,8 +39,8 @@ import com.bumptech.glide.Glide
 import com.omid.musicplayer.R
 import com.omid.musicplayer.databinding.ActivityMainBinding
 import com.omid.musicplayer.db.RoomDBInstance
-import com.omid.musicplayer.model.models.DownloadedMp3
-import com.omid.musicplayer.model.models.LatestMp3
+import com.omid.musicplayer.model.DownloadedMp3
+import com.omid.musicplayer.model.LatestMp3
 import com.omid.musicplayer.utils.sendData.IOnSongClickListener
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -253,10 +253,6 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
-
-            /*downSlide.uiPlayer.popupMenu.setOnClickListener {
-                setupPopupMenu()
-            }*/
         }
     }
 

@@ -5,11 +5,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.omid.musicplayer.R
-import com.omid.musicplayer.model.models.LatestMp3
+import com.omid.musicplayer.model.LatestMp3
 import com.omid.musicplayer.utils.configuration.AppConfiguration
 import com.omid.musicplayer.utils.sendData.IOnSongClickListener
 
-class SongSearchAdapter(private val searchList: List<LatestMp3>,private val iSend: IOnSongClickListener): RecyclerView.Adapter<SongSearchVH>() {
+class SongSearchAdapter(private val searchList: List<LatestMp3>, private val iSend: IOnSongClickListener): RecyclerView.Adapter<SongSearchVH>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SongSearchVH {
         return SongSearchVH(LayoutInflater.from(AppConfiguration.getContext()).inflate(R.layout.search_list_row,null))
