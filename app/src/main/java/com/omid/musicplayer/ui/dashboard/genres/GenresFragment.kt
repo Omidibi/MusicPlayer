@@ -60,37 +60,39 @@ class GenresFragment : Fragment() {
 
     private fun categoriesListObservers() {
         binding.apply {
-            genresViewModel.checkNetworkConnection.observe(owner) { isConnected->
-                pbGenres.visibility = View.VISIBLE
-                srl.visibility = View.GONE
-                liveNoConnection.visibility = View.GONE
-                if (isConnected) {
-                    MainWidgets.bnv.visibility = View.VISIBLE
-                    if (MainWidgets.isPlay) {
-                        MainWidgets.slidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
-                    }else {
-                        MainWidgets.slidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.HIDDEN
-                    }
-
-                    genresViewModel.categoriesList.observe(owner) { categoriesList->
-                        pbGenres.visibility = View.GONE
-                        srl.visibility = View.VISIBLE
-                        liveNoConnection.visibility = View.GONE
-                        rvCat.adapter = CatListAdapter(this@GenresFragment,categoriesList.onlineMp3)
-                        rvCat.layoutManager = GridLayoutManager(requireContext(), 2)
-                    }
-                }else {
-                    pbGenres.visibility = View.GONE
+            if (isAdded){
+                genresViewModel.checkNetworkConnection.observe(owner) { isConnected->
+                    pbGenres.visibility = View.VISIBLE
                     srl.visibility = View.GONE
-                    liveNoConnection.visibility = View.VISIBLE
-                    MainWidgets.playPause.setImageResource(R.drawable.play)
-                    MainWidgets.upPlayPause.setImageResource(R.drawable.play)
-                    MainWidgets.bnv.visibility = View.VISIBLE
-                    MainWidgets.slidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.HIDDEN
-                    try {
-                        MainWidgets.player.pause()
-                    }catch (e: UninitializedPropertyAccessException) {
-                        e.message?.let { Log.e("Catch", it) }
+                    liveNoConnection.visibility = View.GONE
+                    if (isConnected) {
+                        MainWidgets.bnv.visibility = View.VISIBLE
+                        if (MainWidgets.isPlay) {
+                            MainWidgets.slidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
+                        }else {
+                            MainWidgets.slidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.HIDDEN
+                        }
+
+                        genresViewModel.categoriesList.observe(owner) { categoriesList->
+                            pbGenres.visibility = View.GONE
+                            srl.visibility = View.VISIBLE
+                            liveNoConnection.visibility = View.GONE
+                            rvCat.adapter = CatListAdapter(this@GenresFragment,categoriesList.onlineMp3)
+                            rvCat.layoutManager = GridLayoutManager(requireContext(), 2)
+                        }
+                    }else {
+                        pbGenres.visibility = View.GONE
+                        srl.visibility = View.GONE
+                        liveNoConnection.visibility = View.VISIBLE
+                        MainWidgets.playPause.setImageResource(R.drawable.play)
+                        MainWidgets.upPlayPause.setImageResource(R.drawable.play)
+                        MainWidgets.bnv.visibility = View.VISIBLE
+                        MainWidgets.slidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.HIDDEN
+                        try {
+                            MainWidgets.player.pause()
+                        }catch (e: UninitializedPropertyAccessException) {
+                            e.message?.let { Log.e("Catch", it) }
+                        }
                     }
                 }
             }

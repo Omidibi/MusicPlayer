@@ -100,134 +100,136 @@ class NewSongsMoreFragment : Fragment() {
 
     private fun newSongsList(){
         binding.apply {
-            val teddySwims = LatestMp3("",
-                "android.resource://com.omid.musicplayer/${R.drawable.teddy}",
-                "android.resource://com.omid.musicplayer/${R.drawable.teddy}",
-                "","","999","Teddy Swims",
-                "","03:30",
-                "android.resource://com.omid.musicplayer/${R.drawable.teddy}",
-                "android.resource://com.omid.musicplayer/${R.drawable.teddy}",
-                "Lose Control","",
-                "android.resource://com.omid.musicplayer/${R.raw.teddy_swims_lose_control}",
-                "","","","")
+            if (isAdded){
+                val teddySwims = LatestMp3("",
+                    "android.resource://com.omid.musicplayer/${R.drawable.teddy}",
+                    "android.resource://com.omid.musicplayer/${R.drawable.teddy}",
+                    "","","999","Teddy Swims",
+                    "","03:30",
+                    "android.resource://com.omid.musicplayer/${R.drawable.teddy}",
+                    "android.resource://com.omid.musicplayer/${R.drawable.teddy}",
+                    "Lose Control","",
+                    "android.resource://com.omid.musicplayer/${R.raw.teddy_swims_lose_control}",
+                    "","","","")
 
-            val tamar = LatestMp3("",
-                "android.resource://com.omid.musicplayer/${R.drawable.tamar}",
-                "android.resource://com.omid.musicplayer/${R.drawable.tamar}",
-                "","","998","Tamar Braxton",
-                "","03:29",
-                "android.resource://com.omid.musicplayer/${R.drawable.tamar}",
-                "android.resource://com.omid.musicplayer/${R.drawable.tamar}",
-                "Notice Me","",
-                "android.resource://com.omid.musicplayer/${R.raw.tamar_braxton_notice_me}",
-                "","","","")
+                val tamar = LatestMp3("",
+                    "android.resource://com.omid.musicplayer/${R.drawable.tamar}",
+                    "android.resource://com.omid.musicplayer/${R.drawable.tamar}",
+                    "","","998","Tamar Braxton",
+                    "","03:29",
+                    "android.resource://com.omid.musicplayer/${R.drawable.tamar}",
+                    "android.resource://com.omid.musicplayer/${R.drawable.tamar}",
+                    "Notice Me","",
+                    "android.resource://com.omid.musicplayer/${R.raw.tamar_braxton_notice_me}",
+                    "","","","")
 
-            val morgan = LatestMp3("",
-                "android.resource://com.omid.musicplayer/${R.drawable.morgan}",
-                "android.resource://com.omid.musicplayer/${R.drawable.morgan}",
-                "","","997","Morgan Wallen",
-                "","02:44",
-                "android.resource://com.omid.musicplayer/${R.drawable.morgan}",
-                "android.resource://com.omid.musicplayer/${R.drawable.morgan}",
-                "Last Night","",
-                "android.resource://com.omid.musicplayer/${R.raw.morgan_wallen_last_night}",
-                "","","","")
+                val morgan = LatestMp3("",
+                    "android.resource://com.omid.musicplayer/${R.drawable.morgan}",
+                    "android.resource://com.omid.musicplayer/${R.drawable.morgan}",
+                    "","","997","Morgan Wallen",
+                    "","02:44",
+                    "android.resource://com.omid.musicplayer/${R.drawable.morgan}",
+                    "android.resource://com.omid.musicplayer/${R.drawable.morgan}",
+                    "Last Night","",
+                    "android.resource://com.omid.musicplayer/${R.raw.morgan_wallen_last_night}",
+                    "","","","")
 
-            val jack = LatestMp3("",
-                "android.resource://com.omid.musicplayer/${R.drawable.jack}",
-                "android.resource://com.omid.musicplayer/${R.drawable.jack}",
-                "","","996","Jack Harlow",
-                "","02:19",
-                "android.resource://com.omid.musicplayer/${R.drawable.jack}",
-                "android.resource://com.omid.musicplayer/${R.drawable.jack}",
-                "Lovin On Me","",
-                "android.resource://com.omid.musicplayer/${R.raw.jack_harlow_lovin_on_me}",
-                "","","","")
+                val jack = LatestMp3("",
+                    "android.resource://com.omid.musicplayer/${R.drawable.jack}",
+                    "android.resource://com.omid.musicplayer/${R.drawable.jack}",
+                    "","","996","Jack Harlow",
+                    "","02:19",
+                    "android.resource://com.omid.musicplayer/${R.drawable.jack}",
+                    "android.resource://com.omid.musicplayer/${R.drawable.jack}",
+                    "Lovin On Me","",
+                    "android.resource://com.omid.musicplayer/${R.raw.jack_harlow_lovin_on_me}",
+                    "","","","")
 
-            val bailey = LatestMp3("",
-                "android.resource://com.omid.musicplayer/${R.drawable.bailey}",
-                "android.resource://com.omid.musicplayer/${R.drawable.bailey}",
-                "","","995","Bailey Zimmerman",
-                "","03:49",
-                "android.resource://com.omid.musicplayer/${R.drawable.bailey}",
-                "android.resource://com.omid.musicplayer/${R.drawable.bailey}",
-                "Fall in Love","",
-                "android.resource://com.omid.musicplayer/${R.raw.bailey_zimmerman_fall_in_love}",
-                "","","","")
+                val bailey = LatestMp3("",
+                    "android.resource://com.omid.musicplayer/${R.drawable.bailey}",
+                    "android.resource://com.omid.musicplayer/${R.drawable.bailey}",
+                    "","","995","Bailey Zimmerman",
+                    "","03:49",
+                    "android.resource://com.omid.musicplayer/${R.drawable.bailey}",
+                    "android.resource://com.omid.musicplayer/${R.drawable.bailey}",
+                    "Fall in Love","",
+                    "android.resource://com.omid.musicplayer/${R.raw.bailey_zimmerman_fall_in_love}",
+                    "","","","")
 
-            val doja = LatestMp3("994",
-                "android.resource://com.omid.musicplayer/${R.drawable.doja}",
-                "android.resource://com.omid.musicplayer/${R.drawable.doja}",
-                "","","","Doja Cat",
-                "","03:51",
-                "android.resource://com.omid.musicplayer/${R.drawable.doja}",
-                "android.resource://com.omid.musicplayer/${R.drawable.doja}",
-                "Paint the Town Red","",
-                "android.resource://com.omid.musicplayer/${R.raw.doja_cat_paint_the_town_red}",
-                "","","","")
+                val doja = LatestMp3("994",
+                    "android.resource://com.omid.musicplayer/${R.drawable.doja}",
+                    "android.resource://com.omid.musicplayer/${R.drawable.doja}",
+                    "","","","Doja Cat",
+                    "","03:51",
+                    "android.resource://com.omid.musicplayer/${R.drawable.doja}",
+                    "android.resource://com.omid.musicplayer/${R.drawable.doja}",
+                    "Paint the Town Red","",
+                    "android.resource://com.omid.musicplayer/${R.raw.doja_cat_paint_the_town_red}",
+                    "","","","")
 
-            val jelly = LatestMp3("",
-                "android.resource://com.omid.musicplayer/${R.drawable.jelly}",
-                "android.resource://com.omid.musicplayer/${R.drawable.jelly}",
-                "","","993","Jelly Roll",
-                "","03:17",
-                "android.resource://com.omid.musicplayer/${R.drawable.jelly}",
-                "android.resource://com.omid.musicplayer/${R.drawable.jelly}",
-                "Need a Favor","",
-                "android.resource://com.omid.musicplayer/${R.raw.jelly_roll_need_a_favor}",
-                "","","","")
+                val jelly = LatestMp3("",
+                    "android.resource://com.omid.musicplayer/${R.drawable.jelly}",
+                    "android.resource://com.omid.musicplayer/${R.drawable.jelly}",
+                    "","","993","Jelly Roll",
+                    "","03:17",
+                    "android.resource://com.omid.musicplayer/${R.drawable.jelly}",
+                    "android.resource://com.omid.musicplayer/${R.drawable.jelly}",
+                    "Need a Favor","",
+                    "android.resource://com.omid.musicplayer/${R.raw.jelly_roll_need_a_favor}",
+                    "","","","")
 
-            val lizzo = LatestMp3("",
-                "android.resource://com.omid.musicplayer/${R.drawable.lizzo}",
-                "android.resource://com.omid.musicplayer/${R.drawable.lizzo}",
-                "","","992","Lizzo",
-                "","02:54",
-                "android.resource://com.omid.musicplayer/${R.drawable.lizzo}",
-                "android.resource://com.omid.musicplayer/${R.drawable.lizzo}",
-                "Special","",
-                "android.resource://com.omid.musicplayer/${R.raw.lizzo_special}",
-                "","","","")
+                val lizzo = LatestMp3("",
+                    "android.resource://com.omid.musicplayer/${R.drawable.lizzo}",
+                    "android.resource://com.omid.musicplayer/${R.drawable.lizzo}",
+                    "","","992","Lizzo",
+                    "","02:54",
+                    "android.resource://com.omid.musicplayer/${R.drawable.lizzo}",
+                    "android.resource://com.omid.musicplayer/${R.drawable.lizzo}",
+                    "Special","",
+                    "android.resource://com.omid.musicplayer/${R.raw.lizzo_special}",
+                    "","","","")
 
-            val luckCombs = LatestMp3("",
-                "android.resource://com.omid.musicplayer/${R.drawable.luck_combs}",
-                "android.resource://com.omid.musicplayer/${R.drawable.luck_combs}",
-                "","","991","Luck Combs",
-                "","04:14",
-                "android.resource://com.omid.musicplayer/${R.drawable.luck_combs}",
-                "android.resource://com.omid.musicplayer/${R.drawable.luck_combs}",
-                "Doin this","",
-                "android.resource://com.omid.musicplayer/${R.raw.luke_combs_doin_this}",
-                "","","","")
+                val luckCombs = LatestMp3("",
+                    "android.resource://com.omid.musicplayer/${R.drawable.luck_combs}",
+                    "android.resource://com.omid.musicplayer/${R.drawable.luck_combs}",
+                    "","","991","Luck Combs",
+                    "","04:14",
+                    "android.resource://com.omid.musicplayer/${R.drawable.luck_combs}",
+                    "android.resource://com.omid.musicplayer/${R.drawable.luck_combs}",
+                    "Doin this","",
+                    "android.resource://com.omid.musicplayer/${R.raw.luke_combs_doin_this}",
+                    "","","","")
 
-            val tom = LatestMp3("",
-                "android.resource://com.omid.musicplayer/${R.drawable.tom}",
-                "android.resource://com.omid.musicplayer/${R.drawable.tom}",
-                "","","990","Tom Mackdonald",
-                "","04:05",
-                "android.resource://com.omid.musicplayer/${R.drawable.tom}",
-                "android.resource://com.omid.musicplayer/${R.drawable.tom}",
-                "Names","",
-                "android.resource://com.omid.musicplayer/${R.raw.tom_macdonald_names}",
-                "","","","")
+                val tom = LatestMp3("",
+                    "android.resource://com.omid.musicplayer/${R.drawable.tom}",
+                    "android.resource://com.omid.musicplayer/${R.drawable.tom}",
+                    "","","990","Tom Mackdonald",
+                    "","04:05",
+                    "android.resource://com.omid.musicplayer/${R.drawable.tom}",
+                    "android.resource://com.omid.musicplayer/${R.drawable.tom}",
+                    "Names","",
+                    "android.resource://com.omid.musicplayer/${R.raw.tom_macdonald_names}",
+                    "","","","")
 
-            newSong.add(teddySwims)
-            newSong.add(tamar)
-            newSong.add(morgan)
-            newSong.add(jack)
-            newSong.add(bailey)
-            newSong.add(doja)
-            newSong.add(jelly)
-            newSong.add(lizzo)
-            newSong.add(luckCombs)
-            newSong.add(tom)
-            rvMoreNew.adapter = NewSongsMoreAdapter(newSong,object : IOnSongClickListener {
-                override fun onSongClick(latestSongInfo: LatestMp3, latestSongsList: List<LatestMp3>) {
-                    sharedViewModel.latestMp3.value = latestSongInfo
-                    sharedViewModel.latestMp3List.value = latestSongsList
-                }
+                newSong.add(teddySwims)
+                newSong.add(tamar)
+                newSong.add(morgan)
+                newSong.add(jack)
+                newSong.add(bailey)
+                newSong.add(doja)
+                newSong.add(jelly)
+                newSong.add(lizzo)
+                newSong.add(luckCombs)
+                newSong.add(tom)
+                rvMoreNew.adapter = NewSongsMoreAdapter(newSong,object : IOnSongClickListener {
+                    override fun onSongClick(latestSongInfo: LatestMp3, latestSongsList: List<LatestMp3>) {
+                        sharedViewModel.latestMp3.value = latestSongInfo
+                        sharedViewModel.latestMp3List.value = latestSongsList
+                    }
 
-            })
-            rvMoreNew.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+                })
+                rvMoreNew.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+            }
         }
     }
 

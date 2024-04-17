@@ -98,44 +98,47 @@ class PlaylistByIdListFragment : Fragment() {
 
     private fun playlistByIdObservers() {
         binding.apply {
-            playlistByIdListViewModel.checkNetworkConnection.observe(owner) { isConnected->
-                pbPlaylistByIdList.visibility = View.VISIBLE
-                srl.visibility = View.GONE
-                liveNoConnection.visibility = View.GONE
-                if (isConnected) {
-                    if (MainWidgets.isPlay) {
-                        MainWidgets.slidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
-                    }else {
-                        MainWidgets.slidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.HIDDEN
-                    }
-
-                    playlistByIdListViewModel.getPlaylistById(playListsMp3.pid).observe(owner) { playListByIdList->
-                        pbPlaylistByIdList.visibility = View.GONE
-                        srl.visibility = View.VISIBLE
-                        liveNoConnection.visibility = View.GONE
-                        for (i in 0..<playListByIdList?.onlineMp3!!.size) {
-                            val songs = playListByIdList.onlineMp3[i].songsList
-                            rvPlaylistList.adapter = PlaylistByIdAdapter(songs,object : IOnSongClickListener {
-                                override fun onSongClick(latestSongInfo: LatestMp3, latestSongsList: List<LatestMp3>) {
-                                    sharedViewModel.latestMp3.value = latestSongInfo
-                                    sharedViewModel.latestMp3List.value = latestSongsList
-                                }
-
-                            })
-                        }
-                        rvPlaylistList.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-                    }
-                }else {
-                    pbPlaylistByIdList.visibility = View.GONE
+            if (isAdded){
+                playlistByIdListViewModel.checkNetworkConnection.observe(owner) { isConnected->
+                    pbPlaylistByIdList.visibility = View.VISIBLE
                     srl.visibility = View.GONE
-                    liveNoConnection.visibility = View.VISIBLE
-                    MainWidgets.slidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.HIDDEN
-                    MainWidgets.playPause.setImageResource(R.drawable.play)
-                    MainWidgets.upPlayPause.setImageResource(R.drawable.play)
-                    try {
-                        MainWidgets.player.pause()
-                    }catch (e: UninitializedPropertyAccessException) {
-                        e.message?.let { Log.e("Catch", it) }
+                    liveNoConnection.visibility = View.GONE
+                    if (isConnected) {
+                        if (MainWidgets.isPlay) {
+                            MainWidgets.slidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
+                        }else {
+                            MainWidgets.slidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.HIDDEN
+                        }
+
+                        playlistByIdListViewModel.getPlaylistById(playListsMp3.pid).observe(owner) { playListByIdList->
+                            pbPlaylistByIdList.visibility = View.GONE
+                            srl.visibility = View.VISIBLE
+                            liveNoConnection.visibility = View.GONE
+                            for (i in 0..<playListByIdList?.onlineMp3!!.size) {
+                                val songs = playListByIdList.onlineMp3[i].songsList
+                                rvPlaylistList.adapter = PlaylistByIdAdapter(songs,object :
+                                    IOnSongClickListener {
+                                    override fun onSongClick(latestSongInfo: LatestMp3, latestSongsList: List<LatestMp3>) {
+                                        sharedViewModel.latestMp3.value = latestSongInfo
+                                        sharedViewModel.latestMp3List.value = latestSongsList
+                                    }
+
+                                })
+                            }
+                            rvPlaylistList.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+                        }
+                    }else {
+                        pbPlaylistByIdList.visibility = View.GONE
+                        srl.visibility = View.GONE
+                        liveNoConnection.visibility = View.VISIBLE
+                        MainWidgets.slidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.HIDDEN
+                        MainWidgets.playPause.setImageResource(R.drawable.play)
+                        MainWidgets.upPlayPause.setImageResource(R.drawable.play)
+                        try {
+                            MainWidgets.player.pause()
+                        }catch (e: UninitializedPropertyAccessException) {
+                            e.message?.let { Log.e("Catch", it) }
+                        }
                     }
                 }
             }

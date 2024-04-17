@@ -69,41 +69,44 @@ class SongsListByCatIdFragment : Fragment() {
 
     private fun songsListByCatIDObservers() {
         binding.apply {
-            songsListByCatIdViewModel.checkNetworkConnection.observe(owner) { isConnected->
-                pb.visibility = View.VISIBLE
-                srl.visibility = View.GONE
-                liveNoConnection.visibility = View.GONE
-                if (isConnected) {
-                    if (MainWidgets.isPlay) {
-                        MainWidgets.slidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
-                    }else {
-                        MainWidgets.slidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.HIDDEN
-                    }
-
-                    songsListByCatIdViewModel.getSongsListByCatId(categoriesMp3.cid).observe(owner) { songsByCatId->
-                        pb.visibility = View.GONE
-                        srl.visibility = View.VISIBLE
-                        liveNoConnection.visibility = View.GONE
-                        rvSongsListByCatId.adapter = SongsListByCatIdAdapter(songsByCatId!!.onlineMp3,object : IOnSongClickListener {
-                            override fun onSongClick(latestSongInfo: LatestMp3, latestSongsList: List<LatestMp3>) {
-                                sharedViewModel.latestMp3.value = latestSongInfo
-                                sharedViewModel.latestMp3List.value = latestSongsList
-                            }
-
-                        })
-                        rvSongsListByCatId.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-                    }
-                }else {
-                    pb.visibility = View.GONE
+            if (isAdded){
+                songsListByCatIdViewModel.checkNetworkConnection.observe(owner) { isConnected->
+                    pb.visibility = View.VISIBLE
                     srl.visibility = View.GONE
-                    liveNoConnection.visibility = View.VISIBLE
-                    MainWidgets.slidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.HIDDEN
-                    MainWidgets.playPause.setImageResource(R.drawable.play)
-                    MainWidgets.upPlayPause.setImageResource(R.drawable.play)
-                    try {
-                        MainWidgets.player.pause()
-                    }catch (e: UninitializedPropertyAccessException) {
-                        e.message?.let { Log.e("Catch", it) }
+                    liveNoConnection.visibility = View.GONE
+                    if (isConnected) {
+                        if (MainWidgets.isPlay) {
+                            MainWidgets.slidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
+                        }else {
+                            MainWidgets.slidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.HIDDEN
+                        }
+
+                        songsListByCatIdViewModel.getSongsListByCatId(categoriesMp3.cid).observe(owner) { songsByCatId->
+                            pb.visibility = View.GONE
+                            srl.visibility = View.VISIBLE
+                            liveNoConnection.visibility = View.GONE
+                            rvSongsListByCatId.adapter = SongsListByCatIdAdapter(songsByCatId!!.onlineMp3,object :
+                                IOnSongClickListener {
+                                override fun onSongClick(latestSongInfo: LatestMp3, latestSongsList: List<LatestMp3>) {
+                                    sharedViewModel.latestMp3.value = latestSongInfo
+                                    sharedViewModel.latestMp3List.value = latestSongsList
+                                }
+
+                            })
+                            rvSongsListByCatId.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+                        }
+                    }else {
+                        pb.visibility = View.GONE
+                        srl.visibility = View.GONE
+                        liveNoConnection.visibility = View.VISIBLE
+                        MainWidgets.slidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.HIDDEN
+                        MainWidgets.playPause.setImageResource(R.drawable.play)
+                        MainWidgets.upPlayPause.setImageResource(R.drawable.play)
+                        try {
+                            MainWidgets.player.pause()
+                        }catch (e: UninitializedPropertyAccessException) {
+                            e.message?.let { Log.e("Catch", it) }
+                        }
                     }
                 }
             }

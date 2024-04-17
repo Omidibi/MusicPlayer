@@ -9,8 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.omid.musicplayer.activity.MainWidgets
 import com.omid.musicplayer.R
+import com.omid.musicplayer.activity.MainWidgets
 import com.omid.musicplayer.model.ArtistsMp3
 import com.omid.musicplayer.utils.configuration.AppConfiguration
 
@@ -43,10 +43,6 @@ class ArtistAdapter(private val fragment: Fragment,private val artistsList : Lis
 
         holder.ivShare.setOnClickListener {
             Toast.makeText(AppConfiguration.getContext(),"Share is Clicked",Toast.LENGTH_LONG).show()
-        }
-
-        holder.aboutSinger.setOnClickListener {
-            Toast.makeText(AppConfiguration.getContext(),"about singer is Clicked",Toast.LENGTH_LONG).show()
         }
     }
 }

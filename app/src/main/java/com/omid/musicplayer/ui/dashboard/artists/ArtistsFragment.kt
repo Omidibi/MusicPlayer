@@ -70,37 +70,39 @@ class ArtistsFragment : Fragment() {
 
     private fun artistsListObservers() {
         binding.apply {
-            artistViewModel.checkNetworkConnection.observe(owner) { isConnected->
-                pbArtist.visibility = View.VISIBLE
-                srl.visibility  = View.GONE
-                liveNoConnection.visibility = View.GONE
-                if (isConnected) {
-                    MainWidgets.bnv.visibility = View.VISIBLE
-                    if (MainWidgets.isPlay) {
-                        MainWidgets.slidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
-                    }else {
-                        MainWidgets.slidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.HIDDEN
-                    }
-
-                    artistViewModel.artistList.observe(owner) { artistList->
-                        pbArtist.visibility = View.GONE
-                        srl.visibility  = View.VISIBLE
-                        liveNoConnection.visibility = View.GONE
-                        rvArtists.adapter = ArtistAdapter(this@ArtistsFragment,artistList.onlineMp3)
-                        rvArtists.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-                    }
-                }else {
-                    pbArtist.visibility = View.GONE
+            if (isAdded){
+                artistViewModel.checkNetworkConnection.observe(owner) { isConnected->
+                    pbArtist.visibility = View.VISIBLE
                     srl.visibility  = View.GONE
-                    liveNoConnection.visibility = View.VISIBLE
-                    MainWidgets.playPause.setImageResource(R.drawable.play)
-                    MainWidgets.upPlayPause.setImageResource(R.drawable.play)
-                    MainWidgets.bnv.visibility = View.VISIBLE
-                    MainWidgets.slidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.HIDDEN
-                    try {
-                        MainWidgets.player.pause()
-                    }catch (e: UninitializedPropertyAccessException) {
-                        e.message?.let { Log.e("Catch", it) }
+                    liveNoConnection.visibility = View.GONE
+                    if (isConnected) {
+                        MainWidgets.bnv.visibility = View.VISIBLE
+                        if (MainWidgets.isPlay) {
+                            MainWidgets.slidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
+                        }else {
+                            MainWidgets.slidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.HIDDEN
+                        }
+
+                        artistViewModel.artistList.observe(owner) { artistList->
+                            pbArtist.visibility = View.GONE
+                            srl.visibility  = View.VISIBLE
+                            liveNoConnection.visibility = View.GONE
+                            rvArtists.adapter = ArtistAdapter(this@ArtistsFragment,artistList.onlineMp3)
+                            rvArtists.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+                        }
+                    }else {
+                        pbArtist.visibility = View.GONE
+                        srl.visibility  = View.GONE
+                        liveNoConnection.visibility = View.VISIBLE
+                        MainWidgets.playPause.setImageResource(R.drawable.play)
+                        MainWidgets.upPlayPause.setImageResource(R.drawable.play)
+                        MainWidgets.bnv.visibility = View.VISIBLE
+                        MainWidgets.slidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.HIDDEN
+                        try {
+                            MainWidgets.player.pause()
+                        }catch (e: UninitializedPropertyAccessException) {
+                            e.message?.let { Log.e("Catch", it) }
+                        }
                     }
                 }
             }

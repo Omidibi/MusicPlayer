@@ -1,6 +1,5 @@
 package com.omid.musicplayer.fragments.menuFragment
 
-import android.content.Context
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.util.Log
@@ -9,12 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.omid.musicplayer.R
 import com.omid.musicplayer.activity.MainWidgets
 import com.omid.musicplayer.databinding.FragmentMenuBinding
+import com.omid.musicplayer.utils.internetLiveData.CheckNetworkConnection
 import com.omid.musicplayer.utils.practicalCodes.FragmentsPracticalCodes
 import com.omid.musicplayer.utils.practicalCodes.MainWidgetStatus
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
@@ -22,13 +21,8 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout
 class MenuFragment : Fragment() {
 
     private lateinit var binding: FragmentMenuBinding
+    private lateinit var checkNetworkConnection: CheckNetworkConnection
     private lateinit var menuViewModel: MenuViewModel
-    private lateinit var owner: LifecycleOwner
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        owner = this
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         setupBinding()
@@ -46,7 +40,8 @@ class MenuFragment : Fragment() {
     private fun setupBinding() {
         binding = FragmentMenuBinding.inflate(layoutInflater)
         requireActivity().requestedOrientation = (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
-        menuViewModel = ViewModelProvider(this)[MenuViewModel::class.java]
+        menuViewModel = ViewModelProvider(requireActivity())[MenuViewModel::class.java]
+        checkNetworkConnection = CheckNetworkConnection(requireActivity().application)
     }
 
     private fun clickEvent() {
@@ -97,7 +92,7 @@ class MenuFragment : Fragment() {
 
     private fun observer(){
         binding.apply {
-            menuViewModel.checkNetworkConnection.observe(owner) { isConnect->
+            checkNetworkConnection.observe(viewLifecycleOwner) { isConnect->
                 if (isConnect) {
                     if (MainWidgets.isPlay) {
                         MainWidgets.slidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
@@ -125,7 +120,6 @@ class MenuFragment : Fragment() {
                     }
 
                 }
-
             }
         }
     }

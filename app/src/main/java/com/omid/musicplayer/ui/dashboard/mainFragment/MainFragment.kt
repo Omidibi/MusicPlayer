@@ -124,123 +124,127 @@ class MainFragment : Fragment() {
 
     private fun newSongs(){
         binding.apply {
-            val teddySwims = LatestMp3("",
-                "android.resource://com.omid.musicplayer/${R.drawable.teddy}",
-                "android.resource://com.omid.musicplayer/${R.drawable.teddy}",
-                "","","999","Teddy Swims",
-                "","03:30",
-                "android.resource://com.omid.musicplayer/${R.drawable.teddy}",
-                "android.resource://com.omid.musicplayer/${R.drawable.teddy}",
-                "Lose Control","",
-                "android.resource://com.omid.musicplayer/${R.raw.teddy_swims_lose_control}",
-                "","","","")
+            if (isAdded){
+                val teddySwims = LatestMp3("",
+                    "android.resource://com.omid.musicplayer/${R.drawable.teddy}",
+                    "android.resource://com.omid.musicplayer/${R.drawable.teddy}",
+                    "","","999","Teddy Swims",
+                    "","03:30",
+                    "android.resource://com.omid.musicplayer/${R.drawable.teddy}",
+                    "android.resource://com.omid.musicplayer/${R.drawable.teddy}",
+                    "Lose Control","",
+                    "android.resource://com.omid.musicplayer/${R.raw.teddy_swims_lose_control}",
+                    "","","","")
 
-            val tamar = LatestMp3("",
-                "android.resource://com.omid.musicplayer/${R.drawable.tamar}",
-                "android.resource://com.omid.musicplayer/${R.drawable.tamar}",
-                "","","998","Tamar Braxton",
-                "","03:29",
-                "android.resource://com.omid.musicplayer/${R.drawable.tamar}",
-                "android.resource://com.omid.musicplayer/${R.drawable.tamar}",
-                "Notice Me","",
-                "android.resource://com.omid.musicplayer/${R.raw.tamar_braxton_notice_me}",
-                "","","","")
+                val tamar = LatestMp3("",
+                    "android.resource://com.omid.musicplayer/${R.drawable.tamar}",
+                    "android.resource://com.omid.musicplayer/${R.drawable.tamar}",
+                    "","","998","Tamar Braxton",
+                    "","03:29",
+                    "android.resource://com.omid.musicplayer/${R.drawable.tamar}",
+                    "android.resource://com.omid.musicplayer/${R.drawable.tamar}",
+                    "Notice Me","",
+                    "android.resource://com.omid.musicplayer/${R.raw.tamar_braxton_notice_me}",
+                    "","","","")
 
-            val morgan = LatestMp3("",
-                "android.resource://com.omid.musicplayer/${R.drawable.morgan}",
-                "android.resource://com.omid.musicplayer/${R.drawable.morgan}",
-                "","","997","Morgan Wallen",
-                "","02:44",
-                "android.resource://com.omid.musicplayer/${R.drawable.morgan}",
-                "android.resource://com.omid.musicplayer/${R.drawable.morgan}",
-                "Last Night","",
-                "android.resource://com.omid.musicplayer/${R.raw.morgan_wallen_last_night}",
-                "","","","")
+                val morgan = LatestMp3("",
+                    "android.resource://com.omid.musicplayer/${R.drawable.morgan}",
+                    "android.resource://com.omid.musicplayer/${R.drawable.morgan}",
+                    "","","997","Morgan Wallen",
+                    "","02:44",
+                    "android.resource://com.omid.musicplayer/${R.drawable.morgan}",
+                    "android.resource://com.omid.musicplayer/${R.drawable.morgan}",
+                    "Last Night","",
+                    "android.resource://com.omid.musicplayer/${R.raw.morgan_wallen_last_night}",
+                    "","","","")
 
-            val jack = LatestMp3("",
-                "android.resource://com.omid.musicplayer/${R.drawable.jack}",
-                "android.resource://com.omid.musicplayer/${R.drawable.jack}",
-                "","","996","Jack Harlow",
-                "","02:19",
-                "android.resource://com.omid.musicplayer/${R.drawable.jack}",
-                "android.resource://com.omid.musicplayer/${R.drawable.jack}",
-                "Lovin On Me","",
-                "android.resource://com.omid.musicplayer/${R.raw.jack_harlow_lovin_on_me}",
-                "","","","")
+                val jack = LatestMp3("",
+                    "android.resource://com.omid.musicplayer/${R.drawable.jack}",
+                    "android.resource://com.omid.musicplayer/${R.drawable.jack}",
+                    "","","996","Jack Harlow",
+                    "","02:19",
+                    "android.resource://com.omid.musicplayer/${R.drawable.jack}",
+                    "android.resource://com.omid.musicplayer/${R.drawable.jack}",
+                    "Lovin On Me","",
+                    "android.resource://com.omid.musicplayer/${R.raw.jack_harlow_lovin_on_me}",
+                    "","","","")
 
-            newSong.add(teddySwims)
-            newSong.add(tamar)
-            newSong.add(morgan)
-            newSong.add(jack)
-            rvNewSongs.adapter = NewSongsAdapter(newSong,object : IOnSongClickListener{
-                override fun onSongClick(latestSongInfo: LatestMp3, latestSongsList: List<LatestMp3>) {
-                    sharedViewModel.latestMp3.value = latestSongInfo
-                    sharedViewModel.latestMp3List.value = latestSongsList
-                }
+                newSong.add(teddySwims)
+                newSong.add(tamar)
+                newSong.add(morgan)
+                newSong.add(jack)
+                rvNewSongs.adapter = NewSongsAdapter(newSong,object : IOnSongClickListener{
+                    override fun onSongClick(latestSongInfo: LatestMp3, latestSongsList: List<LatestMp3>) {
+                        sharedViewModel.latestMp3.value = latestSongInfo
+                        sharedViewModel.latestMp3List.value = latestSongsList
+                    }
 
-            })
-            rvNewSongs.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+                })
+                rvNewSongs.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            }
         }
     }
 
     private fun specialSong(){
         binding.apply {
-            val david = LatestMp3("",
-                "android.resource://com.omid.musicplayer/${R.drawable.david}",
-                "android.resource://com.omid.musicplayer/${R.drawable.david}",
-                "","","899","David Kushner",
-                "","03:33",
-                "android.resource://com.omid.musicplayer/${R.drawable.david}",
-                "android.resource://com.omid.musicplayer/${R.drawable.david}",
-                "Daylight","",
-                "android.resource://com.omid.musicplayer/${R.raw.david_kushner_daylight}",
-                "","","","")
+            if (isAdded){
+                val david = LatestMp3("",
+                    "android.resource://com.omid.musicplayer/${R.drawable.david}",
+                    "android.resource://com.omid.musicplayer/${R.drawable.david}",
+                    "","","899","David Kushner",
+                    "","03:33",
+                    "android.resource://com.omid.musicplayer/${R.drawable.david}",
+                    "android.resource://com.omid.musicplayer/${R.drawable.david}",
+                    "Daylight","",
+                    "android.resource://com.omid.musicplayer/${R.raw.david_kushner_daylight}",
+                    "","","","")
 
-            val syml = LatestMp3("",
-                "android.resource://com.omid.musicplayer/${R.drawable.syml}",
-                "android.resource://com.omid.musicplayer/${R.drawable.syml}",
-                "","","898","Syml",
-                "","04:08",
-                "android.resource://com.omid.musicplayer/${R.drawable.syml}",
-                "android.resource://com.omid.musicplayer/${R.drawable.syml}",
-                "Wheres My Love","",
-                "android.resource://com.omid.musicplayer/${R.raw.wheres_my_love}",
-                "","","","")
+                val syml = LatestMp3("",
+                    "android.resource://com.omid.musicplayer/${R.drawable.syml}",
+                    "android.resource://com.omid.musicplayer/${R.drawable.syml}",
+                    "","","898","Syml",
+                    "","04:08",
+                    "android.resource://com.omid.musicplayer/${R.drawable.syml}",
+                    "android.resource://com.omid.musicplayer/${R.drawable.syml}",
+                    "Wheres My Love","",
+                    "android.resource://com.omid.musicplayer/${R.raw.wheres_my_love}",
+                    "","","","")
 
-            val zach = LatestMp3("",
-                "android.resource://com.omid.musicplayer/${R.drawable.zach}",
-                "android.resource://com.omid.musicplayer/${R.drawable.zach}",
-                "","","897","Zach Bryan",
-                "","04:14",
-                "android.resource://com.omid.musicplayer/${R.drawable.zach}",
-                "android.resource://com.omid.musicplayer/${R.drawable.zach}",
-                "Something in The Orange","",
-                "android.resource://com.omid.musicplayer/${R.raw.zach_bryan_something_in_the_orange}",
-                "","","","")
+                val zach = LatestMp3("",
+                    "android.resource://com.omid.musicplayer/${R.drawable.zach}",
+                    "android.resource://com.omid.musicplayer/${R.drawable.zach}",
+                    "","","897","Zach Bryan",
+                    "","04:14",
+                    "android.resource://com.omid.musicplayer/${R.drawable.zach}",
+                    "android.resource://com.omid.musicplayer/${R.drawable.zach}",
+                    "Something in The Orange","",
+                    "android.resource://com.omid.musicplayer/${R.raw.zach_bryan_something_in_the_orange}",
+                    "","","","")
 
-            val wolves = LatestMp3("",
-                "android.resource://com.omid.musicplayer/${R.drawable.wolves}",
-                "android.resource://com.omid.musicplayer/${R.drawable.wolves}",
-                "","","896","Down Like Silver",
-                "","04:32",
-                "android.resource://com.omid.musicplayer/${R.drawable.wolves}",
-                "android.resource://com.omid.musicplayer/${R.drawable.wolves}",
-                "Wolves","",
-                "android.resource://com.omid.musicplayer/${R.raw.down_like_silver_wolves}",
-                "","","","")
+                val wolves = LatestMp3("",
+                    "android.resource://com.omid.musicplayer/${R.drawable.wolves}",
+                    "android.resource://com.omid.musicplayer/${R.drawable.wolves}",
+                    "","","896","Down Like Silver",
+                    "","04:32",
+                    "android.resource://com.omid.musicplayer/${R.drawable.wolves}",
+                    "android.resource://com.omid.musicplayer/${R.drawable.wolves}",
+                    "Wolves","",
+                    "android.resource://com.omid.musicplayer/${R.raw.down_like_silver_wolves}",
+                    "","","","")
 
-            specialSong.add(david)
-            specialSong.add(syml)
-            specialSong.add(zach)
-            specialSong.add(wolves)
-            rvSpecialSongs.adapter = NewSongsAdapter(specialSong,object : IOnSongClickListener{
-                override fun onSongClick(latestSongInfo: LatestMp3, latestSongsList: List<LatestMp3>) {
-                    sharedViewModel.latestMp3.value = latestSongInfo
-                    sharedViewModel.latestMp3List.value = latestSongsList
-                }
+                specialSong.add(david)
+                specialSong.add(syml)
+                specialSong.add(zach)
+                specialSong.add(wolves)
+                rvSpecialSongs.adapter = NewSongsAdapter(specialSong,object : IOnSongClickListener{
+                    override fun onSongClick(latestSongInfo: LatestMp3, latestSongsList: List<LatestMp3>) {
+                        sharedViewModel.latestMp3.value = latestSongInfo
+                        sharedViewModel.latestMp3List.value = latestSongsList
+                    }
 
-            })
-            rvSpecialSongs.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+                })
+                rvSpecialSongs.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            }
         }
     }
 
@@ -264,51 +268,53 @@ class MainFragment : Fragment() {
 
     private fun mainObservers(){
         binding.apply {
-            mainViewModel.checkNetworkConnection.observe(owner) { isConnected->
-                srl.visibility = View.GONE
-                pbLoading.visibility = View.VISIBLE
-                liveNoConnection.visibility = View.GONE
-                if (isConnected) {
-                    MainWidgets.bnv.visibility = View.VISIBLE
-                    if (MainWidgets.isPlay) {
-                        MainWidgets.slidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
-                    }else {
-                        MainWidgets.slidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.HIDDEN
-                    }
-
-                    mainViewModel.latestSong.observe(owner) { latestSong ->
-                        srl.visibility = View.VISIBLE
-                        pbLoading.visibility = View.GONE
-                        liveNoConnection.visibility = View.GONE
-                        val adapter = LatestSongsAdapter(requireActivity(), latestSong.onlineMp3, object : IOnSongClickListener {
-                            override fun onSongClick(latestSongInfo: LatestMp3, latestSongsList: List<LatestMp3>) {
-                                sharedViewModel.latestMp3.value = latestSongInfo
-                                sharedViewModel.latestMp3List.value = latestSongsList
-                            }
-                        })
-                        rvLatestSongs.adapter = adapter
-                        rvLatestSongs.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-                    }
-                    mainViewModel.recentArtistList.observe(owner) { recentArtistList ->
-                        srl.visibility = View.VISIBLE
-                        pbLoading.visibility = View.GONE
-                        liveNoConnection.visibility = View.GONE
-                        rvRecentArtist.adapter = RecentArtistAdapter(this@MainFragment,recentArtistList.onlineMp3)
-                        rvRecentArtist.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-                    }
-                }else {
+            if (isAdded){
+                mainViewModel.checkNetworkConnection.observe(owner) { isConnected->
                     srl.visibility = View.GONE
-                    pbLoading.visibility = View.GONE
-                    liveNoConnection.visibility = View.VISIBLE
-                    MainWidgets.slidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.HIDDEN
-                    MainWidgets.playPause.setImageResource(R.drawable.play)
-                    MainWidgets.upPlayPause.setImageResource(R.drawable.play)
-                    MainWidgets.bnv.visibility = View.VISIBLE
-                    currentPage = 0
-                    try {
-                        MainWidgets.player.pause()
-                    }catch (e: UninitializedPropertyAccessException) {
-                        e.message?.let { Log.e("Catch", it) }
+                    pbLoading.visibility = View.VISIBLE
+                    liveNoConnection.visibility = View.GONE
+                    if (isConnected) {
+                        MainWidgets.bnv.visibility = View.VISIBLE
+                        if (MainWidgets.isPlay) {
+                            MainWidgets.slidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
+                        }else {
+                            MainWidgets.slidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.HIDDEN
+                        }
+
+                        mainViewModel.latestSong.observe(owner) { latestSong ->
+                            srl.visibility = View.VISIBLE
+                            pbLoading.visibility = View.GONE
+                            liveNoConnection.visibility = View.GONE
+                            val adapter = LatestSongsAdapter(requireActivity(), latestSong.onlineMp3, object : IOnSongClickListener {
+                                override fun onSongClick(latestSongInfo: LatestMp3, latestSongsList: List<LatestMp3>) {
+                                    sharedViewModel.latestMp3.value = latestSongInfo
+                                    sharedViewModel.latestMp3List.value = latestSongsList
+                                }
+                            })
+                            rvLatestSongs.adapter = adapter
+                            rvLatestSongs.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+                        }
+                        mainViewModel.recentArtistList.observe(owner) { recentArtistList ->
+                            srl.visibility = View.VISIBLE
+                            pbLoading.visibility = View.GONE
+                            liveNoConnection.visibility = View.GONE
+                            rvRecentArtist.adapter = RecentArtistAdapter(this@MainFragment,recentArtistList.onlineMp3)
+                            rvRecentArtist.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+                        }
+                    }else {
+                        srl.visibility = View.GONE
+                        pbLoading.visibility = View.GONE
+                        liveNoConnection.visibility = View.VISIBLE
+                        MainWidgets.slidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.HIDDEN
+                        MainWidgets.playPause.setImageResource(R.drawable.play)
+                        MainWidgets.upPlayPause.setImageResource(R.drawable.play)
+                        MainWidgets.bnv.visibility = View.VISIBLE
+                        currentPage = 0
+                        try {
+                            MainWidgets.player.pause()
+                        }catch (e: UninitializedPropertyAccessException) {
+                            e.message?.let { Log.e("Catch", it) }
+                        }
                     }
                 }
             }
