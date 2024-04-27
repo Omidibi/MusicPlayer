@@ -15,10 +15,10 @@ import kotlinx.coroutines.launch
 class SongListByArtistNameViewModel(application: Application) : AndroidViewModel(application) {
 
     private val webServiceCaller = WebServiceCaller()
-    private val songListByArtistName = MutableLiveData<SongListByArtistName?>()
+    private val songListByArtistName = MutableLiveData<SongListByArtistName>()
     val checkNetworkConnection = CheckNetworkConnection(application)
 
-    fun getSongListByArtistName(artistName: String): MutableLiveData<SongListByArtistName?> {
+    fun getSongListByArtistName(artistName: String): MutableLiveData<SongListByArtistName> {
         CoroutineScope(Dispatchers.IO).launch {
             webServiceCaller.getSongListByArtistName(artistName).apply {
                 songListByArtistName.postValue(this)

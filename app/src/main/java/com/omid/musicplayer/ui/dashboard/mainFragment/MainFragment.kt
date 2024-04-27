@@ -285,20 +285,24 @@ class MainFragment : Fragment() {
                             srl.visibility = View.VISIBLE
                             pbLoading.visibility = View.GONE
                             liveNoConnection.visibility = View.GONE
-                            val adapter = LatestSongsAdapter(requireActivity(), latestSong.onlineMp3, object : IOnSongClickListener {
-                                override fun onSongClick(latestSongInfo: LatestMp3, latestSongsList: List<LatestMp3>) {
-                                    sharedViewModel.latestMp3.value = latestSongInfo
-                                    sharedViewModel.latestMp3List.value = latestSongsList
-                                }
-                            })
-                            rvLatestSongs.adapter = adapter
+                            latestSong.let {
+                                val adapter = LatestSongsAdapter(requireActivity(), it.onlineMp3, object : IOnSongClickListener {
+                                    override fun onSongClick(latestSongInfo: LatestMp3, latestSongsList: List<LatestMp3>) {
+                                        sharedViewModel.latestMp3.value = latestSongInfo
+                                        sharedViewModel.latestMp3List.value = latestSongsList
+                                    }
+                                })
+                                rvLatestSongs.adapter = adapter
+                            }
                             rvLatestSongs.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
                         }
                         mainViewModel.recentArtistList.observe(owner) { recentArtistList ->
                             srl.visibility = View.VISIBLE
                             pbLoading.visibility = View.GONE
                             liveNoConnection.visibility = View.GONE
-                            rvRecentArtist.adapter = RecentArtistAdapter(this@MainFragment,recentArtistList.onlineMp3)
+                            recentArtistList.let {
+                                rvRecentArtist.adapter = RecentArtistAdapter(this@MainFragment,it.onlineMp3)
+                            }
                             rvRecentArtist.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
                         }
                     }else {

@@ -15,10 +15,10 @@ import kotlinx.coroutines.launch
 class SearchViewModel(application: Application) : AndroidViewModel(application) {
 
     private val webServiceCaller = WebServiceCaller()
-    private val searchSong = MutableLiveData<SearchSong?>()
+    private val searchSong = MutableLiveData<SearchSong>()
     val checkNetworkConnection = CheckNetworkConnection(application)
 
-    fun getSearchSong(searchText: String): MutableLiveData<SearchSong?> {
+    fun getSearchSong(searchText: String): MutableLiveData<SearchSong> {
         CoroutineScope(Dispatchers.IO).launch {
             webServiceCaller.getSearchSong(searchText).apply {
                 searchSong.postValue(this)

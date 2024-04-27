@@ -87,7 +87,9 @@ class AlbumsFragment : Fragment() {
                             pbAlbums.visibility = View.GONE
                             srl.visibility = View.VISIBLE
                             liveNoConnection.visibility = View.GONE
-                            rvAlbumsList.adapter = AlbumsListAdapter(this@AlbumsFragment, albumList.onlineMp3)
+                            albumList.let {
+                                rvAlbumsList.adapter = AlbumsListAdapter(this@AlbumsFragment, it.onlineMp3)
+                            }
                             rvAlbumsList.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
                         }
                     } else {

@@ -77,7 +77,9 @@ class GenresFragment : Fragment() {
                             pbGenres.visibility = View.GONE
                             srl.visibility = View.VISIBLE
                             liveNoConnection.visibility = View.GONE
-                            rvCat.adapter = CatListAdapter(this@GenresFragment,categoriesList.onlineMp3)
+                            categoriesList.let {
+                                rvCat.adapter = CatListAdapter(this@GenresFragment,it.onlineMp3)
+                            }
                             rvCat.layoutManager = GridLayoutManager(requireContext(), 2)
                         }
                     }else {

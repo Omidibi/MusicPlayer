@@ -15,10 +15,10 @@ import kotlinx.coroutines.launch
 class SongsListByCatIdViewModel(application: Application) : AndroidViewModel(application) {
 
     private val webServiceCaller = WebServiceCaller()
-    private val songsByCatId = MutableLiveData<SongsByCatId?>()
+    private val songsByCatId = MutableLiveData<SongsByCatId>()
     val checkNetworkConnection = CheckNetworkConnection(application)
 
-    fun getSongsListByCatId(catId: String): MutableLiveData<SongsByCatId?> {
+    fun getSongsListByCatId(catId: String): MutableLiveData<SongsByCatId> {
         CoroutineScope(Dispatchers.IO).launch {
             webServiceCaller.getSongsListByCatId(catId).apply {
                 songsByCatId.postValue(this)

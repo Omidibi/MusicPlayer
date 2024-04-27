@@ -114,16 +114,17 @@ class PlaylistByIdListFragment : Fragment() {
                             pbPlaylistByIdList.visibility = View.GONE
                             srl.visibility = View.VISIBLE
                             liveNoConnection.visibility = View.GONE
-                            for (i in 0..<playListByIdList?.onlineMp3!!.size) {
-                                val songs = playListByIdList.onlineMp3[i].songsList
-                                rvPlaylistList.adapter = PlaylistByIdAdapter(songs,object :
-                                    IOnSongClickListener {
-                                    override fun onSongClick(latestSongInfo: LatestMp3, latestSongsList: List<LatestMp3>) {
-                                        sharedViewModel.latestMp3.value = latestSongInfo
-                                        sharedViewModel.latestMp3List.value = latestSongsList
-                                    }
+                            playListByIdList.let {
+                                for (i in 0..<it?.onlineMp3!!.size) {
+                                    val songs = it.onlineMp3[i].songsList
+                                    rvPlaylistList.adapter = PlaylistByIdAdapter(songs,object : IOnSongClickListener {
+                                        override fun onSongClick(latestSongInfo: LatestMp3, latestSongsList: List<LatestMp3>) {
+                                            sharedViewModel.latestMp3.value = latestSongInfo
+                                            sharedViewModel.latestMp3List.value = latestSongsList
+                                        }
 
-                                })
+                                    })
+                                }
                             }
                             rvPlaylistList.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
                         }

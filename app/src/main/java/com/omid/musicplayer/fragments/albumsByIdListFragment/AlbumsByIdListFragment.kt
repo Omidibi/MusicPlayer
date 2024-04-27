@@ -104,14 +104,15 @@ class AlbumsByIdListFragment : Fragment() {
                             pbAlbumByIdList.visibility = View.GONE
                             srl.visibility = View.VISIBLE
                             liveNoConnection.visibility = View.GONE
-                            rvAlbumsList.adapter = AlbumsByIdAdapter(albumByIdList!!.onlineMp3,object :
-                                IOnSongClickListener {
-                                override fun onSongClick(latestSongInfo: LatestMp3, latestSongsList: List<LatestMp3>) {
-                                    sharedViewModel.latestMp3List.value = latestSongsList
-                                    sharedViewModel.latestMp3.value = latestSongInfo
-                                }
+                            albumByIdList.let {
+                                rvAlbumsList.adapter = AlbumsByIdAdapter(it.onlineMp3,object : IOnSongClickListener {
+                                    override fun onSongClick(latestSongInfo: LatestMp3, latestSongsList: List<LatestMp3>) {
+                                        sharedViewModel.latestMp3List.value = latestSongsList
+                                        sharedViewModel.latestMp3.value = latestSongInfo
+                                    }
 
-                            })
+                                })
+                            }
                             rvAlbumsList.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
                         }
                     } else {

@@ -137,15 +137,16 @@ class SearchFragment : Fragment() {
                     pbSearch.visibility = View.GONE
                     rvSearchSong.visibility = View.VISIBLE
                     liveNoConnection.visibility = View.GONE
-                    rvSearchSong.adapter = SongSearchAdapter(searchSong!!.onlineMp3,object :
-                        IOnSongClickListener {
-                        override fun onSongClick(latestSongInfo: LatestMp3, latestSongsList: List<LatestMp3>) {
-                            sharedViewModel.latestMp3List.value = latestSongsList
-                            sharedViewModel.latestMp3.value = latestSongInfo
+                    searchSong.let {
+                        rvSearchSong.adapter = SongSearchAdapter(it.onlineMp3,object : IOnSongClickListener {
+                            override fun onSongClick(latestSongInfo: LatestMp3, latestSongsList: List<LatestMp3>) {
+                                sharedViewModel.latestMp3List.value = latestSongsList
+                                sharedViewModel.latestMp3.value = latestSongInfo
 
-                        }
+                            }
 
-                    })
+                        })
+                    }
                     rvSearchSong.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
                 }
             }

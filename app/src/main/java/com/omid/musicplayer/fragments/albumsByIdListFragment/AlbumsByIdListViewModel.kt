@@ -15,10 +15,10 @@ import kotlinx.coroutines.launch
 class AlbumsByIdListViewModel(application: Application) : AndroidViewModel(application) {
 
     private val webServiceCaller = WebServiceCaller()
-    private val albumByIdList = MutableLiveData<AlbumByIdList?>()
+    private val albumByIdList = MutableLiveData<AlbumByIdList>()
     val checkNetworkConnection = CheckNetworkConnection(application)
 
-    fun getAlbumsById(albumId: String): MutableLiveData<AlbumByIdList?> {
+    fun getAlbumsById(albumId: String): MutableLiveData<AlbumByIdList> {
         CoroutineScope(Dispatchers.IO).launch {
             webServiceCaller.getAlbumsById(albumId).apply {
                 albumByIdList.postValue(this)

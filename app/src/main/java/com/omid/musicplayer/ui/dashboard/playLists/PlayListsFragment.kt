@@ -87,7 +87,9 @@ class PlayListsFragment : Fragment() {
                             pbPlaylist.visibility = View.GONE
                             srl.visibility = View.VISIBLE
                             liveNoConnection.visibility = View.GONE
-                            rvPlaylists.adapter = PlayListsAdapter(this@PlayListsFragment,playLists.onlineMp3)
+                            playLists.let {
+                                rvPlaylists.adapter = PlayListsAdapter(this@PlayListsFragment,it.onlineMp3)
+                            }
                             rvPlaylists.layoutManager = GridLayoutManager(requireContext(), 2)
                         }
                     }else {

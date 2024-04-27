@@ -124,14 +124,15 @@ class SongListByArtistNameFragment : Fragment() {
                             pb.visibility = View.GONE
                             srl.visibility = View.VISIBLE
                             liveNoConnection.visibility = View.GONE
-                            rvListByArtisName.adapter = SongListByArtistNameAdapter(songListByArtistName!!.songListByArtistName,object :
-                                IOnSongClickListener {
-                                override fun onSongClick(latestSongInfo: LatestMp3, latestSongsList: List<LatestMp3>) {
-                                    sharedViewModel.latestMp3.value = latestSongInfo
-                                    sharedViewModel.latestMp3List.value = latestSongsList
-                                }
+                            songListByArtistName.let {
+                                rvListByArtisName.adapter = SongListByArtistNameAdapter(it.songListByArtistName,object : IOnSongClickListener {
+                                    override fun onSongClick(latestSongInfo: LatestMp3, latestSongsList: List<LatestMp3>) {
+                                        sharedViewModel.latestMp3.value = latestSongInfo
+                                        sharedViewModel.latestMp3List.value = latestSongsList
+                                    }
 
-                            })
+                                })
+                            }
                             rvListByArtisName.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL,false)
                         }
                     }else {

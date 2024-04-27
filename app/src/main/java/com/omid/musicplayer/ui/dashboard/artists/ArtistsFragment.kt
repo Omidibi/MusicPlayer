@@ -87,7 +87,9 @@ class ArtistsFragment : Fragment() {
                             pbArtist.visibility = View.GONE
                             srl.visibility  = View.VISIBLE
                             liveNoConnection.visibility = View.GONE
-                            rvArtists.adapter = ArtistAdapter(this@ArtistsFragment,artistList.onlineMp3)
+                            artistList.let {
+                                rvArtists.adapter = ArtistAdapter(this@ArtistsFragment,it.onlineMp3)
+                            }
                             rvArtists.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
                         }
                     }else {
