@@ -21,7 +21,7 @@ import com.omid.musicplayer.utils.practicalCodes.FragmentsPracticalCodes
 import com.omid.musicplayer.utils.sendData.IOnSongClickListener
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
 
-class FavoritesFragment : Fragment() {
+class FavoritesFragment : Fragment(), IOnSongClickListener {
 
     private lateinit var binding: FragmentFavoritesBinding
     private lateinit var sharedViewModel: SharedViewModel
@@ -117,18 +117,17 @@ class FavoritesFragment : Fragment() {
 
     private fun showFvtList(){
         binding.apply {
-            rvFvt.adapter = FavoritesAdapter(favoritesViewModel.showAllFavorite(),object : IOnSongClickListener{
-                override fun onSongClick(latestSongInfo: LatestMp3, latestSongsList: List<LatestMp3>) {
-                   sharedViewModel.latestMp3.value = latestSongInfo
-                    sharedViewModel.latestMp3List.value = latestSongsList
-                }
-
-            })
+            rvFvt.adapter = FavoritesAdapter(favoritesViewModel.showAllFavorite(),this@FavoritesFragment)
             rvFvt.layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false)
         }
     }
 
     private fun slidingUpPanelStatus() {
         FragmentsPracticalCodes.slidingUpPanelStatus()
+    }
+
+    override fun onSongClick(latestSongInfo: LatestMp3, latestSongsList: List<LatestMp3>) {
+        sharedViewModel.latestMp3.value = latestSongInfo
+        sharedViewModel.latestMp3List.value = latestSongsList
     }
 }

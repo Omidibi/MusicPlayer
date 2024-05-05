@@ -32,7 +32,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:tint="@color/torchRed" />
 
-                <androidx.appcompat.widget.AppCompatTextView
+                <com.omid.musicplayer.ui.customView.customFonts.IranSansTextView
                     android:id="@+id/tv_name_cat"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

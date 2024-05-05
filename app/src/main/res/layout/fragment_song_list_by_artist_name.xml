@@ -20,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/_40dp">
 
-            <androidx.appcompat.widget.AppCompatTextView
+            <com.omid.musicplayer.ui.customView.customFonts.IranSansTextView
                 android:id="@+id/title_toolbar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

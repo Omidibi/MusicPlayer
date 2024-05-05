@@ -3,10 +3,10 @@ package com.omid.musicplayer.ui.customView.customFonts
 import android.content.Context
 import android.graphics.Typeface
 import android.util.AttributeSet
-import androidx.appcompat.widget.AppCompatButton
+import androidx.appcompat.widget.AppCompatTextView
 import com.omid.musicplayer.utils.configuration.AppConfiguration
 
-class IranSansButton : AppCompatButton {
+class BYekanPlusTextView: AppCompatTextView {
 
     constructor(context: Context?) : super(context!!) {
         extracted()
@@ -21,7 +21,7 @@ class IranSansButton : AppCompatButton {
     }
 
     private fun extracted() {
-        Typeface.createFromAsset(AppConfiguration.getContext().assets, "font/IRANSans/iran_sans_mobile.ttf").apply {
+        Typeface.createFromAsset(AppConfiguration.getContext().assets, "font/BYekan+/BYekan+.ttf").apply {
             setTypeface(this@apply)
         }
     }

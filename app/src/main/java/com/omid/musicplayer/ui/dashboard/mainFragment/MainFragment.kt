@@ -29,7 +29,7 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout
 import java.util.Timer
 import java.util.TimerTask
 
-class MainFragment : Fragment() {
+class MainFragment : Fragment(),IOnSongClickListener {
 
     private lateinit var binding: FragmentMainBinding
     private lateinit var owner: LifecycleOwner
@@ -173,13 +173,7 @@ class MainFragment : Fragment() {
                 newSong.add(tamar)
                 newSong.add(morgan)
                 newSong.add(jack)
-                rvNewSongs.adapter = NewSongsAdapter(newSong,object : IOnSongClickListener{
-                    override fun onSongClick(latestSongInfo: LatestMp3, latestSongsList: List<LatestMp3>) {
-                        sharedViewModel.latestMp3.value = latestSongInfo
-                        sharedViewModel.latestMp3List.value = latestSongsList
-                    }
-
-                })
+                rvNewSongs.adapter = NewSongsAdapter(newSong, this@MainFragment)
                 rvNewSongs.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             }
         }
@@ -236,13 +230,7 @@ class MainFragment : Fragment() {
                 specialSong.add(syml)
                 specialSong.add(zach)
                 specialSong.add(wolves)
-                rvSpecialSongs.adapter = NewSongsAdapter(specialSong,object : IOnSongClickListener{
-                    override fun onSongClick(latestSongInfo: LatestMp3, latestSongsList: List<LatestMp3>) {
-                        sharedViewModel.latestMp3.value = latestSongInfo
-                        sharedViewModel.latestMp3List.value = latestSongsList
-                    }
-
-                })
+                rvSpecialSongs.adapter = SpecialAdapter(specialSong, this@MainFragment)
                 rvSpecialSongs.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             }
         }
@@ -285,13 +273,8 @@ class MainFragment : Fragment() {
                             srl.visibility = View.VISIBLE
                             pbLoading.visibility = View.GONE
                             liveNoConnection.visibility = View.GONE
-                            latestSong.let {
-                                val adapter = LatestSongsAdapter(requireActivity(), it.onlineMp3, object : IOnSongClickListener {
-                                    override fun onSongClick(latestSongInfo: LatestMp3, latestSongsList: List<LatestMp3>) {
-                                        sharedViewModel.latestMp3.value = latestSongInfo
-                                        sharedViewModel.latestMp3List.value = latestSongsList
-                                    }
-                                })
+                            latestSong?.let {
+                                val adapter = LatestSongsAdapter(requireActivity(), it.onlineMp3, this@MainFragment)
                                 rvLatestSongs.adapter = adapter
                             }
                             rvLatestSongs.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
@@ -358,5 +341,10 @@ class MainFragment : Fragment() {
                 MainWidgetStatus.gone()
             }
         }
+    }
+
+    override fun onSongClick(latestSongInfo: LatestMp3, latestSongsList: List<LatestMp3>) {
+        sharedViewModel.latestMp3.value = latestSongInfo
+        sharedViewModel.latestMp3List.value = latestSongsList
     }
 }

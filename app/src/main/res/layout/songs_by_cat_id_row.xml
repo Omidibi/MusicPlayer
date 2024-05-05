@@ -46,19 +46,19 @@
 
             </androidx.cardview.widget.CardView>
 
-            <androidx.appcompat.widget.AppCompatTextView
+            <com.omid.musicplayer.ui.customView.customFonts.IranSansTextView
                 android:id="@+id/song_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/_18sp"
                 android:layout_marginStart="@dimen/_16dp"
                 android:textColor="@color/white"
+                android:textSize="@dimen/_16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/cv_img_song"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.19999999" />
 
-            <androidx.appcompat.widget.AppCompatTextView
+            <com.omid.musicplayer.ui.customView.customFonts.IranSansTextView
                 android:id="@+id/artist_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

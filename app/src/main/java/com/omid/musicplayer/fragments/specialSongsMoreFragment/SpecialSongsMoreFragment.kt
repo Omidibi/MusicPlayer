@@ -22,7 +22,7 @@ import com.omid.musicplayer.utils.practicalCodes.MainWidgetStatus
 import com.omid.musicplayer.utils.sendData.IOnSongClickListener
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
 
-class SpecialSongsMoreFragment : Fragment() {
+class SpecialSongsMoreFragment : Fragment(),IOnSongClickListener {
 
     private lateinit var binding: FragmentSpecialSongsMoreBinding
     private lateinit var specialSong: MutableList<LatestMp3>
@@ -233,13 +233,7 @@ class SpecialSongsMoreFragment : Fragment() {
                 specialSong.add(little)
                 specialSong.add(jason)
                 specialSong.add(lewis)
-                rvMoreSpecial.adapter = SpecialSongsMoreAdapter(specialSong,object : IOnSongClickListener {
-                    override fun onSongClick(latestSongInfo: LatestMp3, latestSongsList: List<LatestMp3>) {
-                        sharedViewModel.latestMp3.value = latestSongInfo
-                        sharedViewModel.latestMp3List.value = latestSongsList
-                    }
-
-                })
+                rvMoreSpecial.adapter = SpecialSongsMoreAdapter(specialSong,this@SpecialSongsMoreFragment)
                 rvMoreSpecial.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
             }
         }
@@ -247,5 +241,10 @@ class SpecialSongsMoreFragment : Fragment() {
 
     private fun slidingUpPanelStatus() {
         FragmentsPracticalCodes.slidingUpPanelStatus()
+    }
+
+    override fun onSongClick(latestSongInfo: LatestMp3, latestSongsList: List<LatestMp3>) {
+        sharedViewModel.latestMp3.value = latestSongInfo
+        sharedViewModel.latestMp3List.value = latestSongsList
     }
 }

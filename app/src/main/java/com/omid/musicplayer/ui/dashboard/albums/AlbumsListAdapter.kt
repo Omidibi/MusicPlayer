@@ -5,29 +5,38 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.widget.AppCompatImageView
+import androidx.appcompat.widget.AppCompatTextView
+import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.omid.musicplayer.activity.MainWidgets
 import com.omid.musicplayer.R
+import com.omid.musicplayer.activity.MainWidgets
 import com.omid.musicplayer.model.AlbumsListMp3
 import com.omid.musicplayer.utils.configuration.AppConfiguration
 
-class AlbumsListAdapter():RecyclerView.Adapter<AlbumsListVH>() {
+class AlbumsListAdapter() : RecyclerView.Adapter<AlbumsListAdapter.AlbumsListVH>() {
 
-    private lateinit var albumsList : List<AlbumsListMp3>
+    inner class AlbumsListVH(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val cvAlbums = itemView.findViewById<CardView>(R.id.cv_albums)!!
+        val ivAlbums = itemView.findViewById<AppCompatImageView>(R.id.iv_albums)!!
+        val tvNameAlbums = itemView.findViewById<AppCompatTextView>(R.id.tv_name_albums)!!
+        val ivShare = itemView.findViewById<AppCompatImageView>(R.id.iv_share)!!
+    }
+
+    private lateinit var albumsList: List<AlbumsListMp3>
     private lateinit var fragment: Fragment
     private val bundle = Bundle()
 
-    constructor(fragment: Fragment, albumsList : List<AlbumsListMp3>): this(){
+    constructor(fragment: Fragment, albumsList: List<AlbumsListMp3>) : this() {
         this.albumsList = albumsList
         this.fragment = fragment
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlbumsListVH {
-        val view = LayoutInflater.from(AppConfiguration.getContext()).inflate(R.layout.albums_row,null)
-        return AlbumsListVH(view)
+        return AlbumsListVH(LayoutInflater.from(AppConfiguration.getContext()).inflate(R.layout.albums_row, null))
     }
 
     override fun getItemCount(): Int {
@@ -35,22 +44,24 @@ class AlbumsListAdapter():RecyclerView.Adapter<AlbumsListVH>() {
     }
 
     override fun onBindViewHolder(holder: AlbumsListVH, position: Int) {
-        val albumsListInfo = albumsList[position]
-        holder.tvNameAlbums.text = albumsListInfo.albumName
-        Glide.with(AppConfiguration.getContext()).load(albumsListInfo.albumImageThumb)
-            .error(R.drawable.error)
-            .placeholder(R.drawable.loading)
-            .into(holder.ivAlbums)
+        holder.apply {
+            val albumsListInfo = albumsList[position]
+            tvNameAlbums.text = albumsListInfo.albumName
+            Glide.with(AppConfiguration.getContext()).load(albumsListInfo.albumImageThumb)
+                .error(R.drawable.error)
+                .placeholder(R.drawable.loading)
+                .into(ivAlbums)
 
-        holder.cvAlbums.setOnClickListener {
-            bundle.putParcelable("albumsListInfo",albumsListInfo)
-            fragment.findNavController().navigate(R.id.action_albumsFragment_to_albumsByIdListFragment,bundle)
-            MainWidgets.bnv.visibility = View.GONE
-            MainWidgets.toolbar.visibility = View.GONE
-        }
+            cvAlbums.setOnClickListener {
+                bundle.putParcelable("albumsListInfo", albumsListInfo)
+                fragment.findNavController().navigate(R.id.action_albumsFragment_to_albumsByIdListFragment, bundle)
+                MainWidgets.bnv.visibility = View.GONE
+                MainWidgets.toolbar.visibility = View.GONE
+            }
 
-        holder.ivShare.setOnClickListener {
-            Toast.makeText(AppConfiguration.getContext(),"Share Clicked",Toast.LENGTH_LONG).show()
+            ivShare.setOnClickListener {
+                Toast.makeText(AppConfiguration.getContext(), "Share Clicked", Toast.LENGTH_LONG).show()
+            }
         }
     }
 }

@@ -1,7 +1,11 @@
 package com.omid.musicplayer.activity
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.AppCompatImageView
+import androidx.appcompat.widget.AppCompatTextView
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.omid.musicplayer.R
@@ -9,7 +13,16 @@ import com.omid.musicplayer.model.LatestMp3
 import com.omid.musicplayer.utils.configuration.AppConfiguration
 import com.omid.musicplayer.utils.sendData.IOnSongClickListener
 
-class SongListSlidingUpPanelAdapter() : RecyclerView.Adapter<SongListSlidingUpPanelVH>() {
+class SongListSlidingUpPanelAdapter() : RecyclerView.Adapter<SongListSlidingUpPanelAdapter.SongListSlidingUpPanelVH>() {
+
+    inner class SongListSlidingUpPanelVH(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val cvSong = itemView.findViewById<CardView>(R.id.cv_song)!!
+        val imgSong = itemView.findViewById<AppCompatImageView>(R.id.img_song)!!
+        val imgEq = itemView.findViewById<AppCompatImageView>(R.id.img_eq)!!
+        val singerName = itemView.findViewById<AppCompatTextView>(R.id.singer_name)!!
+        val songName = itemView.findViewById<AppCompatTextView>(R.id.song_name)!!
+        val songDuration = itemView.findViewById<AppCompatTextView>(R.id.song_duration)!!
+    }
 
     private lateinit var songList: List<LatestMp3>
     private lateinit var iSelected: IOnSongClickListener

@@ -13,7 +13,7 @@ class FavoritesViewModel(application: Application) : AndroidViewModel(applicatio
     val checkNetworkConnection = CheckNetworkConnection(application)
 
     fun showAllFavorite(): MutableList<LatestMp3> {
-        return RoomDBInstance.roomDbInstance.dao().showAll()
+        return RoomDBInstance.roomDbInstance.dao().showAllFavorite()
     }
 
     fun networkAvailable(): Boolean {

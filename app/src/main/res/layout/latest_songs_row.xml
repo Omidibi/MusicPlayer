@@ -27,7 +27,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.0" />
 
-            <androidx.appcompat.widget.AppCompatTextView
+            <com.omid.musicplayer.ui.customView.customFonts.IranSansTextView
                 android:id="@+id/music_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -40,7 +40,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.85" />
 
-            <androidx.appcompat.widget.AppCompatTextView
+            <com.omid.musicplayer.ui.customView.customFonts.IranSansTextView
                 android:id="@+id/artist_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

@@ -5,6 +5,9 @@ import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.AppCompatImageView
+import androidx.appcompat.widget.AppCompatTextView
+import androidx.cardview.widget.CardView
 import androidx.core.view.setPadding
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -17,21 +20,27 @@ import com.omid.musicplayer.model.LatestMp3
 import com.omid.musicplayer.utils.configuration.AppConfiguration
 import com.omid.musicplayer.utils.sendData.IOnSongClickListener
 
-class LatestSongsAdapter() : RecyclerView.Adapter<LatestSongsVH>() {
+class LatestSongsAdapter() : RecyclerView.Adapter<LatestSongsAdapter.LatestSongsVH>() {
+
+    inner class LatestSongsVH(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val artistName = itemView.findViewById<AppCompatTextView>(R.id.artist_name)!!
+        val musicName = itemView.findViewById<AppCompatTextView>(R.id.music_name)!!
+        val ivLatestSongs = itemView.findViewById<AppCompatImageView>(R.id.iv_latest_songs)!!
+        val cvLatestSongs = itemView.findViewById<CardView>(R.id.cv_latest_songs)!!
+    }
 
     lateinit var activity: Activity
-    private lateinit var songsList :  List<LatestMp3>
-    private lateinit var iSelected : IOnSongClickListener
+    private lateinit var songsList: List<LatestMp3>
+    private lateinit var iSelected: IOnSongClickListener
 
-    constructor(activity: Activity, latestSongsList: List<LatestMp3>, iSelected : IOnSongClickListener) : this() {
+    constructor(activity: Activity, latestSongsList: List<LatestMp3>, iSelected: IOnSongClickListener) : this() {
         this.activity = activity
         songsList = latestSongsList
         this.iSelected = iSelected
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LatestSongsVH {
-        val view = LayoutInflater.from(activity).inflate(R.layout.latest_songs_row, null)
-        return LatestSongsVH(view)
+        return LatestSongsVH(LayoutInflater.from(activity).inflate(R.layout.latest_songs_row, null))
     }
 
     override fun getItemCount(): Int {
@@ -63,7 +72,7 @@ class LatestSongsAdapter() : RecyclerView.Adapter<LatestSongsVH>() {
                 .into(ivLatestSongs)
 
             cvLatestSongs.setOnClickListener {
-                iSelected.onSongClick(latestSongInfo,songsList)
+                iSelected.onSongClick(latestSongInfo, songsList)
             }
         }
     }

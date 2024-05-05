@@ -21,7 +21,7 @@ class IranSansTextView : AppCompatTextView {
     }
 
     private fun extracted() {
-        Typeface.createFromAsset(AppConfiguration.getContext().assets, "Fonts/IRANSans/iran_sans_mobile.ttf").apply {
+        Typeface.createFromAsset(AppConfiguration.getContext().assets, "font/IRANSans/iran_sans_mobile.ttf").apply {
             setTypeface(this@apply)
         }
     }

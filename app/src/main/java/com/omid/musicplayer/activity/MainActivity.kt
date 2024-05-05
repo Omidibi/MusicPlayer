@@ -16,7 +16,6 @@ import android.os.Looper
 import android.provider.MediaStore
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
-import android.util.Log
 import android.view.View
 import android.widget.PopupMenu
 import android.widget.SeekBar
@@ -38,8 +37,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.omid.musicplayer.R
 import com.omid.musicplayer.databinding.ActivityMainBinding
-import com.omid.musicplayer.db.RoomDBInstance
-import com.omid.musicplayer.model.DownloadedMp3
 import com.omid.musicplayer.model.LatestMp3
 import com.omid.musicplayer.utils.sendData.IOnSongClickListener
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
@@ -53,10 +50,11 @@ import java.io.OutputStream
 import java.net.URL
 import kotlin.random.Random
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), IOnSongClickListener {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var sharedViewModel: SharedViewModel
+    private lateinit var mainViewModel: MainViewModel
     private lateinit var navHost: NavHostFragment
     private lateinit var navController: NavController
     private lateinit var player: ExoPlayer
@@ -108,6 +106,7 @@ class MainActivity : AppCompatActivity() {
             navController = navHost.navController
             NavigationUI.setupWithNavController(bnvMain, navController)
             sharedViewModel = ViewModelProvider(this@MainActivity)[SharedViewModel::class.java]
+            mainViewModel = ViewModelProvider(this@MainActivity)[MainViewModel::class.java]
         }
     }
 
@@ -266,12 +265,7 @@ class MainActivity : AppCompatActivity() {
 
             sharedViewModel.latestMp3List.observe(this@MainActivity) { latestMp3List ->
                 mainLatestList = latestMp3List
-                downSlide.uiPlayer.rvListSong.adapter = SongListSlidingUpPanelAdapter(latestMp3List,object : IOnSongClickListener {
-                    override fun onSongClick(latestSongInfo: LatestMp3, latestSongsList: List<LatestMp3>) {
-                        setupPlayer(latestSongInfo)
-                        setupSeekBar()
-                    }
-                })
+                downSlide.uiPlayer.rvListSong.adapter = SongListSlidingUpPanelAdapter(latestMp3List,this@MainActivity)
                 downSlide.uiPlayer.rvListSong.layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL,false)
             }
         }
@@ -320,7 +314,6 @@ class MainActivity : AppCompatActivity() {
             player.prepare()
             player.play()
             MainWidgets.isPlay = true
-            Log.e("fuckk", latestMp3.mp3Url)
             downSlide.uiPlayer.seekbar.progress = 0
             downSlide.uiPlayer.upSeekbar.progress = 0
             player.addListener(object : Player.Listener {
@@ -467,12 +460,7 @@ class MainActivity : AppCompatActivity() {
                     }
 
                     R.id.add_to_favorite -> {
-                        if (RoomDBInstance.roomDbInstance.dao().searchById(latestMp3.id).isEmpty()){
-                            RoomDBInstance.roomDbInstance.dao().insert(latestMp3)
-                            Toast.makeText(applicationContext,"${latestMp3.mp3Title} Added To Favorites List", Toast.LENGTH_LONG).show()
-                        } else {
-                            Toast.makeText(applicationContext,"${latestMp3.mp3Title} There is in Favorites List", Toast.LENGTH_LONG).show()
-                        }
+                        mainViewModel.checkForInsertFavorite(latestMp3.id,latestMp3)
                     }
                 }
                 false
@@ -507,9 +495,7 @@ class MainActivity : AppCompatActivity() {
                         withContext(Dispatchers.Main) {
                             Toast.makeText(applicationContext, getString(R.string.download_completed), Toast.LENGTH_LONG).show()
                         }
-                        if (RoomDBInstance.roomDbInstance.dao().searchByIdDownload(latestMp3.id).isEmpty()){
-                            RoomDBInstance.roomDbInstance.dao().insertDownload(latestMp3.toDownloadMp3())
-                        }
+                        mainViewModel.checkForInsertDownload(latestMp3.id,latestMp3)
                     } catch (e: Exception) {
                         e.printStackTrace()
                     }
@@ -530,9 +516,7 @@ class MainActivity : AppCompatActivity() {
                         .setAllowedOverRoaming(true)
                     val downloadManager = this.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
                     downloadManager.enqueue(request)
-                    if (RoomDBInstance.roomDbInstance.dao().searchByIdDownload(latestMp3.id).isEmpty()){
-                        RoomDBInstance.roomDbInstance.dao().insertDownload(latestMp3.toDownloadMp3())
-                    }
+                    mainViewModel.checkForInsertDownload(latestMp3.id,latestMp3)
                 } else {
                     /** روش دانلود برای دیگر نسخه های اندروید*/
                     val request = DownloadManager.Request(Uri.parse(latestMp3.mp3Url))
@@ -541,15 +525,15 @@ class MainActivity : AppCompatActivity() {
                         .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "/MusicPlayer/${latestMp3.mp3Title}.mp3")
                     val downloadManager = this.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
                     downloadManager.enqueue(request)
-                    if (RoomDBInstance.roomDbInstance.dao().searchByIdDownload(latestMp3.id).isEmpty()){
-                        RoomDBInstance.roomDbInstance.dao().insertDownload(latestMp3.toDownloadMp3())
-                    }
+                    mainViewModel.checkForInsertDownload(latestMp3.id,latestMp3)
                 }
             }
         }
     }
 
-    private fun LatestMp3.toDownloadMp3(): DownloadedMp3 {
-        return DownloadedMp3(catId, categoryImage, categoryImageThumb, categoryName, cid, id, mp3Artist, mp3Description, mp3Duration, mp3ThumbnailB, mp3ThumbnailS, mp3Title, mp3Type, mp3Url, rateAvg, totalDownload, totalRate, totalViews)
+    override fun onSongClick(latestSongInfo: LatestMp3, latestSongsList: List<LatestMp3>) {
+        latestMp3 = latestSongInfo
+        setupPlayer(latestSongInfo)
+        setupSeekBar()
     }
 }

@@ -48,7 +48,7 @@
 
             </androidx.cardview.widget.CardView>
 
-            <androidx.appcompat.widget.AppCompatTextView
+            <com.omid.musicplayer.ui.customView.customFonts.IranSansTextView
                 android:id="@+id/tv_name_artist"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

@@ -23,7 +23,7 @@ import com.omid.musicplayer.utils.practicalCodes.ProgressBarStatus
 import com.omid.musicplayer.utils.sendData.IOnSongClickListener
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
 
-class SearchFragment : Fragment() {
+class SearchFragment : Fragment(),IOnSongClickListener {
 
     private lateinit var binding: FragmentSearchBinding
     private lateinit var searchViewModel: SearchViewModel
@@ -138,14 +138,7 @@ class SearchFragment : Fragment() {
                     rvSearchSong.visibility = View.VISIBLE
                     liveNoConnection.visibility = View.GONE
                     searchSong.let {
-                        rvSearchSong.adapter = SongSearchAdapter(it.onlineMp3,object : IOnSongClickListener {
-                            override fun onSongClick(latestSongInfo: LatestMp3, latestSongsList: List<LatestMp3>) {
-                                sharedViewModel.latestMp3List.value = latestSongsList
-                                sharedViewModel.latestMp3.value = latestSongInfo
-
-                            }
-
-                        })
+                        rvSearchSong.adapter = SongSearchAdapter(it.onlineMp3,this@SearchFragment)
                     }
                     rvSearchSong.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
                 }
@@ -155,5 +148,10 @@ class SearchFragment : Fragment() {
 
     private fun slidingUpPanelStatus() {
         FragmentsPracticalCodes.slidingUpPanelStatus()
+    }
+
+    override fun onSongClick(latestSongInfo: LatestMp3, latestSongsList: List<LatestMp3>) {
+        sharedViewModel.latestMp3List.value = latestSongsList
+        sharedViewModel.latestMp3.value = latestSongInfo
     }
 }

@@ -25,7 +25,7 @@ import com.omid.musicplayer.utils.practicalCodes.ProgressBarStatus
 import com.omid.musicplayer.utils.sendData.IOnSongClickListener
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
 
-class PlaylistByIdListFragment : Fragment() {
+class PlaylistByIdListFragment : Fragment(),IOnSongClickListener {
 
     private lateinit var binding: FragmentPlaylistByIdListBinding
     private lateinit var owner: LifecycleOwner
@@ -117,13 +117,7 @@ class PlaylistByIdListFragment : Fragment() {
                             playListByIdList.let {
                                 for (i in 0..<it?.onlineMp3!!.size) {
                                     val songs = it.onlineMp3[i].songsList
-                                    rvPlaylistList.adapter = PlaylistByIdAdapter(songs,object : IOnSongClickListener {
-                                        override fun onSongClick(latestSongInfo: LatestMp3, latestSongsList: List<LatestMp3>) {
-                                            sharedViewModel.latestMp3.value = latestSongInfo
-                                            sharedViewModel.latestMp3List.value = latestSongsList
-                                        }
-
-                                    })
+                                    rvPlaylistList.adapter = PlaylistByIdAdapter(songs,this@PlaylistByIdListFragment)
                                 }
                             }
                             rvPlaylistList.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
@@ -162,5 +156,10 @@ class PlaylistByIdListFragment : Fragment() {
 
     private fun slidingUpPanelStatus() {
         FragmentsPracticalCodes.slidingUpPanelStatus()
+    }
+
+    override fun onSongClick(latestSongInfo: LatestMp3, latestSongsList: List<LatestMp3>) {
+        sharedViewModel.latestMp3.value = latestSongInfo
+        sharedViewModel.latestMp3List.value = latestSongsList
     }
 }
