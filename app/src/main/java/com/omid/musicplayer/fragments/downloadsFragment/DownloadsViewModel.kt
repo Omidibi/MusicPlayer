@@ -16,6 +16,10 @@ class DownloadsViewModel(application: Application) : AndroidViewModel(applicatio
         return RoomDBInstance.roomDbInstance.dao().showAllDownload()
     }
 
+    fun isDownloadEmpty(): Boolean {
+        return RoomDBInstance.roomDbInstance.dao().showAllDownload().isEmpty()
+    }
+
     fun networkAvailable(): Boolean {
         return NetworkAvailable.isNetworkAvailable(AppConfiguration.getContext())
     }

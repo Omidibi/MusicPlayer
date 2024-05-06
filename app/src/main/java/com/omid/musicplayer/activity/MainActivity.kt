@@ -1,7 +1,9 @@
 package com.omid.musicplayer.activity
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.DownloadManager
+import android.app.SearchManager
 import android.content.ContentValues
 import android.content.Context
 import android.content.pm.ActivityInfo
@@ -16,12 +18,16 @@ import android.os.Looper
 import android.provider.MediaStore
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
+import android.view.Menu
 import android.view.View
+import android.widget.EditText
+import android.widget.ImageView
 import android.widget.PopupMenu
 import android.widget.SeekBar
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.forEach
@@ -91,11 +97,54 @@ class MainActivity : AppCompatActivity(), IOnSongClickListener {
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.option_menu,menu)
+        val manager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        val searchItem = menu?.findItem(R.id.search)
+        val searchView = searchItem?.actionView as SearchView
+        searchView.findViewById<EditText>(androidx.appcompat.R.id.search_src_text).setTextColor(ContextCompat.getColor(applicationContext,R.color.white))
+        searchView.findViewById<ImageView>(androidx.appcompat.R.id.search_close_btn).setColorFilter(ContextCompat.getColor(applicationContext,R.color.white))
+        searchView.setSearchableInfo(manager.getSearchableInfo(componentName))
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                newText?.let {
+                    mainViewModel.checkNetworkConnection.observe(this@MainActivity) { isConnect ->
+                        if (!isConnect) {
+                            searchView.setQuery("", false)
+                        }
+                    }
+                    if (it.isEmpty()) {
+                        binding.upSlide.rvSearch.visibility = View.GONE
+                        binding.upSlide.navHostFragment.visibility = View.VISIBLE
+                        MainWidgets.bnv.visibility = View.VISIBLE
+                    }else {
+                        MainWidgets.bnv.visibility = View.GONE
+                        mainViewModel.getSearchSong(newText).observe(this@MainActivity){ searchSong ->
+                            binding.upSlide.rvSearch.visibility = View.VISIBLE
+                            binding.upSlide.navHostFragment.visibility = View.GONE
+                            binding.upSlide.rvSearch.adapter = SongSearchAdapter(searchSong.onlineMp3,this@MainActivity)
+                            binding.upSlide.rvSearch.layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
+                        }
+                    }
+                }
+                return true
+            }
+
+        })
+        return super.onCreateOptionsMenu(menu)
+    }
+
     private fun setupBinding() {
         requestedOrientation = (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
         binding = ActivityMainBinding.inflate(layoutInflater)
         binding.apply {
             setContentView(root)
+            setSupportActionBar(upSlide.mainToolbar)
             MainWidgets.slidingUpPanel = slidingLayout
             MainWidgets.bnv = bnvMain
             MainWidgets.toolbar = upSlide.mainToolbar
@@ -163,16 +212,10 @@ class MainActivity : AppCompatActivity(), IOnSongClickListener {
                 MainWidgets.toolbar.visibility = View.GONE
             }
 
-            upSlide.search.setOnClickListener {
-                navHost.findNavController().navigate(R.id.searchFragment)
-                MainWidgets.bnv.visibility = View.GONE
-                MainWidgets.toolbar.visibility = View.GONE
-            }
-
             downSlide.uiPlayer.skip.setOnClickListener {
                 currentIndex++
                 if (currentIndex >= mainLatestList.size) {
-                    currentIndex = 0
+                    currentIndex = mainLatestList.size - 1
                 }
                 val nextMp3 = mainLatestList[currentIndex]
                 setupPlayer(nextMp3)
@@ -222,7 +265,7 @@ class MainActivity : AppCompatActivity(), IOnSongClickListener {
             downSlide.uiPlayer.preview.setOnClickListener {
                 currentIndex--
                 if (currentIndex < 0) {
-                    currentIndex = mainLatestList.size - 1
+                    currentIndex = 0
                 }
                 val previousMp3 = mainLatestList[currentIndex]
                 setupPlayer(previousMp3)
@@ -265,6 +308,7 @@ class MainActivity : AppCompatActivity(), IOnSongClickListener {
 
             sharedViewModel.latestMp3List.observe(this@MainActivity) { latestMp3List ->
                 mainLatestList = latestMp3List
+                currentIndex = latestMp3List.indexOf(latestMp3)
                 downSlide.uiPlayer.rvListSong.adapter = SongListSlidingUpPanelAdapter(latestMp3List,this@MainActivity)
                 downSlide.uiPlayer.rvListSong.layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL,false)
             }
@@ -353,6 +397,7 @@ class MainActivity : AppCompatActivity(), IOnSongClickListener {
         }
     }
 
+    @SuppressLint("DefaultLocale")
     private fun setupSeekBar() {
         binding.apply {
             downSlide.uiPlayer.seekbar.setOnSeekBarChangeListener(object :

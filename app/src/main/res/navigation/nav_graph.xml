@@ -46,12 +46,6 @@
     </fragment>
 
     <fragment
-        android:id="@+id/searchFragment"
-        android:name="com.omid.musicplayer.fragments.searchFragment.SearchFragment"
-        android:label="fragment_search"
-        tools:layout="@layout/fragment_search" />
-
-    <fragment
         android:id="@+id/menuFragment"
         android:name="com.omid.musicplayer.fragments.menuFragment.MenuFragment"
         android:label="fragment_menu"

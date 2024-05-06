@@ -16,6 +16,10 @@ class FavoritesViewModel(application: Application) : AndroidViewModel(applicatio
         return RoomDBInstance.roomDbInstance.dao().showAllFavorite()
     }
 
+    fun isFavoriteEmpty(): Boolean {
+        return RoomDBInstance.roomDbInstance.dao().showAllFavorite().isEmpty()
+    }
+
     fun networkAvailable(): Boolean {
         return NetworkAvailable.isNetworkAvailable(AppConfiguration.getContext())
     }

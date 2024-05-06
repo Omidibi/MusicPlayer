@@ -3,12 +3,32 @@ package com.omid.musicplayer.activity
 import android.app.Application
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.MutableLiveData
+import com.omid.musicplayer.api.WebServiceCaller
 import com.omid.musicplayer.db.RoomDBInstance
 import com.omid.musicplayer.model.DownloadedMp3
 import com.omid.musicplayer.model.LatestMp3
+import com.omid.musicplayer.model.SearchSong
 import com.omid.musicplayer.utils.configuration.AppConfiguration
+import com.omid.musicplayer.utils.internetLiveData.CheckNetworkConnection
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
+
+    private val webServiceCaller = WebServiceCaller()
+    private val searchSong = MutableLiveData<SearchSong>()
+    val checkNetworkConnection = CheckNetworkConnection(application)
+
+    fun getSearchSong(searchText: String): MutableLiveData<SearchSong> {
+        CoroutineScope(Dispatchers.IO).launch {
+            webServiceCaller.getSearchSong(searchText).apply {
+                searchSong.postValue(this)
+            }
+        }
+        return searchSong
+    }
 
     fun checkForInsertFavorite(id: String, latestMp3: LatestMp3) {
         if (RoomDBInstance.roomDbInstance.dao().searchByIdFavorite(id).isEmpty()) {

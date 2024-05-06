@@ -41,6 +41,7 @@ class FavoritesFragment : Fragment(), IOnSongClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         networkAvailable()
+        checkListFavorite()
         clickEvent()
         slidingUpPanelStatus()
         observer()
@@ -72,14 +73,24 @@ class FavoritesFragment : Fragment(), IOnSongClickListener {
         }
     }
 
+    private fun checkListFavorite(){
+        binding.apply {
+            if (favoritesViewModel.isFavoriteEmpty()){
+                emptyList.visibility = View.VISIBLE
+                rvFvt.visibility = View.GONE
+            }else {
+                emptyList.visibility = View.GONE
+                rvFvt.visibility = View.VISIBLE
+            }
+        }
+    }
+
     private fun clickEvent() {
         binding.apply {
 
             FragmentsPracticalCodes.onlyBack(this@FavoritesFragment)
 
-            ivBack.setOnClickListener {
-                findNavController().popBackStack()
-            }
+            ivBack.setOnClickListener { findNavController().popBackStack() }
         }
     }
 

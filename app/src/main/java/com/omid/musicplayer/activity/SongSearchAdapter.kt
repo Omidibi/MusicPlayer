@@ -1,4 +1,4 @@
-package com.omid.musicplayer.fragments.searchFragment
+package com.omid.musicplayer.activity
 
 import android.view.LayoutInflater
 import android.view.View

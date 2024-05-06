@@ -41,6 +41,7 @@ class DownloadsFragment : Fragment(), IOnSongClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         networkAvailable()
+        checkListDownload()
         clickEvent()
         slidingUpPanelStatus()
         observer()
@@ -68,6 +69,18 @@ class DownloadsFragment : Fragment(), IOnSongClickListener {
                 pb.visibility = View.GONE
                 rvDownload.visibility = View.GONE
                 liveNoConnection.visibility = View.VISIBLE
+            }
+        }
+    }
+
+    private fun checkListDownload(){
+        binding.apply {
+            if (downloadViewModel.isDownloadEmpty()){
+                emptyList.visibility = View.VISIBLE
+                rvDownload.visibility = View.GONE
+            }else {
+                emptyList.visibility = View.GONE
+                rvDownload.visibility = View.VISIBLE
             }
         }
     }
