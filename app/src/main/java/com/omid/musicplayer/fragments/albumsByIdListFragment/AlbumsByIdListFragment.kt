@@ -104,7 +104,7 @@ class AlbumsByIdListFragment : Fragment(), IOnSongClickListener {
                             pbAlbumByIdList.visibility = View.GONE
                             srl.visibility = View.VISIBLE
                             liveNoConnection.visibility = View.GONE
-                            albumByIdList.let { rvAlbumsList.adapter = AlbumsByIdAdapter(it.onlineMp3,this@AlbumsByIdListFragment) }
+                            albumByIdList.let { rvAlbumsList.adapter = AlbumsByIdAdapter(it.onlineMp3,this@AlbumsByIdListFragment,this@AlbumsByIdListFragment) }
                             rvAlbumsList.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
                         }
                     } else {

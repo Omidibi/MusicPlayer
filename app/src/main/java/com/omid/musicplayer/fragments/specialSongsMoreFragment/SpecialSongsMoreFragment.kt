@@ -233,7 +233,7 @@ class SpecialSongsMoreFragment : Fragment(),IOnSongClickListener {
                 specialSong.add(little)
                 specialSong.add(jason)
                 specialSong.add(lewis)
-                rvMoreSpecial.adapter = SpecialSongsMoreAdapter(specialSong,this@SpecialSongsMoreFragment)
+                rvMoreSpecial.adapter = SpecialSongsMoreAdapter(specialSong,this@SpecialSongsMoreFragment, this@SpecialSongsMoreFragment)
                 rvMoreSpecial.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
             }
         }

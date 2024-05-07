@@ -11,6 +11,7 @@ import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.cardview.widget.CardView
 import androidx.core.view.forEach
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.omid.musicplayer.R
@@ -18,8 +19,9 @@ import com.omid.musicplayer.db.RoomDBInstance
 import com.omid.musicplayer.model.LatestMp3
 import com.omid.musicplayer.utils.configuration.AppConfiguration
 import com.omid.musicplayer.utils.sendData.IOnSongClickListener
+import com.omid.musicplayer.utils.share.Share
 
-class FavoritesAdapter(private val latestMp3: MutableList<LatestMp3>, private val iSelect: IOnSongClickListener) : RecyclerView.Adapter<FavoritesAdapter.FavoritesVH>() {
+class FavoritesAdapter(private val latestMp3: MutableList<LatestMp3>, private val iSelect: IOnSongClickListener, private val fragment: Fragment) : RecyclerView.Adapter<FavoritesAdapter.FavoritesVH>() {
 
     inner class FavoritesVH(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val cvFvt = itemView.findViewById<CardView>(R.id.cv_fvt)!!
@@ -50,12 +52,12 @@ class FavoritesAdapter(private val latestMp3: MutableList<LatestMp3>, private va
             }
 
             popupFvt.setOnClickListener {
-                setupPopupMenu(holder, latestMp3Info, latestMp3, position)
+                setupPopupMenu(holder, latestMp3Info, latestMp3, position, fragment)
             }
         }
     }
 
-    private fun setupPopupMenu(holder: FavoritesVH, latestMp3Info: LatestMp3, latestMp3List: MutableList<LatestMp3>, position: Int) {
+    private fun setupPopupMenu(holder: FavoritesVH, latestMp3Info: LatestMp3, latestMp3List: MutableList<LatestMp3>, position: Int, fragment: Fragment) {
         val popup = PopupMenu(AppConfiguration.getContext(), holder.popupFvt)
         popup.inflate(R.menu.fvt_popup_menu)
         popup.show()
@@ -68,7 +70,7 @@ class FavoritesAdapter(private val latestMp3: MutableList<LatestMp3>, private va
         popup.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.share_fvt -> {
-
+                    Share.shareMusic(latestMp3Info, fragment)
                 }
 
                 R.id.delete -> {

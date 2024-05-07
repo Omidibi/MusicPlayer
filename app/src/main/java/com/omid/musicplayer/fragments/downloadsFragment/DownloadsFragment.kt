@@ -130,7 +130,7 @@ class DownloadsFragment : Fragment(), IOnSongClickListener {
 
     private fun showDownloadList(){
         binding.apply {
-            rvDownload.adapter = DownloadsAdapter(downloadViewModel.showAllDownload(),this@DownloadsFragment)
+            rvDownload.adapter = DownloadsAdapter(downloadViewModel.showAllDownload(),this@DownloadsFragment, this@DownloadsFragment)
             rvDownload.layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false)
         }
     }

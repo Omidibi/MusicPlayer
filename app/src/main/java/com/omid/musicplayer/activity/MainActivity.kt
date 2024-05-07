@@ -44,6 +44,7 @@ import com.bumptech.glide.Glide
 import com.omid.musicplayer.R
 import com.omid.musicplayer.databinding.ActivityMainBinding
 import com.omid.musicplayer.model.LatestMp3
+import com.omid.musicplayer.utils.practicalCodes.ProgressBarStatus
 import com.omid.musicplayer.utils.sendData.IOnSongClickListener
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -121,13 +122,18 @@ class MainActivity : AppCompatActivity(), IOnSongClickListener {
                     if (it.isEmpty()) {
                         binding.upSlide.rvSearch.visibility = View.GONE
                         binding.upSlide.navHostFragment.visibility = View.VISIBLE
+                        binding.upSlide.pbSearch.visibility = View.GONE
                         MainWidgets.bnv.visibility = View.VISIBLE
                     }else {
                         MainWidgets.bnv.visibility = View.GONE
+                        binding.upSlide.rvSearch.visibility = View.GONE
+                        binding.upSlide.navHostFragment.visibility = View.GONE
+                        binding.upSlide.pbSearch.visibility = View.VISIBLE
                         mainViewModel.getSearchSong(newText).observe(this@MainActivity){ searchSong ->
                             binding.upSlide.rvSearch.visibility = View.VISIBLE
                             binding.upSlide.navHostFragment.visibility = View.GONE
-                            binding.upSlide.rvSearch.adapter = SongSearchAdapter(searchSong.onlineMp3,this@MainActivity)
+                            binding.upSlide.pbSearch.visibility = View.GONE
+                            binding.upSlide.rvSearch.adapter = SongSearchAdapter(searchSong.onlineMp3,this@MainActivity, this@MainActivity)
                             binding.upSlide.rvSearch.layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
                         }
                     }
@@ -154,6 +160,7 @@ class MainActivity : AppCompatActivity(), IOnSongClickListener {
             navHost = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
             navController = navHost.navController
             NavigationUI.setupWithNavController(bnvMain, navController)
+            ProgressBarStatus.pbStatus(upSlide.pbSearch)
             sharedViewModel = ViewModelProvider(this@MainActivity)[SharedViewModel::class.java]
             mainViewModel = ViewModelProvider(this@MainActivity)[MainViewModel::class.java]
         }
@@ -217,9 +224,18 @@ class MainActivity : AppCompatActivity(), IOnSongClickListener {
                 if (currentIndex >= mainLatestList.size) {
                     currentIndex = mainLatestList.size - 1
                 }
-                val nextMp3 = mainLatestList[currentIndex]
-                setupPlayer(nextMp3)
-                setupSeekBar()
+                try {
+                    val nextMp3 = mainLatestList[currentIndex]
+                    latestMp3 = nextMp3
+                    setupPlayer(nextMp3)
+                    setupSeekBar()
+                }catch (e: Exception){
+                    when(e){
+                        is IndexOutOfBoundsException -> {
+                            Toast.makeText(applicationContext,"موزیکی در لیست وجود ندارد",Toast.LENGTH_LONG).show()
+                        }
+                    }
+                }
             }
 
             downSlide.uiPlayer.playPause.setOnClickListener {
@@ -267,9 +283,18 @@ class MainActivity : AppCompatActivity(), IOnSongClickListener {
                 if (currentIndex < 0) {
                     currentIndex = 0
                 }
-                val previousMp3 = mainLatestList[currentIndex]
-                setupPlayer(previousMp3)
-                setupSeekBar()
+                try {
+                    val previousMp3 = mainLatestList[currentIndex]
+                    latestMp3 = previousMp3
+                    setupPlayer(previousMp3)
+                    setupSeekBar()
+                }catch (e: Exception){
+                    when(e) {
+                        is IndexOutOfBoundsException -> {
+                            Toast.makeText(applicationContext,"موزیکی در لیست وجود ندارد",Toast.LENGTH_LONG).show()
+                        }
+                    }
+                }
             }
 
             downSlide.uiPlayer.random.setOnClickListener {
@@ -308,7 +333,9 @@ class MainActivity : AppCompatActivity(), IOnSongClickListener {
 
             sharedViewModel.latestMp3List.observe(this@MainActivity) { latestMp3List ->
                 mainLatestList = latestMp3List
-                currentIndex = latestMp3List.indexOf(latestMp3)
+                if (::latestMp3.isInitialized){
+                    currentIndex = latestMp3List.indexOf(latestMp3)
+                }
                 downSlide.uiPlayer.rvListSong.adapter = SongListSlidingUpPanelAdapter(latestMp3List,this@MainActivity)
                 downSlide.uiPlayer.rvListSong.layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL,false)
             }
@@ -371,11 +398,19 @@ class MainActivity : AppCompatActivity(), IOnSongClickListener {
                     } else if (state == Player.STATE_ENDED) {
                         if (isRandom) {
                             downSlide.uiPlayer.random.alpha = 1.0f
-                           val randomIndex = Random.nextInt(mainLatestList.size)
-                           val randomMp3 = mainLatestList[randomIndex]
-                           setupPlayer(randomMp3)
-                           setupSeekBar()
-
+                            try {
+                                val randomIndex = Random.nextInt(mainLatestList.size)
+                                val randomMp3 = mainLatestList[randomIndex]
+                                this@MainActivity.latestMp3 = randomMp3
+                                setupPlayer(randomMp3)
+                                setupSeekBar()
+                            }catch (e: Exception){
+                                when (e){
+                                    is IllegalArgumentException -> {
+                                        Toast.makeText(applicationContext,"موزیکی در لیست وجود ندارد",Toast.LENGTH_LONG).show()
+                                    }
+                                }
+                            }
                         }
                         downSlide.uiPlayer.seekbar.progress = 0
                         downSlide.uiPlayer.upSeekbar.progress = 0
@@ -402,9 +437,9 @@ class MainActivity : AppCompatActivity(), IOnSongClickListener {
         binding.apply {
             downSlide.uiPlayer.seekbar.setOnSeekBarChangeListener(object :
                 SeekBar.OnSeekBarChangeListener {
-                override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
-                    if (p2) {
-                        player.seekTo(p1.toLong())
+                override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                    if (fromUser) {
+                        player.seekTo(progress.toLong())
                     }
                 }
 
@@ -419,9 +454,9 @@ class MainActivity : AppCompatActivity(), IOnSongClickListener {
             })
             downSlide.uiPlayer.upSeekbar.setOnSeekBarChangeListener(object :
                 SeekBar.OnSeekBarChangeListener {
-                override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
-                    if (p2) {
-                        player.seekTo(p1.toLong())
+                override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                    if (fromUser) {
+                        player.seekTo(progress.toLong())
                     }
                 }
 

@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.cardview.widget.CardView
@@ -23,7 +22,6 @@ class ArtistAdapter(private val fragment: Fragment, private val artistsList: Lis
         val cvArtist = itemView.findViewById<CardView>(R.id.cv_artist)!!
         val ivArtist = itemView.findViewById<AppCompatImageView>(R.id.iv_artist)!!
         val tvNameArtist = itemView.findViewById<AppCompatTextView>(R.id.tv_name_artist)!!
-        val ivShare = itemView.findViewById<AppCompatImageView>(R.id.iv_share)!!
     }
 
     private val bundle = Bundle()
@@ -50,10 +48,6 @@ class ArtistAdapter(private val fragment: Fragment, private val artistsList: Lis
                 fragment.findNavController().navigate(R.id.action_artistsFragment_to_songListByArtistNameFragment, bundle)
                 MainWidgets.bnv.visibility = View.GONE
                 MainWidgets.toolbar.visibility = View.GONE
-            }
-
-            ivShare.setOnClickListener {
-                Toast.makeText(AppConfiguration.getContext(), "Share is Clicked", Toast.LENGTH_LONG).show()
             }
         }
     }

@@ -3,10 +3,10 @@ package com.omid.musicplayer.fragments.albumsByIdListFragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.cardview.widget.CardView
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.omid.musicplayer.R
@@ -14,6 +14,7 @@ import com.omid.musicplayer.model.AlbumByIdMp3
 import com.omid.musicplayer.model.LatestMp3
 import com.omid.musicplayer.utils.configuration.AppConfiguration
 import com.omid.musicplayer.utils.sendData.IOnSongClickListener
+import com.omid.musicplayer.utils.share.Share
 
 class AlbumsByIdAdapter() : RecyclerView.Adapter<AlbumsByIdAdapter.AlbumsByIdVH>() {
 
@@ -27,10 +28,12 @@ class AlbumsByIdAdapter() : RecyclerView.Adapter<AlbumsByIdAdapter.AlbumsByIdVH>
 
     private lateinit var albumsByIdList: List<AlbumByIdMp3>
     private lateinit var iSelected: IOnSongClickListener
+    private lateinit var fragment: Fragment
 
-    constructor(albumsByIdList: List<AlbumByIdMp3>, iSelected: IOnSongClickListener) : this() {
+    constructor(albumsByIdList: List<AlbumByIdMp3>, iSelected: IOnSongClickListener,fragment: Fragment) : this() {
         this.albumsByIdList = albumsByIdList
         this.iSelected = iSelected
+        this.fragment = fragment
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlbumsByIdVH {
@@ -76,7 +79,27 @@ class AlbumsByIdAdapter() : RecyclerView.Adapter<AlbumsByIdAdapter.AlbumsByIdVH>
             }
 
             ivShare.setOnClickListener {
-                Toast.makeText(AppConfiguration.getContext(), "Share Selected", Toast.LENGTH_SHORT).show()
+                val latestMp3 = LatestMp3(
+                    albumsByIdListInfo.catId,
+                    albumsByIdListInfo.categoryImage,
+                    albumsByIdListInfo.categoryImageThumb,
+                    albumsByIdListInfo.categoryName,
+                    albumsByIdListInfo.cid,
+                    albumsByIdListInfo.id,
+                    albumsByIdListInfo.mp3Artist,
+                    albumsByIdListInfo.mp3Description,
+                    albumsByIdListInfo.mp3Duration,
+                    albumsByIdListInfo.mp3ThumbnailB,
+                    albumsByIdListInfo.mp3ThumbnailS,
+                    albumsByIdListInfo.mp3Title,
+                    albumsByIdListInfo.mp3Type,
+                    albumsByIdListInfo.mp3Url,
+                    albumsByIdListInfo.rateAvg,
+                    albumsByIdListInfo.totalDownload,
+                    albumsByIdListInfo.totalRate,
+                    albumsByIdListInfo.totalViews
+                )
+                Share.shareMusic(latestMp3,fragment)
             }
         }
     }

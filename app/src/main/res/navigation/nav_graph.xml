@@ -29,7 +29,7 @@
         android:id="@+id/artistsFragment"
         android:name="com.omid.musicplayer.ui.dashboard.artists.ArtistsFragment"
         android:label="fragment_artists"
-        tools:layout="@layout/fragment_artists" >
+        tools:layout="@layout/fragment_artists">
         <action
             android:id="@+id/action_artistsFragment_to_songListByArtistNameFragment"
             app:destination="@id/songListByArtistNameFragment" />
@@ -49,10 +49,7 @@
         android:id="@+id/menuFragment"
         android:name="com.omid.musicplayer.fragments.menuFragment.MenuFragment"
         android:label="fragment_menu"
-        tools:layout="@layout/fragment_menu" >
-        <action
-            android:id="@+id/action_menuFragment_to_aboutFragment"
-            app:destination="@id/aboutFragment" />
+        tools:layout="@layout/fragment_menu">
         <action
             android:id="@+id/action_menuFragment_to_downloadsFragment"
             app:destination="@id/downloadsFragment" />
@@ -112,12 +109,6 @@
         android:name="com.omid.musicplayer.fragments.specialSongsMoreFragment.SpecialSongsMoreFragment"
         android:label="fragment_special_songs_more"
         tools:layout="@layout/fragment_special_songs_more" />
-
-    <fragment
-        android:id="@+id/aboutFragment"
-        android:name="com.omid.musicplayer.fragments.aboutFragment.AboutFragment"
-        android:label="fragment_about"
-        tools:layout="@layout/fragment_about" />
 
     <fragment
         android:id="@+id/downloadsFragment"

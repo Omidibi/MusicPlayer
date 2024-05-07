@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.cardview.widget.CardView
@@ -23,7 +22,6 @@ class AlbumsListAdapter() : RecyclerView.Adapter<AlbumsListAdapter.AlbumsListVH>
         val cvAlbums = itemView.findViewById<CardView>(R.id.cv_albums)!!
         val ivAlbums = itemView.findViewById<AppCompatImageView>(R.id.iv_albums)!!
         val tvNameAlbums = itemView.findViewById<AppCompatTextView>(R.id.tv_name_albums)!!
-        val ivShare = itemView.findViewById<AppCompatImageView>(R.id.iv_share)!!
     }
 
     private lateinit var albumsList: List<AlbumsListMp3>
@@ -57,10 +55,6 @@ class AlbumsListAdapter() : RecyclerView.Adapter<AlbumsListAdapter.AlbumsListVH>
                 fragment.findNavController().navigate(R.id.action_albumsFragment_to_albumsByIdListFragment, bundle)
                 MainWidgets.bnv.visibility = View.GONE
                 MainWidgets.toolbar.visibility = View.GONE
-            }
-
-            ivShare.setOnClickListener {
-                Toast.makeText(AppConfiguration.getContext(), "Share Clicked", Toast.LENGTH_LONG).show()
             }
         }
     }

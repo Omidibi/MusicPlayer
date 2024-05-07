@@ -125,7 +125,7 @@ class SongListByArtistNameFragment : Fragment(),IOnSongClickListener {
                             srl.visibility = View.VISIBLE
                             liveNoConnection.visibility = View.GONE
                             songListByArtistName.let {
-                                rvListByArtisName.adapter = SongListByArtistNameAdapter(it.songListByArtistName,this@SongListByArtistNameFragment)
+                                rvListByArtisName.adapter = SongListByArtistNameAdapter(it.songListByArtistName,this@SongListByArtistNameFragment, this@SongListByArtistNameFragment)
                             }
                             rvListByArtisName.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL,false)
                         }

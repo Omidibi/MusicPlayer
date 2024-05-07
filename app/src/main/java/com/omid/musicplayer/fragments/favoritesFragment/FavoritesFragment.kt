@@ -128,7 +128,7 @@ class FavoritesFragment : Fragment(), IOnSongClickListener {
 
     private fun showFvtList(){
         binding.apply {
-            rvFvt.adapter = FavoritesAdapter(favoritesViewModel.showAllFavorite(),this@FavoritesFragment)
+            rvFvt.adapter = FavoritesAdapter(favoritesViewModel.showAllFavorite(),this@FavoritesFragment, this@FavoritesFragment)
             rvFvt.layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false)
         }
     }

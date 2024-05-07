@@ -1,5 +1,6 @@
 package com.omid.musicplayer.activity
 
+import android.app.Activity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,14 +13,16 @@ import com.omid.musicplayer.R
 import com.omid.musicplayer.model.LatestMp3
 import com.omid.musicplayer.utils.configuration.AppConfiguration
 import com.omid.musicplayer.utils.sendData.IOnSongClickListener
+import com.omid.musicplayer.utils.share.Share
 
-class SongSearchAdapter(private val searchList: List<LatestMp3>, private val iSend: IOnSongClickListener) : RecyclerView.Adapter<SongSearchAdapter.SongSearchVH>() {
+class SongSearchAdapter(private val searchList: List<LatestMp3>, private val iSend: IOnSongClickListener, private val activity: Activity) : RecyclerView.Adapter<SongSearchAdapter.SongSearchVH>() {
 
     inner class SongSearchVH(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val cvSongSearch = itemView.findViewById<CardView>(R.id.cv_song_search)!!
         val ivSongSearch = itemView.findViewById<AppCompatImageView>(R.id.iv_song_search)!!
         val tvNameSong = itemView.findViewById<AppCompatTextView>(R.id.tv_name_song)!!
         val tvNameArtist = itemView.findViewById<AppCompatTextView>(R.id.tv_name_artist)!!
+        val ivShareSearch = itemView.findViewById<AppCompatImageView>(R.id.iv_share_search)!!
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SongSearchVH {
@@ -42,6 +45,10 @@ class SongSearchAdapter(private val searchList: List<LatestMp3>, private val iSe
 
             cvSongSearch.setOnClickListener {
                 iSend.onSongClick(searchListInfo, searchList)
+            }
+
+            ivShareSearch.setOnClickListener {
+                Share.mainActivityShareMusic(searchListInfo, activity)
             }
         }
     }

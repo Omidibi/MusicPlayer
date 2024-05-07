@@ -6,7 +6,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -16,6 +15,7 @@ import com.omid.musicplayer.databinding.FragmentMenuBinding
 import com.omid.musicplayer.utils.internetLiveData.CheckNetworkConnection
 import com.omid.musicplayer.utils.practicalCodes.FragmentsPracticalCodes
 import com.omid.musicplayer.utils.practicalCodes.MainWidgetStatus
+import com.omid.musicplayer.utils.share.Share
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
 
 class MenuFragment : Fragment() {
@@ -62,12 +62,8 @@ class MenuFragment : Fragment() {
                 findNavController().navigate(R.id.action_menuFragment_to_favoritesFragment)
             }
 
-            clAbout.setOnClickListener {
-                findNavController().navigate(R.id.action_menuFragment_to_aboutFragment)
-            }
-
             clShare.setOnClickListener {
-                Toast.makeText(requireContext(), "clShare is OK", Toast.LENGTH_LONG).show()
+                Share.shareApp(this@MenuFragment)
             }
         }
     }
@@ -77,13 +73,11 @@ class MenuFragment : Fragment() {
             if (menuViewModel.checkNetworkAvailable()) {
                 clDownloads.visibility = View.VISIBLE
                 clFavorites.visibility = View.VISIBLE
-                clAbout.visibility = View.VISIBLE
                 clShare.visibility = View.VISIBLE
                 liveNoConnection.visibility = View.GONE
             }else {
                 clDownloads.visibility = View.GONE
                 clFavorites.visibility = View.GONE
-                clAbout.visibility = View.GONE
                 clShare.visibility = View.GONE
                 liveNoConnection.visibility = View.VISIBLE
             }
@@ -102,13 +96,11 @@ class MenuFragment : Fragment() {
                     liveNoConnection.visibility = View.GONE
                     clDownloads.visibility = View.VISIBLE
                     clFavorites.visibility = View.VISIBLE
-                    clAbout.visibility = View.VISIBLE
                     clShare.visibility = View.VISIBLE
                 }else {
                     liveNoConnection.visibility = View.VISIBLE
                     clDownloads.visibility = View.GONE
                     clFavorites.visibility = View.GONE
-                    clAbout.visibility = View.GONE
                     clShare.visibility = View.GONE
                     MainWidgets.slidingUpPanel.panelState = SlidingUpPanelLayout.PanelState.HIDDEN
                     MainWidgets.playPause.setImageResource(R.drawable.play)

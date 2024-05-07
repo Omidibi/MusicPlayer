@@ -221,7 +221,7 @@ class NewSongsMoreFragment : Fragment(),IOnSongClickListener {
                 newSong.add(lizzo)
                 newSong.add(luckCombs)
                 newSong.add(tom)
-                rvMoreNew.adapter = NewSongsMoreAdapter(newSong,this@NewSongsMoreFragment)
+                rvMoreNew.adapter = NewSongsMoreAdapter(newSong,this@NewSongsMoreFragment, this@NewSongsMoreFragment)
                 rvMoreNew.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
             }
         }

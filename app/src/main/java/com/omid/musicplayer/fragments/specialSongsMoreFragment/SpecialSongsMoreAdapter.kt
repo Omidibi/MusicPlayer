@@ -6,14 +6,16 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.cardview.widget.CardView
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.omid.musicplayer.R
 import com.omid.musicplayer.model.LatestMp3
 import com.omid.musicplayer.utils.configuration.AppConfiguration
 import com.omid.musicplayer.utils.sendData.IOnSongClickListener
+import com.omid.musicplayer.utils.share.Share
 
-class SpecialSongsMoreAdapter(private val specialSongs: List<LatestMp3>, private val iSelected: IOnSongClickListener) : RecyclerView.Adapter<SpecialSongsMoreAdapter.SpecialSongsMoreVH>() {
+class SpecialSongsMoreAdapter(private val specialSongs: List<LatestMp3>, private val iSelected: IOnSongClickListener, private val fragment: Fragment) : RecyclerView.Adapter<SpecialSongsMoreAdapter.SpecialSongsMoreVH>() {
 
     inner class SpecialSongsMoreVH(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val cvSpecialSongs = itemView.findViewById<CardView>(R.id.cv_special_songs)!!
@@ -39,6 +41,10 @@ class SpecialSongsMoreAdapter(private val specialSongs: List<LatestMp3>, private
             Glide.with(AppConfiguration.getContext()).load(specialSongsInfo.mp3ThumbnailB).into(imgSpecialSong)
             cvSpecialSongs.setOnClickListener {
                 iSelected.onSongClick(specialSongsInfo, specialSongs)
+            }
+
+            ivShare.setOnClickListener {
+                Share.shareMusic(specialSongsInfo, fragment)
             }
         }
     }

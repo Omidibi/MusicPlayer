@@ -117,7 +117,7 @@ class PlaylistByIdListFragment : Fragment(),IOnSongClickListener {
                             playListByIdList.let {
                                 for (i in 0..<it?.onlineMp3!!.size) {
                                     val songs = it.onlineMp3[i].songsList
-                                    rvPlaylistList.adapter = PlaylistByIdAdapter(songs,this@PlaylistByIdListFragment)
+                                    rvPlaylistList.adapter = PlaylistByIdAdapter(songs,this@PlaylistByIdListFragment, this@PlaylistByIdListFragment)
                                 }
                             }
                             rvPlaylistList.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)

@@ -86,7 +86,7 @@ class SongsListByCatIdFragment : Fragment(),IOnSongClickListener {
                             srl.visibility = View.VISIBLE
                             liveNoConnection.visibility = View.GONE
                             songsByCatId.let {
-                                rvSongsListByCatId.adapter = SongsListByCatIdAdapter(it.onlineMp3,this@SongsListByCatIdFragment)
+                                rvSongsListByCatId.adapter = SongsListByCatIdAdapter(it.onlineMp3,this@SongsListByCatIdFragment, this@SongsListByCatIdFragment)
                             }
                             rvSongsListByCatId.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
                         }
