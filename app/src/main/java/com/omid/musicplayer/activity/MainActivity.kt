@@ -113,28 +113,28 @@ class MainActivity : AppCompatActivity(), IOnSongClickListener {
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                newText?.let {
-                    mainViewModel.checkNetworkConnection.observe(this@MainActivity) { isConnect ->
-                        if (!isConnect) {
-                            searchView.setQuery("", false)
+                binding.apply {
+                    newText?.let {
+                        mainViewModel.checkNetworkConnection.observe(this@MainActivity) { isConnect ->
+                            if (!isConnect) {
+                                searchView.setQuery("", false)
+                            }
                         }
-                    }
-                    if (it.isEmpty()) {
-                        binding.upSlide.rvSearch.visibility = View.GONE
-                        binding.upSlide.navHostFragment.visibility = View.VISIBLE
-                        binding.upSlide.pbSearch.visibility = View.GONE
-                        MainWidgets.bnv.visibility = View.VISIBLE
-                    }else {
-                        MainWidgets.bnv.visibility = View.GONE
-                        binding.upSlide.rvSearch.visibility = View.GONE
-                        binding.upSlide.navHostFragment.visibility = View.GONE
-                        binding.upSlide.pbSearch.visibility = View.VISIBLE
-                        mainViewModel.getSearchSong(newText).observe(this@MainActivity){ searchSong ->
-                            binding.upSlide.rvSearch.visibility = View.VISIBLE
-                            binding.upSlide.navHostFragment.visibility = View.GONE
-                            binding.upSlide.pbSearch.visibility = View.GONE
-                            binding.upSlide.rvSearch.adapter = SongSearchAdapter(searchSong.onlineMp3,this@MainActivity, this@MainActivity)
-                            binding.upSlide.rvSearch.layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
+                        if (it.isEmpty()) {
+                            upSlide.rvSearch.visibility = View.GONE
+                            upSlide.navHostFragment.visibility = View.VISIBLE
+                            upSlide.pbSearch.visibility = View.GONE
+                        }else {
+                            upSlide.rvSearch.visibility = View.GONE
+                            upSlide.navHostFragment.visibility = View.GONE
+                            upSlide.pbSearch.visibility = View.VISIBLE
+                            mainViewModel.getSearchSong(newText).observe(this@MainActivity){ searchSong ->
+                                upSlide.rvSearch.visibility = View.VISIBLE
+                                upSlide.navHostFragment.visibility = View.GONE
+                                upSlide.pbSearch.visibility = View.GONE
+                                upSlide.rvSearch.adapter = SongSearchAdapter(searchSong.onlineMp3,this@MainActivity, this@MainActivity)
+                                upSlide.rvSearch.layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
+                            }
                         }
                     }
                 }
